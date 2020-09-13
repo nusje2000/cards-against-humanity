@@ -5,11 +5,11 @@
     "autoload": {
         "psr-4": {
             "Nusje2000\\CAH\\": "src/"
-        },
-        "autoload-dev": {
-            "psr-4": {
-                "Nusje2000\\CAH\\Tests\\": "tests/"
-            }
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nusje2000\\CAH\\Tests\\": "tests/"
         }
     },
     "license": "MIT",
