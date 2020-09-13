@@ -18,5 +18,8 @@
         "phpstan/phpstan": "^0.12.42",
         "vimeo/psalm": "^3.15",
         "phpunit/phpunit": "^9.3"
+    },
+    "require": {
+        "aeviiq/collection": "^3.3"
     }
 }

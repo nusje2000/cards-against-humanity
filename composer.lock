@@ -4,8 +4,55 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c10e28da6fa440c3821c5d50c6a87f3",
-    "packages": [],
+    "content-hash": "9315099e22226f9a68e979494f5b99b5",
+    "packages": [
+        {
+            "name": "aeviiq/collection",
+            "version": "v3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aeviiq/collection.git",
+                "reference": "9b378becfb8a482f92734153909ceaa509db544f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aeviiq/collection/zipball/9b378becfb8a482f92734153909ceaa509db544f",
+                "reference": "9b378becfb8a482f92734153909ceaa509db544f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aeviiq\\Collection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aeviiq Collection contributors",
+                    "homepage": "https://github.com/aeviiq/collection/graphs/contributors"
+                }
+            ],
+            "description": "A library that provides strict typed collections in PHP.",
+            "homepage": "https://github.com/aeviiq/collection",
+            "keywords": [
+                "aeviiq",
+                "collection",
+                "php",
+                "typed collection"
+            ],
+            "time": "2020-05-21T16:09:33+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "amphp/amp",
