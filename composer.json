@@ -1,0 +1,22 @@
+{
+    "name": "nusje2000/cards-against-humanity",
+    "description": "A new project",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Nusje2000\\CAH\\": "src/"
+        },
+        "autoload-dev": {
+            "psr-4": {
+                "Nusje2000\\CAH\\Tests\\": "tests/"
+            }
+        }
+    },
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.42",
+        "vimeo/psalm": "^3.15",
+        "phpunit/phpunit": "^9.3"
+    }
+}

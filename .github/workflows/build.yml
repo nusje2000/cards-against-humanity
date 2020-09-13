@@ -1,0 +1,39 @@
+name: Build
+
+on:
+    push:
+        branches:
+            - master
+    pull_request: ~
+
+jobs:
+    code_analysis:
+        name: 'Code analysis (PHP: 7.4)'
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    extension-csv: mbstring, xml, ctype, iconv, mysql, curl, intl
+                    coverage: pcov
+
+            -   uses: actions/checkout@v1
+
+            -   name: Install dependencies
+                run: |
+                    composer clear-cache
+                    composer validate
+                    composer install --prefer-dist --no-progress --no-suggest
+
+            -   name: PHP Stan
+                run: |
+                    vendor/bin/phpstan analyze
+
+            -   name: Psalm
+                run: |
+                    vendor/bin/psalm
+
+            -   name: PHPUnit
+                run: |
+                    vendor/bin/phpunit
