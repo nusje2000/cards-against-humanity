@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Game;
 
 use Aeviiq\Collection\ObjectCollection;
-use ArrayIterator;
 
 /**
- * @phpstan-extends ObjectCollection<SubmissionInterface>
- * @psalm-extends ObjectCollection<SubmissionInterface>
+ * @extends ObjectCollection<int, SubmissionInterface>
  *
- * @method ArrayIterator|SubmissionInterface[] getIterator()
+ * @method \Traversable<int, SubmissionInterface> getIterator()
  * @method SubmissionInterface|null first()
  * @method SubmissionInterface|null last()
  */

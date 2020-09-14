@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Card;
 
 use Aeviiq\Collection\ObjectCollection;
-use ArrayIterator;
 
 /**
- * @phpstan-extends ObjectCollection<AnswerInterface>
- * @psalm-extends ObjectCollection<AnswerInterface>
+ * @extends ObjectCollection<int, AnswerInterface>
  *
- * @method ArrayIterator|AnswerInterface[] getIterator()
+ * @method \Traversable<int, AnswerInterface> getIterator()
  * @method AnswerInterface|null first()
  * @method AnswerInterface|null last()
  */

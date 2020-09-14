@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Game;
 
 use Aeviiq\Collection\ObjectCollection;
-use ArrayIterator;
 
 /**
- * @phpstan-extends ObjectCollection<RoundInterface>
- * @psalm-extends ObjectCollection<RoundInterface>
+ * @extends ObjectCollection<int, RoundInterface>
  *
- * @method ArrayIterator|RoundInterface[] getIterator()
+ * @method \Traversable<int, RoundInterface> getIterator()
  * @method RoundInterface|null first()
  * @method RoundInterface|null last()
  */

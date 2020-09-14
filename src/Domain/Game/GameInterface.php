@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Game;
 
-use Nusje2000\CAH\Domain\Card\AnswerCollection;
-use Nusje2000\CAH\Domain\Card\QuestionCollection;
+use Nusje2000\CAH\Domain\Card\Deck\AnswerDeckInterface;
+use Nusje2000\CAH\Domain\Card\Deck\QuestionDeckInterface;
 
 interface GameInterface
 {
@@ -15,7 +15,7 @@ interface GameInterface
 
     public function getPlayers(): PlayerCollection;
 
-    public function getQuestionDeck(): QuestionCollection;
+    public function getQuestionDeck(): QuestionDeckInterface;
 
-    public function getAnswerDeck(): AnswerCollection;
+    public function getAnswerDeck(): AnswerDeckInterface;
 }

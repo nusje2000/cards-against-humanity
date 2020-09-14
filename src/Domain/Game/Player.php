@@ -8,7 +8,7 @@ use Nusje2000\CAH\Domain\Card\AnswerCollection;
 
 final class Player implements PlayerInterface
 {
-    private int $score;
+    private int $score = 0;
     private AnswerCollection $hand;
 
     public function __construct()

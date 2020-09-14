@@ -12,7 +12,7 @@ final class Round implements RoundInterface
     private PlayerInterface $cardCzar;
     private QuestionInterface $question;
     private SubmissionCollection $submissions;
-    private SubmissionInterface $winner;
+    private ?SubmissionInterface $winner = null;
 
     public function __construct(PlayerInterface $cardCzar, QuestionInterface $question)
     {
