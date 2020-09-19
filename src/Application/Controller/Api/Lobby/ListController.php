@@ -28,6 +28,9 @@ final class ListController
         return new JsonResponse($lobbies);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function generateLobby(): array
     {
         return [
