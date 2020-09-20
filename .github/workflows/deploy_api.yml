@@ -1,0 +1,88 @@
+name: Deploy test api
+
+on:
+    push:
+        branches:
+            - master
+    workflow_dispatch: ~
+
+jobs:
+    tests:
+        name: 'Tests (PHP: 7.4, MySQL: 5.7)'
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    extension-csv: mbstring, xml, ctype, iconv, mysql, curl, intl
+                    coverage: pcov
+
+            -   uses: actions/checkout@v1
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-suggest
+
+            -   name: PHPUnit
+                run: |
+                    vendor/bin/phpunit
+
+    deploy:
+        name: 'Deploy'
+        runs-on: ubuntu-latest
+        needs: ['tests']
+        steps:
+            -   name: Setup PHP, with composer and extensions
+                uses: shivammathur/setup-php@v1
+                with:
+                    php-version: 7.4
+                    extension-csv: mbstring, xml, ctype, iconv, mysql, curl, intl
+                    coverage: pcov
+
+            -   uses: actions/checkout@v1
+
+            -   name: Install dependencies
+                run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+                env:
+                    APP_ENV: prod
+
+            -   name: Create package
+                uses: thedoctor0/zip-release@master
+                with:
+                    filename: 'release.zip'
+                    exclusions: '*.git* /*var/*'
+
+            -   name: Upload artifact
+                uses: actions/upload-artifact@v2
+                with:
+                    name: Package
+                    path: release.zip
+
+            -   name: Upload release to production server
+                uses: appleboy/scp-action@master
+                with:
+                    host: ${{ secrets.PRODUCTION_HOST }}
+                    username: ${{ secrets.PRODUCTION_USERNAME }}
+                    key: ${{ secrets.PRIVATE_KEY }}
+                    source: "release.zip"
+                    target: "/www/cah-test-api"
+
+            -   name: Extract and set as new environment
+                uses: appleboy/ssh-action@master
+                with:
+                    host: ${{ secrets.PRODUCTION_HOST }}
+                    username: ${{ secrets.PRODUCTION_USERNAME }}
+                    key: ${{ secrets.PRIVATE_KEY }}
+                    script: |
+                        export SOURCE_DIR=/www/cah-test-api
+                        export LOCAL_ENV=/www/cah-test-api/config/.env.local
+                        cd ${SOURCE_DIR}
+                        export DATE=`date '+%F_%H%M%S'`
+                        unzip ./release.zip -d release-${DATE}
+                        ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
+                        rm ${SOURCE_DIR}/release.zip
+                        cd ${SOURCE_DIR}/release-${DATE}
+                        php bin/console cache:warmup
+                        cd ${SOURCE_DIR}
+                        rm ${SOURCE_DIR}/current
+                        ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current

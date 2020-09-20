@@ -50,7 +50,7 @@ final class Kernel extends BaseKernel
     {
         $routes->import($this->getConfigDir() . '/routes/routes.xml');
 
-        if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {
+        if ('dev' === $this->getEnvironment()) {
             $routes->import($this->getConfigDir() . '/routes/routes_dev.xml');
         }
     }
