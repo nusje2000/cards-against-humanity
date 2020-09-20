@@ -4,12 +4,8 @@
            xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <defaults>
-            <tag name="controller.service_arguments"/>
-        </defaults>
-
-        <service id="cah.controller.api.lobby.list" class="Nusje2000\CAH\Application\Controller\Api\Lobby\ListController">
-            <argument type="service" id="cah.repository.lobby"/>
+        <service id="cah.repository.lobby" class="Nusje2000\CAH\Infrastructure\Repository\MockLobbyRepository">
+            <argument type="service" id="cah.service.faker.generator"/>
         </service>
     </services>
 </container>
