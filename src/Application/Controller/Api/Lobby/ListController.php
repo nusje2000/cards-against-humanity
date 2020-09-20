@@ -4,35 +4,23 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Application\Controller\Api\Lobby;
 
-use Faker\Generator;
+use Nusje2000\CAH\Infrastructure\Repository\LobbyRepositoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Uid\Uuid;
 
 final class ListController
 {
-    private Generator $generator;
+    private LobbyRepositoryInterface $lobbyRepository;
 
-    public function __construct(Generator $generator)
+    public function __construct(LobbyRepositoryInterface $lobbyRepository)
     {
-        $this->generator = $generator;
+        $this->lobbyRepository = $lobbyRepository;
     }
 
     public function __invoke(): Response
     {
-        $lobbies = [];
-        for ($i = 1; $i < 25; $i++) {
-            $lobbies[] = $this->generateLobby();
-        }
-
-        return new JsonResponse($lobbies);
-    }
-
-    private function generateLobby(): array
-    {
-        return [
-            'id' => (string)Uuid::v4(),
-            'name' => sprintf('%s\'s game', $this->generator->firstName),
-        ];
+        return new JsonResponse(
+            $this->lobbyRepository->all(0, 25)->toArray(),
+        );
     }
 }

@@ -42,6 +42,7 @@ final class Kernel extends BaseKernel
         $confDir = $this->getConfigDir();
 
         $configurator->import($confDir . '/services/controllers.xml');
+        $configurator->import($confDir . '/services/repositories.xml');
         $configurator->import($confDir . '/services/services.xml');
     }
 
