@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Card;
 
 use Aeviiq\Collection\ObjectCollection;
+use JsonSerializable;
 
 /**
  * @extends ObjectCollection<int, AnswerInterface>
@@ -13,10 +14,18 @@ use Aeviiq\Collection\ObjectCollection;
  * @method AnswerInterface|null first()
  * @method AnswerInterface|null last()
  */
-final class AnswerCollection extends ObjectCollection
+final class AnswerCollection extends ObjectCollection implements JsonSerializable
 {
     protected function allowedInstance(): string
     {
         return AnswerInterface::class;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

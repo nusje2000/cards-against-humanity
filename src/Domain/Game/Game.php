@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Game;
 
+use JsonSerializable;
 use LogicException;
 use Nusje2000\CAH\Domain\Card\Deck\AnswerDeckInterface;
 use Nusje2000\CAH\Domain\Card\Deck\QuestionDeckInterface;
 
-final class Game implements GameInterface
+final class Game implements GameInterface, JsonSerializable
 {
     private PlayerCollection $players;
     private QuestionDeckInterface $questionDeck;
@@ -56,5 +57,22 @@ final class Game implements GameInterface
     public function getAnswerDeck(): AnswerDeckInterface
     {
         return $this->answerDeck;
+    }
+
+    public function isStarted(): bool
+    {
+        return null !== $this->rounds->last();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'players' => $this->getPlayers(),
+            'current_round' => $this->isStarted() ? $this->getCurrentRound() : null,
+            'previous_rounds' => $this->getPreviousRounds(),
+        ];
     }
 }

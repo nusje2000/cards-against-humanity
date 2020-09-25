@@ -22,4 +22,17 @@ final class QuestionCollectionTest extends TestCase
 
         self::assertSame($collection->toArray(), $items);
     }
+
+    public function testJsonSerialize(): void
+    {
+        $items = [
+            $this->createStub(QuestionInterface::class),
+            $this->createStub(QuestionInterface::class),
+            $this->createStub(QuestionInterface::class),
+        ];
+
+        $collection = new QuestionCollection($items);
+
+        self::assertSame($collection->jsonSerialize(), $items);
+    }
 }

@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Infrastructure\Model;
+namespace Nusje2000\CAH\Domain;
 
 use JsonSerializable;
 use Nusje2000\CAH\Domain\Game\PlayerCollection;
-use Nusje2000\CAH\Domain\LobbyInterface;
 
 final class Lobby implements LobbyInterface, JsonSerializable
 {
@@ -36,7 +35,7 @@ final class Lobby implements LobbyInterface, JsonSerializable
     {
         return [
             'name' => $this->getName(),
-            'player_count' => $this->getPlayers()->count(),
+            'players' => $this->getPlayers(),
         ];
     }
 }

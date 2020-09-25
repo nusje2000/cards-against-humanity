@@ -22,4 +22,17 @@ final class RoundCollectionTest extends TestCase
 
         self::assertSame($collection->toArray(), $items);
     }
+
+    public function testJsonSerialize(): void
+    {
+        $items = [
+            $this->createStub(RoundInterface::class),
+            $this->createStub(RoundInterface::class),
+            $this->createStub(RoundInterface::class),
+        ];
+
+        $collection = new RoundCollection($items);
+
+        self::assertSame($collection->jsonSerialize(), $items);
+    }
 }

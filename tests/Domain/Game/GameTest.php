@@ -9,6 +9,8 @@ use Nusje2000\CAH\Domain\Card\Deck\AnswerDeckInterface;
 use Nusje2000\CAH\Domain\Card\Deck\QuestionDeckInterface;
 use Nusje2000\CAH\Domain\Game\Game;
 use Nusje2000\CAH\Domain\Game\PlayerCollection;
+use Nusje2000\CAH\Domain\Game\PlayerInterface;
+use Nusje2000\CAH\Domain\Game\RoundCollection;
 use Nusje2000\CAH\Domain\Game\RoundInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -87,5 +89,68 @@ final class GameTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('No rounds set.');
         $game->getCurrentRound();
+    }
+
+    public function testIsStarted(): void
+    {
+        $game = new Game(
+            new PlayerCollection(),
+            $this->createStub(QuestionDeckInterface::class),
+            $this->createStub(AnswerDeckInterface::class),
+        );
+
+        self::assertFalse($game->isStarted());
+        $game->setNextRound($this->createStub(RoundInterface::class));
+        self::assertTrue($game->isStarted());
+    }
+
+    public function testJsonSerialize(): void
+    {
+        $players = new PlayerCollection([
+            $this->createStub(PlayerInterface::class),
+            $this->createStub(PlayerInterface::class),
+            $this->createStub(PlayerInterface::class),
+        ]);
+
+        $game = new Game(
+            $players,
+            $this->createStub(QuestionDeckInterface::class),
+            $this->createStub(AnswerDeckInterface::class),
+        );
+
+        $serialized = $game->jsonSerialize();
+
+        self::assertArrayHasKey('players', $serialized);
+        self::assertSame($players, $serialized['players']);
+
+        self::assertArrayHasKey('current_round', $serialized);
+        self::assertNull($serialized['current_round']);
+
+        self::assertArrayHasKey('previous_rounds', $serialized);
+        self::assertInstanceOf(RoundCollection::class, $serialized['previous_rounds']);
+        self::assertSame([], $serialized['previous_rounds']->toArray());
+    }
+
+    public function testJsonSerializeWithStartedGame(): void
+    {
+        $game = new Game(
+            new PlayerCollection(),
+            $this->createStub(QuestionDeckInterface::class),
+            $this->createStub(AnswerDeckInterface::class),
+        );
+
+        $firstRound = $this->createStub(RoundInterface::class);
+        $game->setNextRound($firstRound);
+        $secondRound = $this->createStub(RoundInterface::class);
+        $game->setNextRound($secondRound);
+
+        $serialized = $game->jsonSerialize();
+
+        self::assertArrayHasKey('current_round', $serialized);
+        self::assertSame($secondRound, $serialized['current_round']);
+
+        self::assertArrayHasKey('previous_rounds', $serialized);
+        self::assertInstanceOf(RoundCollection::class, $serialized['previous_rounds']);
+        self::assertSame([$firstRound], $serialized['previous_rounds']->toArray());
     }
 }

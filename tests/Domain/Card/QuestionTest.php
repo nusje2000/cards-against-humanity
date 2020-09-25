@@ -14,4 +14,13 @@ final class QuestionTest extends TestCase
         $question = new Question('some-text');
         self::assertSame('some-text', $question->getText());
     }
+
+    public function testJsonSerialize(): void
+    {
+        $question = new Question('some-text');
+
+        self::assertSame($question->jsonSerialize(), [
+            'text' => 'some-text',
+        ]);
+    }
 }

@@ -8,6 +8,8 @@ use Nusje2000\CAH\Domain\Card\AnswerCollection;
 
 interface PlayerInterface
 {
+    public function getName(): string;
+
     public function getScore(): int;
 
     public function addScore(int $score): void;

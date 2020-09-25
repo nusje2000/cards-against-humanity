@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Game;
 
 use Aeviiq\Collection\ObjectCollection;
+use JsonSerializable;
 
 /**
  * @extends ObjectCollection<int, RoundInterface>
@@ -13,10 +14,18 @@ use Aeviiq\Collection\ObjectCollection;
  * @method RoundInterface|null first()
  * @method RoundInterface|null last()
  */
-final class RoundCollection extends ObjectCollection
+final class RoundCollection extends ObjectCollection implements JsonSerializable
 {
     protected function allowedInstance(): string
     {
         return RoundInterface::class;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

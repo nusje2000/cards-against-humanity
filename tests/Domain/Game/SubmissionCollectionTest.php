@@ -22,4 +22,17 @@ final class SubmissionCollectionTest extends TestCase
 
         self::assertSame($collection->toArray(), $items);
     }
+
+    public function testJsonSerialize(): void
+    {
+        $items = [
+            $this->createStub(SubmissionInterface::class),
+            $this->createStub(SubmissionInterface::class),
+            $this->createStub(SubmissionInterface::class),
+        ];
+
+        $collection = new SubmissionCollection($items);
+
+        self::assertSame($collection->jsonSerialize(), $items);
+    }
 }

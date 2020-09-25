@@ -16,5 +16,9 @@ interface RoundInterface
 
     public function getWinner(): SubmissionInterface;
 
+    public function hasWinner(): bool;
+
+    public function setWinner(SubmissionInterface $winner): void;
+
     public function isCompleted(): bool;
 }
