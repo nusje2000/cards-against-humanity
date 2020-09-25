@@ -22,7 +22,7 @@ final class PlayerCollection extends ObjectCollection implements JsonSerializabl
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function jsonSerialize(): array
     {

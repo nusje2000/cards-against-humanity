@@ -22,7 +22,7 @@ final class QuestionCollection extends ObjectCollection implements JsonSerializa
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function jsonSerialize(): array
     {

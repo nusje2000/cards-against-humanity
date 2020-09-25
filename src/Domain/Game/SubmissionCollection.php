@@ -22,7 +22,7 @@ final class SubmissionCollection extends ObjectCollection implements JsonSeriali
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function jsonSerialize(): array
     {

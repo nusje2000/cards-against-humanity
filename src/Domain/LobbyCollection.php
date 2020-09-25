@@ -22,7 +22,7 @@ final class LobbyCollection extends ObjectCollection implements JsonSerializable
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function jsonSerialize(): array
     {
