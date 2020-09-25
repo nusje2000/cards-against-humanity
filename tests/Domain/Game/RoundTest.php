@@ -66,4 +66,31 @@ final class RoundTest extends TestCase
         $this->expectExceptionMessage('No winner was selected yet.');
         $round->getWinner();
     }
+
+    public function testJsonSerialize(): void
+    {
+        $cardCzar = $this->createStub(PlayerInterface::class);
+        $question = $this->createStub(QuestionInterface::class);
+
+        $round = new Round($cardCzar, $question);
+
+        self::assertSame([
+            'card_czar' => $cardCzar,
+            'question' => $question,
+            'submissions' => $round->getSubmissions(),
+            'winner' => null,
+            'completed' => false,
+        ], $round->jsonSerialize());
+
+        $winner = $this->createStub(SubmissionInterface::class);
+        $round->setWinner($winner);
+
+        self::assertSame([
+            'card_czar' => $cardCzar,
+            'question' => $question,
+            'submissions' => $round->getSubmissions(),
+            'winner' => $winner,
+            'completed' => true,
+        ], $round->jsonSerialize());
+    }
 }

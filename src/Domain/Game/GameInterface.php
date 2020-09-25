@@ -9,6 +9,8 @@ use Nusje2000\CAH\Domain\Card\Deck\QuestionDeckInterface;
 
 interface GameInterface
 {
+    public function setNextRound(RoundInterface $round): void;
+
     public function getCurrentRound(): RoundInterface;
 
     public function getPreviousRounds(): RoundCollection;
@@ -18,4 +20,6 @@ interface GameInterface
     public function getQuestionDeck(): QuestionDeckInterface;
 
     public function getAnswerDeck(): AnswerDeckInterface;
+
+    public function isStarted(): bool;
 }

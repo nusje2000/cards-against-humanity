@@ -20,7 +20,7 @@ final class ListController
     public function __invoke(): Response
     {
         return new JsonResponse(
-            $this->lobbyRepository->all(0, 25)->toArray(),
+            $this->lobbyRepository->all(0, 25),
         );
     }
 }

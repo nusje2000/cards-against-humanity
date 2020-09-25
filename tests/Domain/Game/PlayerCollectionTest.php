@@ -22,4 +22,17 @@ final class PlayerCollectionTest extends TestCase
 
         self::assertSame($collection->toArray(), $items);
     }
+
+    public function testJsonSerialize(): void
+    {
+        $items = [
+            $this->createStub(PlayerInterface::class),
+            $this->createStub(PlayerInterface::class),
+            $this->createStub(PlayerInterface::class),
+        ];
+
+        $collection = new PlayerCollection($items);
+
+        self::assertSame($collection->jsonSerialize(), $items);
+    }
 }

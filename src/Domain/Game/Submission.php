@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Game;
 
+use JsonSerializable;
 use Nusje2000\CAH\Domain\Card\AnswerInterface;
 
-final class Submission implements SubmissionInterface
+final class Submission implements SubmissionInterface, JsonSerializable
 {
     private PlayerInterface $player;
     private AnswerInterface $answer;
@@ -25,5 +26,16 @@ final class Submission implements SubmissionInterface
     public function getAnswer(): AnswerInterface
     {
         return $this->answer;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'player' => $this->getPlayer(),
+            'answer' => $this->getAnswer(),
+        ];
     }
 }

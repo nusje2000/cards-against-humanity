@@ -21,4 +21,17 @@ final class SubmissionTest extends TestCase
         self::assertSame($player, $submission->getPlayer());
         self::assertSame($answer, $submission->getAnswer());
     }
+
+    public function testJsonSerialize(): void
+    {
+        $player = $this->createStub(PlayerInterface::class);
+        $answer = $this->createStub(AnswerInterface::class);
+
+        $submission = new Submission($player, $answer);
+
+        self::assertSame($submission->jsonSerialize(), [
+            'player' => $player,
+            'answer' => $answer,
+        ]);
+    }
 }

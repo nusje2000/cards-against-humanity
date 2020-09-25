@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Card;
 
-final class Answer implements AnswerInterface
+use JsonSerializable;
+
+final class Answer implements AnswerInterface, JsonSerializable
 {
     private string $text;
 
@@ -16,5 +18,15 @@ final class Answer implements AnswerInterface
     public function getText(): string
     {
         return $this->text;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'text' => $this->getText(),
+        ];
     }
 }
