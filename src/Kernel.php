@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use SymfonyBundles\JsonRequestBundle\SymfonyBundlesJsonRequestBundle;
 
 final class Kernel extends BaseKernel
 {
@@ -22,7 +23,7 @@ final class Kernel extends BaseKernel
      */
     public function registerBundles(): array
     {
-        $bundles = [new FrameworkBundle()];
+        $bundles = [new FrameworkBundle(), new SymfonyBundlesJsonRequestBundle()];
 
         if ('dev' === $this->getEnvironment()) {
             $bundles[] = new TwigBundle();

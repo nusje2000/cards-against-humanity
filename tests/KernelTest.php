@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Routing\Loader\PhpFileLoader as RoutingLoader;
 use Symfony\Component\Routing\RouteCollection;
+use SymfonyBundles\JsonRequestBundle\SymfonyBundlesJsonRequestBundle;
 
 final class KernelTest extends TestCase
 {
@@ -22,32 +23,37 @@ final class KernelTest extends TestCase
     {
         $kernel = $this->createKernel('dev', true);
         $bundles = $kernel->registerBundles();
-        self::assertCount(3, $bundles);
+        self::assertCount(4, $bundles);
         self::assertInstanceOf(FrameworkBundle::class, $bundles[0]);
-        self::assertInstanceOf(TwigBundle::class, $bundles[1]);
-        self::assertInstanceOf(WebProfilerBundle::class, $bundles[2]);
+        self::assertInstanceOf(SymfonyBundlesJsonRequestBundle::class, $bundles[1]);
+        self::assertInstanceOf(TwigBundle::class, $bundles[2]);
+        self::assertInstanceOf(WebProfilerBundle::class, $bundles[3]);
 
         $kernel = $this->createKernel('dev', false);
         $bundles = $kernel->registerBundles();
-        self::assertCount(3, $bundles);
+        self::assertCount(4, $bundles);
         self::assertInstanceOf(FrameworkBundle::class, $bundles[0]);
-        self::assertInstanceOf(TwigBundle::class, $bundles[1]);
-        self::assertInstanceOf(WebProfilerBundle::class, $bundles[2]);
+        self::assertInstanceOf(SymfonyBundlesJsonRequestBundle::class, $bundles[1]);
+        self::assertInstanceOf(TwigBundle::class, $bundles[2]);
+        self::assertInstanceOf(WebProfilerBundle::class, $bundles[3]);
 
         $kernel = $this->createKernel('test', true);
         $bundles = $kernel->registerBundles();
-        self::assertCount(1, $bundles);
+        self::assertCount(2, $bundles);
         self::assertInstanceOf(FrameworkBundle::class, $bundles[0]);
+        self::assertInstanceOf(SymfonyBundlesJsonRequestBundle::class, $bundles[1]);
 
         $kernel = $this->createKernel('test', false);
         $bundles = $kernel->registerBundles();
-        self::assertCount(1, $bundles);
+        self::assertCount(2, $bundles);
         self::assertInstanceOf(FrameworkBundle::class, $bundles[0]);
+        self::assertInstanceOf(SymfonyBundlesJsonRequestBundle::class, $bundles[1]);
 
         $kernel = $this->createKernel('prod', false);
         $bundles = $kernel->registerBundles();
-        self::assertCount(1, $bundles);
+        self::assertCount(2, $bundles);
         self::assertInstanceOf(FrameworkBundle::class, $bundles[0]);
+        self::assertInstanceOf(SymfonyBundlesJsonRequestBundle::class, $bundles[1]);
     }
 
     public function testGetProjectDir(): void
