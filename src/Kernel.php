@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH;
 
+use League\Tactician\Bundle\TacticianBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -23,10 +24,14 @@ final class Kernel extends BaseKernel
      */
     public function registerBundles(): array
     {
-        $bundles = [new FrameworkBundle(), new SymfonyBundlesJsonRequestBundle()];
+        $bundles = [
+            new FrameworkBundle(),
+            new SymfonyBundlesJsonRequestBundle(),
+            new TwigBundle(),
+            new TacticianBundle(),
+        ];
 
         if ('dev' === $this->getEnvironment()) {
-            $bundles[] = new TwigBundle();
             $bundles[] = new WebProfilerBundle();
         }
 
@@ -42,9 +47,9 @@ final class Kernel extends BaseKernel
     {
         $confDir = $this->getConfigDir();
 
+        $configurator->import($confDir . '/services/commands.xml');
         $configurator->import($confDir . '/services/controllers.xml');
         $configurator->import($confDir . '/services/repositories.xml');
-        $configurator->import($confDir . '/services/services.xml');
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void
