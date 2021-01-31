@@ -8,8 +8,33 @@
             <tag name="controller.service_arguments"/>
         </defaults>
 
-        <service id="cah.controller.api.lobby.list" class="Nusje2000\CAH\Application\Controller\Api\Lobby\ListController">
-            <argument type="service" id="cah.repository.lobby"/>
+        <service id="cah.controller.client.game.view" class="Nusje2000\CAH\Application\Controller\Client\Game\ViewController">
+            <argument type="service" id="cah.repository.game"/>
+            <argument type="service" id="twig"/>
+        </service>
+
+        <service id="cah.controller.api.game.create" class="Nusje2000\CAH\Application\Controller\Api\Game\CreateController">
+            <argument type="service" id="tactician.commandbus"/>
+        </service>
+
+        <service id="cah.controller.api.player.join_game" class="Nusje2000\CAH\Application\Controller\Api\Player\JoinGameController">
+            <argument type="service" id="tactician.commandbus"/>
+        </service>
+
+        <service id="cah.controller.api.player.leave_game" class="Nusje2000\CAH\Application\Controller\Api\Player\LeaveGameController">
+            <argument type="service" id="tactician.commandbus"/>
+        </service>
+
+        <service id="cah.controller.api.round.complete" class="Nusje2000\CAH\Application\Controller\Api\Round\CompleteController">
+            <argument type="service" id="tactician.commandbus"/>
+        </service>
+
+        <service id="cah.controller.api.round.start" class="Nusje2000\CAH\Application\Controller\Api\Round\StartController">
+            <argument type="service" id="tactician.commandbus"/>
+        </service>
+
+        <service id="cah.controller.api.round.submit" class="Nusje2000\CAH\Application\Controller\Api\Round\SubmissionController">
+            <argument type="service" id="tactician.commandbus"/>
         </service>
     </services>
 </container>
