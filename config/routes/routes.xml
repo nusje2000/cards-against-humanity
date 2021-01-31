@@ -3,7 +3,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing
         https://symfony.com/schema/routing/routing-1.0.xsd">
-    <route id="app_api_lobby_list" path="/api/lobby/list">
+    <route id="app_api_lobby_lobby" path="/api/lobby" methods="GET">
         <default key="_controller">cah.controller.api.lobby.list</default>
+    </route>
+
+    <route id="app_api_lobby_list" path="/api/lobby/{id}" methods="GET">
+        <default key="_controller">cah.controller.api.lobby.lobby</default>
     </route>
 </routes>

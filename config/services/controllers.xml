@@ -11,5 +11,14 @@
         <service id="cah.controller.api.lobby.list" class="Nusje2000\CAH\Application\Controller\Api\Lobby\ListController">
             <argument type="service" id="cah.repository.lobby"/>
         </service>
+
+        <service id="cah.controller.api.lobby.lobby" class="Nusje2000\CAH\Application\Controller\Api\Lobby\LobbyController">
+            <argument type="service" id="cah.repository.lobby"/>
+        </service>
+
+        <service id="cah.controller.api.lobby.create" class="Nusje2000\CAH\Application\Controller\Api\Lobby\CreateController">
+            <argument type="service" id="cah.repository.player"/>
+            <argument type="service" id="cah.repository.lobby"/>
+        </service>
     </services>
 </container>

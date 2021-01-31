@@ -4,75 +4,34 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Game;
 
-use JsonSerializable;
-use LogicException;
-use Nusje2000\CAH\Domain\Card\Deck\AnswerDeckInterface;
-use Nusje2000\CAH\Domain\Card\Deck\QuestionDeckInterface;
+use Nusje2000\CAH\Domain\Card\WhiteCard;
+use Nusje2000\CAH\Domain\Player\Player;
+use Nusje2000\CAH\Domain\Round;
+use Nusje2000\CAH\Domain\Submission;
+use Nusje2000\CAH\Domain\Table;
 
-final class Game implements GameInterface, JsonSerializable
+interface Game
 {
-    private PlayerCollection $players;
-    private QuestionDeckInterface $questionDeck;
-    private AnswerDeckInterface $answerDeck;
-    private RoundCollection $rounds;
-
-    public function __construct(PlayerCollection $players, QuestionDeckInterface $questionDeck, AnswerDeckInterface $answerDeck)
-    {
-        $this->players = $players;
-        $this->questionDeck = $questionDeck;
-        $this->answerDeck = $answerDeck;
-        $this->rounds = new RoundCollection();
-    }
-
-    public function setNextRound(RoundInterface $round): void
-    {
-        $this->rounds->append($round);
-    }
-
-    public function getCurrentRound(): RoundInterface
-    {
-        $currentRound = $this->rounds->last();
-        if (null === $currentRound) {
-            throw new LogicException('No rounds set.');
-        }
-
-        return $currentRound;
-    }
-
-    public function getPreviousRounds(): RoundCollection
-    {
-        return new RoundCollection(array_slice($this->rounds->toArray(), 0, $this->rounds->count() - 1));
-    }
-
-    public function getPlayers(): PlayerCollection
-    {
-        return $this->players;
-    }
-
-    public function getQuestionDeck(): QuestionDeckInterface
-    {
-        return $this->questionDeck;
-    }
-
-    public function getAnswerDeck(): AnswerDeckInterface
-    {
-        return $this->answerDeck;
-    }
-
-    public function isStarted(): bool
-    {
-        return null !== $this->rounds->last();
-    }
+    public function start(): void;
 
     /**
-     * @return array<string, mixed>
+     * @return array<Player>
      */
-    public function jsonSerialize(): array
-    {
-        return [
-            'players' => $this->getPlayers(),
-            'current_round' => $this->isStarted() ? $this->getCurrentRound() : null,
-            'previous_rounds' => $this->getPreviousRounds(),
-        ];
-    }
+    public function players(): array;
+
+    public function join(Player $player): void;
+
+    public function leave(Player $player): void;
+
+    public function table(): Table;
+
+    public function currentRound(): Round;
+
+    public function completeRound(Submission $winner): void;
+
+    public function startRound(): void;
+
+    public function end(): void;
+
+    public function submit(Player $player, WhiteCard $card): void;
 }
