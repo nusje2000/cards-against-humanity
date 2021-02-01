@@ -15,6 +15,7 @@ use Nusje2000\CAH\Domain\Card\WhiteCard;
 use Nusje2000\CAH\Domain\Game\EventBasedGame;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Game\Rules;
+use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Player\Player;
 use Nusje2000\CAH\Domain\Player\Username;
 use PHPUnit\Framework\TestCase;
@@ -23,8 +24,8 @@ final class EventBasedGameTest extends TestCase
 {
     public function testGame(): void
     {
-        $player1 = Player::create(\Nusje2000\CAH\Domain\Player\Id::fromString('player-1'), Username::fromString('palyer-1'));
-        $player2 = Player::create(\Nusje2000\CAH\Domain\Player\Id::fromString('player-2'), Username::fromString('palyer-2'));
+        $player1 = Player::create(PlayerId::fromString('player-1'), Username::fromString('palyer-1'));
+        $player2 = Player::create(PlayerId::fromString('player-2'), Username::fromString('palyer-2'));
 
         $game = EventBasedGame::initialize(Id::fromString('some-id'), Rules::custom(4, 4), $this->whiteDeck(), $this->blackDeck());
         $game->join($player1);
