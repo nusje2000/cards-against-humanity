@@ -35,7 +35,7 @@ final class BlackCard implements Card, JsonSerializable
     }
 
     /**
-     * @return array<string, mixed>\
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {

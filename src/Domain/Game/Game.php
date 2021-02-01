@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Game;
 
-use Nusje2000\CAH\Domain\Card\WhiteCard;
+use Nusje2000\CAH\Domain\Card\Id as CardId;
+use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Player\Player;
-use Nusje2000\CAH\Domain\Round;
-use Nusje2000\CAH\Domain\Submission;
+use Nusje2000\CAH\Domain\Round\RoundRegistry;
 use Nusje2000\CAH\Domain\Table;
 
 interface Game
 {
-    public function start(): void;
+    public function id(): Id;
+
+    public function table(): Table;
+
+    public function rules(): Rules;
 
     /**
      * @return array<Player>
@@ -23,15 +27,13 @@ interface Game
 
     public function leave(Player $player): void;
 
-    public function table(): Table;
-
-    public function currentRound(): Round;
-
-    public function completeRound(Submission $winner): void;
+    public function start(): void;
 
     public function startRound(): void;
 
-    public function end(): void;
+    public function rounds(): RoundRegistry;
 
-    public function submit(Player $player, WhiteCard $card): void;
+    public function completeRound(PlayerId $winner): void;
+
+    public function submit(PlayerId $player, CardId $card): void;
 }

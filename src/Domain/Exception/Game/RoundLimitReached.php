@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Domain\Exception\Card;
+namespace Nusje2000\CAH\Domain\Exception\Game;
 
 use LogicException;
 use Throwable;
 
-final class EmptyDeck extends LogicException
+final class RoundLimitReached extends LogicException
 {
     private function __construct(string $message, Throwable $previous = null)
     {
@@ -16,6 +16,6 @@ final class EmptyDeck extends LogicException
 
     public static function create(?Throwable $previous = null): self
     {
-        return new self('The deck is emtpy.', $previous);
+        return new self('The round limit has been reached.', $previous);
     }
 }

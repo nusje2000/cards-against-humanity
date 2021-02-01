@@ -5,29 +5,20 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Event\Game;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
-use Nusje2000\CAH\Domain\Card\ArrayDeck;
-use Nusje2000\CAH\Domain\Card\ArrayDiscardPile;
-use Nusje2000\CAH\Domain\Card\BlackCard;
-use Nusje2000\CAH\Domain\Card\Id as CardId;
-use Nusje2000\CAH\Domain\Card\Text;
-use Nusje2000\CAH\Domain\Card\WhiteCard;
-use Nusje2000\CAH\Domain\Table;
+use Nusje2000\CAH\Domain\Game\Id;
 
 final class GameWasInitialized implements SerializablePayload
 {
-    /**
-     * @var Table
-     */
-    private Table $table;
+    private Id $id;
 
-    public function __construct(Table $table)
+    public function __construct(Id $id)
     {
-        $this->table = $table;
+        $this->id = $id;
     }
 
-    public function table(): Table
+    public function id(): Id
     {
-        return $this->table;
+        return $this->id;
     }
 
     /**
@@ -36,63 +27,19 @@ final class GameWasInitialized implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'table' => [
-                'black_deck' => array_map(static function (WhiteCard $card): array {
-                    return [
-                        'id' => $card->id()->toString(),
-                        'contents' => $card->contents()->toString(),
-                    ];
-                }, $this->table()->whiteDeck()->cards()),
-                'white_deck' => array_map(static function (BlackCard $card): array {
-                    return [
-                        'id' => $card->id()->toString(),
-                        'contents' => $card->contents()->toString(),
-                    ];
-                }, $this->table()->blackDeck()->cards()),
-                'white_discard_pile' => array_map(static function (WhiteCard $card): array {
-                    return [
-                        'id' => $card->id()->toString(),
-                        'contents' => $card->contents()->toString(),
-                    ];
-                }, $this->table()->whiteDiscardPile()->cards()),
-                'black_discard_pile' => array_map(static function (BlackCard $card): array {
-                    return [
-                        'id' => $card->id()->toString(),
-                        'contents' => $card->contents()->toString(),
-                    ];
-                }, $this->table()->blackDiscardPile()->cards()),
-            ],
+            'id' => $this->id()->toString(),
         ];
     }
 
     /**
+     * @psalm-suppress MixedArgument
+     *
      * @param array<mixed> $payload
      */
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new self(
-            Table::createWithDiscardPiles(
-                ArrayDeck::fromArray(
-                    array_map(static function (array $card): WhiteCard {
-                        return new WhiteCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                    }, $payload['table']['black_deck'])
-                ),
-                ArrayDeck::fromArray(
-                    array_map(static function (array $card): BlackCard {
-                        return new BlackCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                    }, $payload['table']['white_deck'])
-                ),
-                ArrayDiscardPile::fromArray(
-                    array_map(static function (array $card): WhiteCard {
-                        return new WhiteCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                    }, $payload['table']['white_discard_pile'])
-                ),
-                ArrayDiscardPile::fromArray(
-                    array_map(static function (array $card): BlackCard {
-                        return new BlackCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                    }, $payload['table']['black_discard_pile'])
-                )
-            )
+            Id::fromString($payload['id'])
         );
     }
 }

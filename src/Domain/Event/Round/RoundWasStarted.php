@@ -9,23 +9,26 @@ use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Card\Text;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
+use Nusje2000\CAH\Domain\Round\Id as RoundId;
 
 final class RoundWasStarted implements SerializablePayload
 {
-    /**
-     * @var PlayerId
-     */
+    private RoundId $id;
+
     private PlayerId $cardCzar;
 
-    /**
-     * @var BlackCard
-     */
     private BlackCard $blackCard;
 
-    public function __construct(PlayerId $cardCzar, BlackCard $blackCard)
+    public function __construct(RoundId $id, PlayerId $cardCzar, BlackCard $blackCard)
     {
+        $this->id = $id;
         $this->cardCzar = $cardCzar;
         $this->blackCard = $blackCard;
+    }
+
+    public function id(): RoundId
+    {
+        return $this->id;
     }
 
     public function cardCzar(): PlayerId
@@ -44,7 +47,8 @@ final class RoundWasStarted implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'card_czar' => $this->cardCzar(),
+            'id' => $this->id()->toString(),
+            'card_czar' => $this->cardCzar()->toString(),
             'black_card' => [
                 'id' => $this->blackCard()->id()->toString(),
                 'contents' => $this->blackCard()->contents()->toString(),
@@ -53,12 +57,16 @@ final class RoundWasStarted implements SerializablePayload
     }
 
     /**
+     * @psalm-suppress MixedArgument
+     * @psalm-suppress MixedArrayAccess
+     *
      * @param array<mixed> $payload
      */
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new self(
-            PlayerId::fromString($payload['id']),
+            RoundId::fromString($payload['id']),
+            PlayerId::fromString($payload['card_czar']),
             new BlackCard(CardId::fromString($payload['black_card']['id']), Text::fromString($payload['black_card']['contents'])),
         );
     }

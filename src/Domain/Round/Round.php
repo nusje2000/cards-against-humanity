@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Domain;
+namespace Nusje2000\CAH\Domain\Round;
 
 use LogicException;
 use Nusje2000\CAH\Domain\Card\BlackCard;
+use Nusje2000\CAH\Domain\Exception\Round\NoSubmissionFound;
+use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Player\Player;
+use Nusje2000\CAH\Domain\Submission;
 
 final class Round
 {
+    private Id $id;
+
     private Player $cardCzar;
 
     private BlackCard $blackCard;
@@ -17,23 +22,18 @@ final class Round
     private ?Submission $winner = null;
 
     /**
-     * @var array<Submission>
+     * @var array<string, Submission>
      */
     private array $submissions = [];
 
-    /**
-     * @var RoundId
-     */
-    private RoundId $id;
-
-    public function __construct(RoundId $id, Player $cardCzar, BlackCard $blackCard)
+    public function __construct(Id $id, Player $cardCzar, BlackCard $blackCard)
     {
         $this->id = $id;
         $this->cardCzar = $cardCzar;
         $this->blackCard = $blackCard;
     }
 
-    public function id(): RoundId
+    public function id(): Id
     {
         return $this->id;
     }
@@ -58,16 +58,26 @@ final class Round
     }
 
     /**
-     * @return array<Submission>
+     * @return array<string, Submission>
      */
     public function submissions(): array
     {
         return $this->submissions;
     }
 
+    public function submissionByPlayer(PlayerId $id): Submission
+    {
+        $submission = $this->submissions[$id->toString()] ?? null;
+        if (null === $submission) {
+            throw NoSubmissionFound::byPlayer($id);
+        }
+
+        return $submission;
+    }
+
     public function submit(Submission $submission): void
     {
-        $this->submissions[] = $submission;
+        $this->submissions[$submission->player()->id()->toString()] = $submission;
     }
 
     public function end(Submission $winner): void

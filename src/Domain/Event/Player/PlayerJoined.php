@@ -54,6 +54,9 @@ final class PlayerJoined implements SerializablePayload
     }
 
     /**
+     * @psalm-suppress MixedArgument
+     * @psalm-suppress MixedArrayAccess
+     *
      * @param array<mixed> $payload
      */
     public static function fromPayload(array $payload): SerializablePayload

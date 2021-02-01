@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Player;
 
 use JsonSerializable;
+use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
-use UnexpectedValueException;
+use Nusje2000\CAH\Domain\Exception\Card\NoCardFound;
 
 final class Hand implements JsonSerializable
 {
     /**
-     * @var array<WhiteCard>
+     * @var array<string, WhiteCard>
      */
     private array $hand;
 
     /**
-     * @param array<WhiteCard> $hand
+     * @param array<string, WhiteCard> $hand
      */
     private function __construct(array $hand)
     {
@@ -33,22 +34,28 @@ final class Hand implements JsonSerializable
      */
     public static function fromArray(array $hand): self
     {
-        return new self($hand);
+        $mappedHand = [];
+        foreach ($hand as $card) {
+            $mappedHand[$card->id()->toString()] = $card;
+        }
+
+        return new self($mappedHand);
     }
 
     public function add(WhiteCard $card): void
     {
-        $this->hand[] = $card;
+        $this->hand[$card->id()->toString()] = $card;
     }
 
     public function remove(WhiteCard $card): void
     {
-        $index = array_search($card, $this->hand, true);
-        if (false === $index) {
-            throw new UnexpectedValueException('Card is not in players hand.');
+        $id = $card->id();
+
+        if (!isset($this->hand[$id->toString()])) {
+            throw NoCardFound::byId($id);
         }
 
-        unset($this->hand[$index]);
+        unset($this->hand[$id->toString()]);
     }
 
     /**
@@ -57,6 +64,20 @@ final class Hand implements JsonSerializable
     public function contents(): array
     {
         return $this->hand;
+    }
+
+    public function cardById(CardId $id): WhiteCard
+    {
+        if (!isset($this->hand[$id->toString()])) {
+            throw NoCardFound::byId($id);
+        }
+
+        return $this->hand[$id->toString()];
+    }
+
+    public function size(): int
+    {
+        return count($this->hand);
     }
 
     /**

@@ -32,6 +32,9 @@ final class PlayerLeft implements SerializablePayload
     }
 
     /**
+     *
+     * @psalm-suppress MixedArgument
+     *
      * @param array<mixed> $payload
      */
     public static function fromPayload(array $payload): SerializablePayload

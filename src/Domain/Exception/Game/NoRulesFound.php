@@ -7,7 +7,7 @@ namespace Nusje2000\CAH\Domain\Exception\Game;
 use LogicException;
 use Throwable;
 
-final class NoActiveRound extends LogicException
+final class NoRulesFound extends LogicException
 {
     private function __construct(string $message, ?Throwable $previous = null)
     {
@@ -16,6 +16,6 @@ final class NoActiveRound extends LogicException
 
     public static function create(?Throwable $previous = null): self
     {
-        return new self('No active round found.', $previous);
+        return new self('No rules were found.', $previous);
     }
 }

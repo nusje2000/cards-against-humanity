@@ -5,20 +5,30 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Event\Round;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
+use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
-final class RoundWasCompleted implements SerializablePayload
+final class CardWasSubmitted implements SerializablePayload
 {
-    private PlayerId $winningPlayer;
+    private PlayerId $player;
 
-    public function __construct(PlayerId $winningPlayer)
+    private CardId $card;
+
+    public function __construct(PlayerId $player, CardId $card)
     {
-        $this->winningPlayer = $winningPlayer;
+
+        $this->player = $player;
+        $this->card = $card;
     }
 
-    public function winningPlayer(): PlayerId
+    public function player(): PlayerId
     {
-        return $this->winningPlayer;
+        return $this->player;
+    }
+
+    public function card(): CardId
+    {
+        return $this->card;
     }
 
     /**
@@ -27,7 +37,8 @@ final class RoundWasCompleted implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'player_id' => $this->winningPlayer()->toString(),
+            'player_id' => $this->player()->toString(),
+            'card_id' => $this->card()->toString(),
         ];
     }
 
@@ -41,6 +52,7 @@ final class RoundWasCompleted implements SerializablePayload
     {
         return new self(
             PlayerId::fromString($payload['player_id']),
+            CardId::fromString($payload['card_id']),
         );
     }
 }
