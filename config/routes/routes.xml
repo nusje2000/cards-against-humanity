@@ -3,11 +3,23 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing
         https://symfony.com/schema/routing/routing-1.0.xsd">
-    <route id="app_api_lobby_lobby" path="/api/lobby" methods="GET">
-        <default key="_controller">cah.controller.api.lobby.list</default>
+    <route id="cah_api_game_create" path="/api/game/create" methods="GET">
+        <default key="_controller">cah.controller.api.game.create</default>
     </route>
 
-    <route id="app_api_lobby_list" path="/api/lobby/{id}" methods="GET">
-        <default key="_controller">cah.controller.api.lobby.lobby</default>
+    <route id="cah_api_game_start" path="/api/game/{id}/start" methods="GET">
+        <default key="_controller">cah.controller.api.game.start</default>
+    </route>
+
+    <route id="cah_api_game_player_join" path="/api/game/{id}/join" methods="GET">
+        <default key="_controller">cah.controller.api.game.player.join</default>
+    </route>
+
+    <route id="cah_api_game_player_leave" path="/api/game/{gameId}/leave/{playerId}" methods="GET">
+        <default key="_controller">cah.controller.api.game.player.leave</default>
+    </route>
+
+    <route id="cah_api_game_player_leave" path="/api/game/{id}" methods="GET">
+        <default key="_controller">cah.controller.api.game.view</default>
     </route>
 </routes>

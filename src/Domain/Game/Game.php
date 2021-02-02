@@ -25,7 +25,7 @@ interface Game
 
     public function join(Player $player): void;
 
-    public function leave(Player $player): void;
+    public function leave(PlayerId $player): void;
 
     public function start(): void;
 

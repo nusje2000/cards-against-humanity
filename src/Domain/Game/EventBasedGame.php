@@ -110,9 +110,9 @@ final class EventBasedGame implements Game, AggregateRoot
         $this->recordThat(new PlayerJoined($player));
     }
 
-    public function leave(Player $player): void
+    public function leave(PlayerId $player): void
     {
-        $this->recordThat(new PlayerLeft($player->id()));
+        $this->recordThat(new PlayerLeft($player));
     }
 
     public function start(): void

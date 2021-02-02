@@ -85,12 +85,12 @@ final class TableWasCreated implements SerializablePayload
             ArrayDeck::fromArray(
                 array_map(static function (array $card): WhiteCard {
                     return new WhiteCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                }, $payload['table']['black_deck'])
+                }, $payload['table']['white_deck'])
             ),
             ArrayDeck::fromArray(
                 array_map(static function (array $card): BlackCard {
                     return new BlackCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                }, $payload['table']['white_deck'])
+                }, $payload['table']['black_deck'])
             ),
         );
     }
