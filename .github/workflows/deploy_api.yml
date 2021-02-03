@@ -86,3 +86,4 @@ jobs:
                         cd ${SOURCE_DIR}
                         rm ${SOURCE_DIR}/current
                         ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current
+                        service php7.4-fpm reload

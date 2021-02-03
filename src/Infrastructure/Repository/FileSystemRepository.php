@@ -127,6 +127,6 @@ final class FileSystemRepository implements MessageRepository
             throw new UnexpectedValueException(sprintf('No root found by id "%s".', $id->toString()));
         }
 
-        return Finder::create()->in($this->aggregateRootDirectory($id))->name('*.json');
+        return Finder::create()->in($this->aggregateRootDirectory($id))->name('*.json')->sortByName();
     }
 }
