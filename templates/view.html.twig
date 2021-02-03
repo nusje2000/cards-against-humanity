@@ -1,41 +1,70 @@
 {% extends 'base.html.twig' %}
 
+{% import _self as view %}
+
+{% macro white_card(card, bottom_text, highlight = false) %}
+    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex {{ highlight ? 'bg-gradient-to-t from-green-400 to-blue-500' }}">
+        {{ card.contents.toString }}
+        <div class="absolute bottom-0 left-0 font-bold m-2">
+            {{ bottom_text }} {{ highlight ? '❤️' }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro white_card_trigger(card, api_route, highlight = false) %}
+    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex {{ highlight ? 'bg-gradient-to-t from-green-400 to-transparent' }}"
+         data-api-trigger="{{ api_route }}">
+        {{ card.contents.toString }}
+        <div class="absolute bottom-0 left-0 font-bold m-2">
+            {{ highlight ? '✅' }} {{ highlight ? 'Selected' : 'Click to pick' }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro black_card(card) %}
+    <div class="relative w-48 h-64 bg-black text-white font-bold p-2 mb-2 mr-1 rounded inline-flex">
+        {{ card.contents.toString }}
+    </div>
+{% endmacro %}
+
+{% macro black_card_trigger(text, api_route) %}
+    <div class="relative w-48 h-64 bg-black text-white font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex" data-api-trigger="{{ api_route }}">
+        {{ text }}
+    </div>
+{% endmacro %}
+
 {% block body %}
+    {% set round = game.rounds.hasActiveRound ? game.rounds.current : null %}
+
     <div class="flex w-full mb-5">
-        <div class="w-1/2 mx-2">
+        <div class="w-3/4 mx-2">
             {% for player in game.players %}
                 <h1 class="text-4xl text-white">{{ player.username.toString }}</h1>
-                <div class="whitespace-nowrap max-w-full overflow-x-auto">
-                    {% for card in player.hand.contents %}
-                        <div class="w-48 h-64 bg-white text-black inline-block p-2 cursor-pointer rounded"
-                             data-api-trigger="{{ path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': player.id.toString}) }}">
-                            {{ card.contents.toString }}
-                        </div>
-                    {% endfor %}
-                </div>
+                {% for card in player.hand.contents %}
+                    {{ view.white_card_trigger(
+                        card,
+                        path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': player.id.toString}),
+                        round != null and round.playerHasSubmitted(player.id) and round.submissionByPlayer(player.id).card.id.equalTo(card.id)
+                    ) }}
+                {% endfor %}
             {% endfor %}
         </div>
-        <div class="w-1/2 mx-2">
+        <div class="w-1/4 mx-2">
             <h1 class="text-4xl text-white">Current round</h1>
-            {% if game.rounds.hasActiveRound %}
-                <div class="w-48 h-64 bg-black text-white font-bold inline-block p-2 mb-2 rounded">
-                    {{ game.rounds.current.blackCard.contents.toString }}
-                </div>
-                <div class="whitespace-nowrap max-w-full overflow-x-auto">
-                    {% for submission in game.rounds.current.submissions %}
-                        <div class="relative w-48 h-64 bg-white text-black inline-block p-2 cursor-pointer rounded"
-                             data-api-trigger="{{ path('cah_api_round_complete', {'game': game.id.toString, 'winner': submission.player.id.toString}) }}">
-                            {{ submission.card.contents.toString }}
-                            <div class="absolute bottom-0 left-0 font-bold">
-                                Click to pick
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+
+            {% if round != null %}
+                {{ view.black_card(round.blackCard) }}
             {% else %}
-                <div class="w-48 h-64 bg-black text-white font-bold inline-block p-2 mb-2 cursor-pointer rounded"
-                     data-api-trigger="{{ path('cah_api_round_start', {'game': game.id.toString}) }}">
-                    Click to start next round
+                {{ view.black_card_trigger('Click to start next round', path('cah_api_round_start', {'game': game.id.toString})) }}
+            {% endif %}
+
+            {{ view.black_card_trigger('Add player', path('cah_api_game_player_join', {'game' : game.id.toString})) }}
+
+            {% if round != null %}
+                <div class="max-w-full">
+                    {% for submission in round.submissions %}
+                        {{ view.white_card_trigger(submission.card, path('cah_api_round_complete', {'game': game.id.toString, 'winner': submission.player.id.toString})) }}
+                    {% endfor %}
                 </div>
             {% endif %}
         </div>
@@ -43,16 +72,10 @@
 
     {% for round in game.rounds.completed %}
         <div class="flex w-full">
-            <div class="w-48 h-64 bg-black text-white font-bold inline-block p-2 mb-1 rounded">
-                {{ round.blackCard.contents.toString }}
-            </div>
-            <div class="whitespace-nowrap max-w-full overflow-x-auto">
-                {% for submission in round.submissions %}
-                    <div class="relative w-48 h-64 bg-white text-black inline-block p-2 cursor-pointer rounded {% if submission.player.id.equalTo(round.winner.player.id) %}bg-gradient-to-t from-green-400 to-blue-500 text-white font-bold{% endif %}">
-                        {{ submission.card.contents.toString }}
-                    </div>
-                {% endfor %}
-            </div>
+            {{ view.black_card(round.blackCard) }}
+            {% for submission in round.submissions %}
+                {{ view.white_card(submission.card, submission.player.username.toString, submission.player.id.equalTo(round.winner.player.id)) }}
+            {% endfor %}
         </div>
     {% endfor %}
 {% endblock %}

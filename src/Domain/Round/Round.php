@@ -65,6 +65,11 @@ final class Round
         return $this->submissions;
     }
 
+    public function playerHasSubmitted(PlayerId $id): bool
+    {
+        return isset($this->submissions[$id->toString()]);
+    }
+
     public function submissionByPlayer(PlayerId $id): Submission
     {
         $submission = $this->submissions[$id->toString()] ?? null;

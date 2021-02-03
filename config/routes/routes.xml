@@ -11,12 +11,16 @@
         <default key="_controller">cah.controller.client.game.view</default>
     </route>
 
+    <route id="cah_index" path="/" methods="GET">
+        <default key="_controller">cah.controller.client.index</default>
+    </route>
+
     <route id="cah_api_game_player_join" path="/api/game/{game}/join" methods="GET">
-        <default key="_controller">cah.controller.api.player.join</default>
+        <default key="_controller">cah.controller.api.player.join_game</default>
     </route>
 
     <route id="cah_api_player_leave_game" path="/api/game/{game}/leave/{player}" methods="GET">
-        <default key="_controller">cah.controller.api.player.leave</default>
+        <default key="_controller">cah.controller.api.player.leave_game</default>
     </route>
 
     <route id="cah_api_round_start" path="/api/game/{game}/round/start" methods="GET">

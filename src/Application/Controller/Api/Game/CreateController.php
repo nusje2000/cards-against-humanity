@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Application\Controller\Api\Game;
 
+use Faker\Factory;
+use Faker\Generator;
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Card\ArrayDeck;
 use Nusje2000\CAH\Domain\Card\BlackCard;
@@ -25,8 +27,11 @@ final class CreateController
      */
     private CommandBus $commandBus;
 
+    private Generator $faker;
+
     public function __construct(CommandBus $commandBus)
     {
+        $this->faker = Factory::create();
         $this->commandBus = $commandBus;
     }
 
@@ -48,7 +53,7 @@ final class CreateController
     {
         $cards = [];
         foreach (range(1, 200) as $index) {
-            $cards[] = new WhiteCard(CardId::fromString(sprintf('card-%d', $index)), Text::fromString(sprintf('Card %d', $index)));
+            $cards[] = new WhiteCard(CardId::fromUuid(Uuid::uuid4()), Text::fromString(implode(' ', (array) $this->faker->words(10))));
         }
 
         return ArrayDeck::fromArray($cards);
@@ -61,7 +66,7 @@ final class CreateController
     {
         $cards = [];
         foreach (range(1, 50) as $index) {
-            $cards[] = new BlackCard(CardId::fromString(sprintf('card-%d', $index)), Text::fromString(sprintf('Card %d', $index)));
+            $cards[] = new BlackCard(CardId::fromUuid(Uuid::uuid4()), Text::fromString(implode(' ', (array) $this->faker->words(10))));
         }
 
         return ArrayDeck::fromArray($cards);

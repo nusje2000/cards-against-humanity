@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
         <title>{% block title %}CAH Client{% endblock %}</title>
         <style>
             body {
@@ -18,6 +20,16 @@
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
             <script>
+                $('.start-game').on('click', (event) => {
+                    const href = $(event.target).data('api');
+
+                    fetch(href).then((response) => {
+                        return response.json();
+                    }).then((json) => {
+                        window.location.href = `/game/${json.id}`;
+                    }).catch(error => alert(error));
+                });
+
                 $('[data-api-trigger]').on('click', (event) => {
                     const href = $(event.target).data('api-trigger');
 

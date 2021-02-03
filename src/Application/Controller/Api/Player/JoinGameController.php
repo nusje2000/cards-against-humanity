@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Application\Controller\Api\Player;
 
+use Faker\Factory;
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
@@ -29,7 +30,7 @@ final class JoinGameController
 
         $this->commandBus->handle(new JoinGame(Id::fromString($game), Player::create(
             $playerId,
-            Username::fromString('bob'))
+            Username::fromString(Factory::create()->firstName))
         ));
 
         return new JsonResponse([

@@ -8,6 +8,10 @@
             <tag name="controller.service_arguments"/>
         </defaults>
 
+        <service id="cah.controller.client.index" class="Nusje2000\CAH\Application\Controller\Client\IndexController">
+            <argument type="service" id="twig"/>
+        </service>
+
         <service id="cah.controller.client.game.view" class="Nusje2000\CAH\Application\Controller\Client\Game\ViewController">
             <argument type="service" id="cah.repository.game"/>
             <argument type="service" id="twig"/>

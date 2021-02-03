@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="w-screen h-screen flex">
+        <div class="text-white self-center text-center w-full">
+            <div class="text-9xl mb-10">
+                Nusje2000/CAH
+            </div>
+            <div class="text-3xl mb-5">
+                An online version of Cards Against Humanity (Work in Progress)
+            </div>
+            <div class="flex w-1/3 self-center mx-auto">
+                <a class="font-bold p-3 bg-white text-black rounded flex-1 mx-5 start-game cursor-pointer"
+                   data-api="{{ url('cah_api_game_create') }}">Start</a>
+                <a href="https://github.com/nusje2000/cards-against-humanity" class="font-bold p-3 bg-black text-white rounded flex-1 mx-5">GitHub</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
