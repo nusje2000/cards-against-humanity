@@ -30,7 +30,7 @@ jobs:
     deploy:
         name: 'Deploy'
         runs-on: ubuntu-latest
-        needs: ['tests']
+        needs: [ 'tests' ]
         steps:
             -   name: Setup PHP, with composer and extensions
                 uses: shivammathur/setup-php@v1
@@ -86,4 +86,3 @@ jobs:
                         cd ${SOURCE_DIR}
                         rm ${SOURCE_DIR}/current
                         ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current
-                        service php7.4-fpm reload
