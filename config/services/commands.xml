@@ -12,15 +12,23 @@
             <argument type="service" id="cah.repository.game"/>
         </service>
 
-        <service id="cah.command.handler.game.start" class="Nusje2000\CAH\Infrastructure\Command\Game\StartHandler">
-            <argument type="service" id="cah.repository.game"/>
-        </service>
-
         <service id="cah.command.handler.player.join_game" class="Nusje2000\CAH\Infrastructure\Command\Player\JoinGameHandler">
             <argument type="service" id="cah.repository.game"/>
         </service>
 
         <service id="cah.command.handler.player.leave_game" class="Nusje2000\CAH\Infrastructure\Command\Player\LeaveGameHandler">
+            <argument type="service" id="cah.repository.game"/>
+        </service>
+
+        <service id="cah.command.handler.round.start" class="Nusje2000\CAH\Infrastructure\Command\Round\StartHandler">
+            <argument type="service" id="cah.repository.game"/>
+        </service>
+
+        <service id="cah.command.handler.round.submit" class="Nusje2000\CAH\Infrastructure\Command\Round\SubmitHandler">
+            <argument type="service" id="cah.repository.game"/>
+        </service>
+
+        <service id="cah.command.handler.round.complete" class="Nusje2000\CAH\Infrastructure\Command\Round\CompleteHandler">
             <argument type="service" id="cah.repository.game"/>
         </service>
     </services>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Application\Controller\Game;
+namespace Nusje2000\CAH\Application\Controller\Api\Player;
 
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
@@ -11,7 +11,7 @@ use Nusje2000\CAH\Infrastructure\Command\Player\LeaveGame;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class LeaveController
+final class LeaveGameController
 {
     private CommandBus $commandBus;
 
@@ -20,12 +20,9 @@ final class LeaveController
         $this->commandBus = $commandBus;
     }
 
-    public function __invoke(string $gameId, string $playerId): Response
+    public function __invoke(string $game, string $player): Response
     {
-        $game = GameId::fromString($gameId);
-        $player = PlayerId::fromString($playerId);
-
-        $this->commandBus->handle(new LeaveGame($game, $player));
+        $this->commandBus->handle(new LeaveGame(GameId::fromString($game), PlayerId::fromString($player)));
 
         return new JsonResponse();
     }

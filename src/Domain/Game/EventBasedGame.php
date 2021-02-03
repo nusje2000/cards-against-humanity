@@ -21,7 +21,6 @@ use Nusje2000\CAH\Domain\Event\Round\RoundWasCompleted;
 use Nusje2000\CAH\Domain\Event\Round\RoundWasStarted;
 use Nusje2000\CAH\Domain\Exception\Game\NoRulesFound;
 use Nusje2000\CAH\Domain\Exception\Game\NoTableFound;
-use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
 use Nusje2000\CAH\Domain\Exception\Game\RoundLimitReached;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Player\Player;
@@ -108,6 +107,7 @@ final class EventBasedGame implements Game, AggregateRoot
     public function join(Player $player): void
     {
         $this->recordThat(new PlayerJoined($player));
+        $this->restockPlayer($player);
     }
 
     public function leave(PlayerId $player): void
@@ -115,23 +115,13 @@ final class EventBasedGame implements Game, AggregateRoot
         $this->recordThat(new PlayerLeft($player));
     }
 
-    public function start(): void
-    {
-        $this->restockPlayers();
-        $this->startRound();
-    }
-
-    public function startRound(): void
+    public function startRound(RoundId $roundId): void
     {
         if (!$this->canStartNewRound()) {
             throw RoundLimitReached::create();
         }
 
-        $this->recordThat(new RoundWasStarted(
-            RoundId::fromUuid(Uuid::uuid4()),
-            $this->players->rotate()->id(),
-            $this->table()->blackDeck()->draw()
-        ));
+        $this->recordThat(new RoundWasStarted($roundId));
     }
 
     public function submit(PlayerId $player, CardId $card): void
@@ -172,7 +162,11 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function applyPlayerHasDrawnCard(PlayerHasDrawnCard $event): void
     {
-        $this->players->findById($event->player())->hand()->add($event->card());
+        $this->players
+            ->findById($event->player())
+            ->hand()->add(
+                $this->table()->whiteDeck()->draw()
+            );
     }
 
     public function applyRoundWasStarted(RoundWasStarted $event): void
@@ -180,8 +174,8 @@ final class EventBasedGame implements Game, AggregateRoot
         $this->rounds->start(
             new Round(
                 $event->id(),
-                $this->playerById($event->cardCzar()),
-                $event->blackCard()
+                $this->players->rotate(),
+                $this->table()->blackDeck()->draw()
             )
         );
     }
@@ -232,22 +226,12 @@ final class EventBasedGame implements Game, AggregateRoot
     private function restockPlayer(Player $player): void
     {
         while ($this->rules()->handSize() > $player->hand()->size()) {
-            $this->recordThat(new PlayerHasDrawnCard($player->id(), $this->table()->whiteDeck()->draw()));
+            $this->recordThat(new PlayerHasDrawnCard($player->id()));
         }
     }
 
     private function canStartNewRound(): bool
     {
         return null === $this->rules()->maxRounds() || count($this->rounds->completed()) < $this->rules()->maxRounds();
-    }
-
-    private function playerById(PlayerId $id): Player
-    {
-        $player = $this->players()[$id->toString()] ?? null;
-        if (null === $player) {
-            throw PlayerDoesNotExist::withId($id);
-        }
-
-        return $player;
     }
 }

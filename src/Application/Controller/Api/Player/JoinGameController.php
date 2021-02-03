@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Application\Controller\Game;
+namespace Nusje2000\CAH\Application\Controller\Api\Player;
 
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Game\Id;
@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class JoinController
+final class JoinGameController
 {
     private CommandBus $commandBus;
 
@@ -23,11 +23,11 @@ final class JoinController
         $this->commandBus = $commandBus;
     }
 
-    public function __invoke(string $id): Response
+    public function __invoke(string $game): Response
     {
         $playerId = PlayerId::fromUuid(Uuid::uuid4());
 
-        $this->commandBus->handle(new JoinGame(Id::fromString($id), Player::create(
+        $this->commandBus->handle(new JoinGame(Id::fromString($game), Player::create(
             $playerId,
             Username::fromString('bob'))
         ));

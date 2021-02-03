@@ -7,6 +7,7 @@ namespace Nusje2000\CAH\Domain\Game;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Player\Player;
+use Nusje2000\CAH\Domain\Round\Id as RoundId;
 use Nusje2000\CAH\Domain\Round\RoundRegistry;
 use Nusje2000\CAH\Domain\Table;
 
@@ -27,9 +28,7 @@ interface Game
 
     public function leave(PlayerId $player): void;
 
-    public function start(): void;
-
-    public function startRound(): void;
+    public function startRound(RoundId $roundId): void;
 
     public function rounds(): RoundRegistry;
 

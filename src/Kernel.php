@@ -27,11 +27,11 @@ final class Kernel extends BaseKernel
         $bundles = [
             new FrameworkBundle(),
             new SymfonyBundlesJsonRequestBundle(),
+            new TwigBundle(),
             new TacticianBundle(),
         ];
 
         if ('dev' === $this->getEnvironment()) {
-            $bundles[] = new TwigBundle();
             $bundles[] = new WebProfilerBundle();
         }
 

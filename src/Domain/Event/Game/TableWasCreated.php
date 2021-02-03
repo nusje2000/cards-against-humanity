@@ -39,7 +39,7 @@ final class TableWasCreated implements SerializablePayload
      */
     public function whiteDeck(): Deck
     {
-        return $this->whiteDeck;
+        return clone $this->whiteDeck;
     }
 
     /**
@@ -47,7 +47,7 @@ final class TableWasCreated implements SerializablePayload
      */
     public function blackDeck(): Deck
     {
-        return $this->blackDeck;
+        return clone $this->blackDeck;
     }
 
     /**

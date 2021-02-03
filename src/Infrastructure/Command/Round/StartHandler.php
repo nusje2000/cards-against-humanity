@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Application\Controller\Game;
+namespace Nusje2000\CAH\Infrastructure\Command\Round;
 
 use EventSauce\EventSourcing\AggregateRootRepository;
 use Nusje2000\CAH\Domain\Game\EventBasedGame;
-use Nusje2000\CAH\Domain\Game\Id;
-use Symfony\Component\HttpFoundation\Response;
 
-final class ViewController
+final class StartHandler
 {
     /**
      * @var AggregateRootRepository<EventBasedGame>
@@ -24,12 +22,11 @@ final class ViewController
         $this->gameRepository = $gameRepository;
     }
 
-    public function __invoke(string $id): Response
+    public function handle(Start $start): void
     {
-        dd(
-            $this->gameRepository->retrieve(
-                Id::fromString($id)
-            )
-        );
+        /** @var EventBasedGame $game */
+        $game = $this->gameRepository->retrieve($start->game());
+        $game->startRound($start->round());
+        $this->gameRepository->persist($game);
     }
 }

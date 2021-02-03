@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Application\Controller\Game;
+namespace Nusje2000\CAH\Application\Controller\Api\Game;
 
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Card\ArrayDeck;

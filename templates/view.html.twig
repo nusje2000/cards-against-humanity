@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="flex w-full mb-5">
+        <div class="w-1/2 mx-2">
+            {% for player in game.players %}
+                <h1 class="text-4xl text-white">{{ player.username.toString }}</h1>
+                <div class="whitespace-nowrap max-w-full overflow-x-auto">
+                    {% for card in player.hand.contents %}
+                        <div class="w-48 h-64 bg-white text-black inline-block p-2 cursor-pointer rounded"
+                             data-api-trigger="{{ path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': player.id.toString}) }}">
+                            {{ card.contents.toString }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="w-1/2 mx-2">
+            <h1 class="text-4xl text-white">Current round</h1>
+            {% if game.rounds.hasActiveRound %}
+                <div class="w-48 h-64 bg-black text-white font-bold inline-block p-2 mb-2 rounded">
+                    {{ game.rounds.current.blackCard.contents.toString }}
+                </div>
+                <div class="whitespace-nowrap max-w-full overflow-x-auto">
+                    {% for submission in game.rounds.current.submissions %}
+                        <div class="relative w-48 h-64 bg-white text-black inline-block p-2 cursor-pointer rounded"
+                             data-api-trigger="{{ path('cah_api_round_complete', {'game': game.id.toString, 'winner': submission.player.id.toString}) }}">
+                            {{ submission.card.contents.toString }}
+                            <div class="absolute bottom-0 left-0 font-bold">
+                                Click to pick
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="w-48 h-64 bg-black text-white font-bold inline-block p-2 mb-2 cursor-pointer rounded"
+                     data-api-trigger="{{ path('cah_api_round_start', {'game': game.id.toString}) }}">
+                    Click to start next round
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% for round in game.rounds.completed %}
+        <div class="flex w-full">
+            <div class="w-48 h-64 bg-black text-white font-bold inline-block p-2 mb-1 rounded">
+                {{ round.blackCard.contents.toString }}
+            </div>
+            <div class="whitespace-nowrap max-w-full overflow-x-auto">
+                {% for submission in round.submissions %}
+                    <div class="relative w-48 h-64 bg-white text-black inline-block p-2 cursor-pointer rounded {% if submission.player.id.equalTo(round.winner.player.id) %}bg-gradient-to-t from-green-400 to-blue-500 text-white font-bold{% endif %}">
+                        {{ submission.card.contents.toString }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

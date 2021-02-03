@@ -18,6 +18,7 @@ use Nusje2000\CAH\Domain\Game\Rules;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Player\Player;
 use Nusje2000\CAH\Domain\Player\Username;
+use Nusje2000\CAH\Domain\Round\Id as RoundId;
 use PHPUnit\Framework\TestCase;
 
 final class EventBasedGameTest extends TestCase
@@ -31,14 +32,14 @@ final class EventBasedGameTest extends TestCase
         $game->join($player1);
         $game->join($player2);
 
-        $game->start();
+        $game->startRound(RoundId::fromString('round-1'));
         self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($player1->hand()->contents()));
         self::assertSame(['card-5', 'card-6', 'card-7', 'card-8'], array_keys($player2->hand()->contents()));
         self::assertSame($player1, $game->rounds()->current()->cardCzar());
         $game->submit($player2->id(), CardId::fromString('card-5'));
         $game->completeRound($player2->id());
 
-        $game->startRound();
+        $game->startRound(RoundId::fromString('round-2'));
         self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($player1->hand()->contents()));
         self::assertSame(['card-6', 'card-7', 'card-8', 'card-9'], array_keys($player2->hand()->contents()));
         self::assertSame($player2, $game->rounds()->current()->cardCzar());

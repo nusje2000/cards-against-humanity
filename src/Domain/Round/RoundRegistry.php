@@ -39,6 +39,11 @@ final class RoundRegistry
         return $this->completed;
     }
 
+    public function hasActiveRound(): bool
+    {
+        return null !== $this->current;
+    }
+
     public function current(): Round
     {
         if (null === $this->current) {
