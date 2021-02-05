@@ -62,13 +62,13 @@ final class ArrayDeck implements Deck, JsonSerializable
     /**
      * @return T
      */
-    public function random(): Card
+    public function first(): Card
     {
         /** @var string|null $card */
-        $card = array_rand($this->cards);
+        $card = reset($this->cards);
 
         if (null !== $card) {
-            return $this->get(Id::fromString($card));
+            return $card;
         }
 
         throw EmptyDeck::create();

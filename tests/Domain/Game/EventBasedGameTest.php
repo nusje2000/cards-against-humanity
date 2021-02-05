@@ -22,12 +22,12 @@ final class EventBasedGameTest extends TestCase
 {
     public function testGame(): void
     {
-        $player1 = Id::fromString('player-1');
-        $player2 = Id::fromString('player-2');
+        $player1 = PlayerId::fromString('player-1');
+        $player2 = PlayerId::fromString('player-2');
 
         $game = EventBasedGame::initialize(Id::fromString('some-id'), Rules::custom(4, 4), $this->whiteDeck(), $this->blackDeck());
-        $game->join(Id::fromString('player-1'));
-        $game->join(Id::fromString('player-2'));
+        $game->join($player1);
+        $game->join($player2);
 
         $game->startRound(RoundId::fromString('round-1'));
         self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($game->hand($player1)->contents()));
@@ -35,6 +35,7 @@ final class EventBasedGameTest extends TestCase
         self::assertTrue($game->rounds()->current()->cardCzar()->isEqualTo($player1));
         $game->submit($player2, CardId::fromString('card-5'));
         $game->completeRound($player2);
+        $game->draw($player2);
 
         $game->startRound(RoundId::fromString('round-2'));
         self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($game->hand($player1)->contents()));
@@ -42,6 +43,7 @@ final class EventBasedGameTest extends TestCase
         self::assertTrue($game->rounds()->current()->cardCzar()->isEqualTo($player2));
         $game->submit($player1, CardId::fromString('card-1'));
         $game->completeRound($player1);
+        $game->draw($player1);
 
         self::assertSame(['card-2', 'card-3', 'card-4', 'card-10'], array_keys($game->hand($player1)->contents()));
         self::assertSame(['card-6', 'card-7', 'card-8', 'card-9'], array_keys($game->hand($player2)->contents()));

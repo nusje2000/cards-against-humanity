@@ -17,7 +17,7 @@ interface Deck
     /**
      * @return T
      */
-    public function random(): Card;
+    public function first(): Card;
 
     /**
      * @param Id $card

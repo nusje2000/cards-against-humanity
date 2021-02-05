@@ -131,7 +131,7 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function draw(PlayerId $id): void
     {
-        $this->recordThat(new PlayerHasDrawnCard($id, $this->table()->whiteDeck()->random()));
+        $this->recordThat(new PlayerHasDrawnCard($id, $this->table()->whiteDeck()->first()));
     }
 
     public function rounds(): RoundRegistry
@@ -152,7 +152,7 @@ final class EventBasedGame implements Game, AggregateRoot
             $cardCzar = $this->players->next($previousRound->cardCzar());
         }
 
-        $this->recordThat(new RoundWasStarted($roundId, $cardCzar, $this->table()->blackDeck()->random()));
+        $this->recordThat(new RoundWasStarted($roundId, $cardCzar, $this->table()->blackDeck()->first()));
     }
 
     public function submit(PlayerId $player, CardId $card): void
