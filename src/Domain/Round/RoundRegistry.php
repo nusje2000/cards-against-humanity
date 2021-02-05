@@ -52,4 +52,9 @@ final class RoundRegistry
 
         return $this->current;
     }
+
+    public function previous(): ?Round
+    {
+        return end($this->completed) ?: null;
+    }
 }

@@ -6,24 +6,17 @@ namespace Nusje2000\CAH\Domain\Event\Player;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Domain\Player\Player;
-use Nusje2000\CAH\Domain\Player\Username;
 
 final class PlayerJoined implements SerializablePayload
 {
-    private Player $player;
+    private PlayerId $player;
 
-    public function __construct(Player $player)
+    public function __construct(PlayerId $player)
     {
         $this->player = $player;
     }
 
-    public function id(): PlayerId
-    {
-        return $this->player->id();
-    }
-
-    public function player(): Player
+    public function player(): PlayerId
     {
         return $this->player;
     }
@@ -33,13 +26,8 @@ final class PlayerJoined implements SerializablePayload
      */
     public function toPayload(): array
     {
-        $player = $this->player();
-
         return [
-            'player' => [
-                'id' => $player->id()->toString(),
-                'username' => $player->username()->toString(),
-            ],
+            'player_id' => $this->player()->toString(),
         ];
     }
 
@@ -51,11 +39,6 @@ final class PlayerJoined implements SerializablePayload
      */
     public static function fromPayload(array $payload): SerializablePayload
     {
-        return new self(
-            Player::create(
-                PlayerId::fromString($payload['player']['id']),
-                Username::fromString($payload['player']['username']),
-            )
-        );
+        return new self(PlayerId::fromString($payload['player_id']));
     }
 }

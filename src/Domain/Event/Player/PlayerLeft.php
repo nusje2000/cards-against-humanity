@@ -9,16 +9,16 @@ use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
 final class PlayerLeft implements SerializablePayload
 {
-    private PlayerId $playerId;
+    private PlayerId $player;
 
-    public function __construct(PlayerId $playerId)
+    public function __construct(PlayerId $player)
     {
-        $this->playerId = $playerId;
+        $this->player = $player;
     }
 
-    public function id(): PlayerId
+    public function player(): PlayerId
     {
-        return $this->playerId;
+        return $this->player;
     }
 
     /**
@@ -27,7 +27,7 @@ final class PlayerLeft implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'player_id' => $this->id()->toString(),
+            'player_id' => $this->player()->toString(),
         ];
     }
 

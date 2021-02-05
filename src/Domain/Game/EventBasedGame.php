@@ -10,6 +10,8 @@ use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Card\Deck;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
+use Nusje2000\CAH\Domain\Event\Deck\BlackCardWasDiscarded;
+use Nusje2000\CAH\Domain\Event\Deck\WhiteCardWasDiscarded;
 use Nusje2000\CAH\Domain\Event\Game\GameWasInitialized;
 use Nusje2000\CAH\Domain\Event\Game\RulesWereSet;
 use Nusje2000\CAH\Domain\Event\Game\TableWasCreated;
@@ -21,16 +23,17 @@ use Nusje2000\CAH\Domain\Event\Round\RoundWasCompleted;
 use Nusje2000\CAH\Domain\Event\Round\RoundWasStarted;
 use Nusje2000\CAH\Domain\Exception\Game\NoRulesFound;
 use Nusje2000\CAH\Domain\Exception\Game\NoTableFound;
+use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
 use Nusje2000\CAH\Domain\Exception\Game\RoundLimitReached;
+use Nusje2000\CAH\Domain\Exception\Round\SubmissionAlreadyPresent;
+use Nusje2000\CAH\Domain\Player\Hand;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Domain\Player\Player;
 use Nusje2000\CAH\Domain\Player\PlayerRegistry;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
 use Nusje2000\CAH\Domain\Round\Round;
 use Nusje2000\CAH\Domain\Round\RoundRegistry;
 use Nusje2000\CAH\Domain\Submission;
 use Nusje2000\CAH\Domain\Table;
-use Ramsey\Uuid\Uuid;
 
 final class EventBasedGame implements Game, AggregateRoot
 {
@@ -43,6 +46,11 @@ final class EventBasedGame implements Game, AggregateRoot
     private RoundRegistry $rounds;
 
     private PlayerRegistry $players;
+
+    /**
+     * @var array<string, Hand>
+     */
+    private array $hands = [];
 
     public function __construct(Id $id)
     {
@@ -91,11 +99,6 @@ final class EventBasedGame implements Game, AggregateRoot
         return $this->rules;
     }
 
-    public function rounds(): RoundRegistry
-    {
-        return $this->rounds;
-    }
-
     /**
      * @inheritDoc
      */
@@ -104,9 +107,20 @@ final class EventBasedGame implements Game, AggregateRoot
         return $this->players->toArray();
     }
 
-    public function join(Player $player): void
+    public function hand(PlayerId $player): Hand
+    {
+        $hand = $this->hands[$player->toString()] ?? null;
+        if (null === $hand) {
+            throw PlayerDoesNotExist::withId($player);
+        }
+
+        return $hand;
+    }
+
+    public function join(PlayerId $player): void
     {
         $this->recordThat(new PlayerJoined($player));
+        // TODO: move this to a consumer
         $this->restockPlayer($player);
     }
 
@@ -115,13 +129,30 @@ final class EventBasedGame implements Game, AggregateRoot
         $this->recordThat(new PlayerLeft($player));
     }
 
+    public function draw(PlayerId $id): void
+    {
+        $this->recordThat(new PlayerHasDrawnCard($id, $this->table()->whiteDeck()->random()));
+    }
+
+    public function rounds(): RoundRegistry
+    {
+        return $this->rounds;
+    }
+
     public function startRound(RoundId $roundId): void
     {
         if (!$this->canStartNewRound()) {
             throw RoundLimitReached::create();
         }
 
-        $this->recordThat(new RoundWasStarted($roundId));
+        $cardCzar = $this->players->first();
+
+        $previousRound = $this->rounds->previous();
+        if (null !== $previousRound) {
+            $cardCzar = $this->players->next($previousRound->cardCzar());
+        }
+
+        $this->recordThat(new RoundWasStarted($roundId, $cardCzar, $this->table()->blackDeck()->random()));
     }
 
     public function submit(PlayerId $player, CardId $card): void
@@ -131,8 +162,8 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function completeRound(PlayerId $winner): void
     {
+        $this->discardPlayedCards();
         $this->recordThat(new RoundWasCompleted($winner));
-        $this->restockPlayers();
     }
 
     public function applyGameWasInitialized(GameWasInitialized $event): void
@@ -152,44 +183,58 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function applyPlayerJoined(PlayerJoined $event): void
     {
+        $this->hands[$event->player()->toString()] = Hand::empty();
         $this->players->join($event->player());
     }
 
     public function applyPlayerLeft(PlayerLeft $event): void
     {
-        $this->players->leave($event->id());
+        $this->players->leave($event->player());
+        unset($this->hands[$event->player()->toString()]);
     }
 
     public function applyPlayerHasDrawnCard(PlayerHasDrawnCard $event): void
     {
-        $this->players
-            ->findById($event->player())
-            ->hand()->add(
-                $this->table()->whiteDeck()->draw()
-            );
+        $deck = $this->table()->whiteDeck();
+
+        $this->hand($event->player())->add($event->card());
+        $deck->remove($event->card()->id());
+    }
+
+    public function applyWhiteCardWasDiscarded(WhiteCardWasDiscarded $event): void
+    {
+        $this->table()->whiteDiscardPile()->discard($event->card());
+    }
+
+    public function applyBlackCardWasDiscarded(BlackCardWasDiscarded $event): void
+    {
+        $this->table()->blackDiscardPile()->discard($event->card());
     }
 
     public function applyRoundWasStarted(RoundWasStarted $event): void
     {
-        $this->rounds->start(
-            new Round(
-                $event->id(),
-                $this->players->rotate(),
-                $this->table()->blackDeck()->draw()
-            )
-        );
+        $this->rounds->start(new Round($event->id(), $event->cardCzar(), $event->card()));
     }
 
     public function applyCardWasSubmitted(CardWasSubmitted $event): void
     {
-        $player = $this->players->findById($event->player());
+        $player = $event->player();
+        if (!$this->players->isJoined($player)) {
+            throw PlayerDoesNotExist::withId($player);
+        }
+
+        if ($this->rounds->current()->playerHasSubmitted($player)) {
+            throw SubmissionAlreadyPresent::forPlayer($player);
+        }
+
+        $hand = $this->hand($player);
+        $card = $hand->card($event->card());
 
         $this->rounds->current()->submit(
-            new Submission(
-                $player,
-                $player->hand()->cardById($event->card()),
-            )
+            new Submission($player, $card)
         );
+
+        $hand->remove($card);
     }
 
     public function applyRoundWasCompleted(RoundWasCompleted $event): void
@@ -197,36 +242,24 @@ final class EventBasedGame implements Game, AggregateRoot
         $winner = $this->rounds->current()->submissions()[$event->winningPlayer()->toString()];
         $this->rounds->current()->end($winner);
 
-        // Remove this from RoundWasCompleted event
-        $this->discardPlayedCards();
         $this->rounds->finishCurrentRound();
     }
 
     private function discardPlayedCards(): void
     {
-        $current = $this->rounds()->current();
+        $current = $this->rounds->current();
 
-        $this->table()->blackDiscardPile()->discard(
-            $current->blackCard()
-        );
+        $this->recordThat(new BlackCardWasDiscarded($current->blackCard()));
 
         foreach ($current->submissions() as $submission) {
-            $submission->player()->hand()->remove($submission->card());
-            $this->table()->whiteDiscardPile()->discard($submission->card());
+            $this->recordThat(new WhiteCardWasDiscarded($submission->card()));
         }
     }
 
-    private function restockPlayers(): void
+    private function restockPlayer(PlayerId $player): void
     {
-        foreach ($this->players() as $player) {
-            $this->restockPlayer($player);
-        }
-    }
-
-    private function restockPlayer(Player $player): void
-    {
-        while ($this->rules()->handSize() > $player->hand()->size()) {
-            $this->recordThat(new PlayerHasDrawnCard($player->id()));
+        while ($this->rules()->handSize() > $this->hand($player)->size()) {
+            $this->draw($player);
         }
     }
 

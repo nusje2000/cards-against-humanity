@@ -8,14 +8,13 @@ use LogicException;
 use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Exception\Round\NoSubmissionFound;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Domain\Player\Player;
 use Nusje2000\CAH\Domain\Submission;
 
 final class Round
 {
     private Id $id;
 
-    private Player $cardCzar;
+    private PlayerId $cardCzar;
 
     private BlackCard $blackCard;
 
@@ -26,7 +25,7 @@ final class Round
      */
     private array $submissions = [];
 
-    public function __construct(Id $id, Player $cardCzar, BlackCard $blackCard)
+    public function __construct(Id $id, PlayerId $cardCzar, BlackCard $blackCard)
     {
         $this->id = $id;
         $this->cardCzar = $cardCzar;
@@ -38,7 +37,7 @@ final class Round
         return $this->id;
     }
 
-    public function cardCzar(): Player
+    public function cardCzar(): PlayerId
     {
         return $this->cardCzar;
     }
@@ -82,7 +81,7 @@ final class Round
 
     public function submit(Submission $submission): void
     {
-        $this->submissions[$submission->player()->id()->toString()] = $submission;
+        $this->submissions[$submission->player()->toString()] = $submission;
     }
 
     public function end(Submission $winner): void

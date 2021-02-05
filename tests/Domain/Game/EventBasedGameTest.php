@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Tests\Domain\Game;
 
-use EventSauce\EventSourcing\AggregateRoot;
 use Generator;
 use Nusje2000\CAH\Domain\Card\ArrayDeck;
 use Nusje2000\CAH\Domain\Card\BlackCard;
@@ -16,8 +15,6 @@ use Nusje2000\CAH\Domain\Game\EventBasedGame;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Game\Rules;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Domain\Player\Player;
-use Nusje2000\CAH\Domain\Player\Username;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
 use PHPUnit\Framework\TestCase;
 
@@ -25,31 +22,33 @@ final class EventBasedGameTest extends TestCase
 {
     public function testGame(): void
     {
-        $player1 = Player::create(PlayerId::fromString('player-1'), Username::fromString('palyer-1'));
-        $player2 = Player::create(PlayerId::fromString('player-2'), Username::fromString('palyer-2'));
+        $player1 = Id::fromString('player-1');
+        $player2 = Id::fromString('player-2');
 
         $game = EventBasedGame::initialize(Id::fromString('some-id'), Rules::custom(4, 4), $this->whiteDeck(), $this->blackDeck());
-        $game->join($player1);
-        $game->join($player2);
+        $game->join(Id::fromString('player-1'));
+        $game->join(Id::fromString('player-2'));
 
         $game->startRound(RoundId::fromString('round-1'));
-        self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($player1->hand()->contents()));
-        self::assertSame(['card-5', 'card-6', 'card-7', 'card-8'], array_keys($player2->hand()->contents()));
-        self::assertSame($player1, $game->rounds()->current()->cardCzar());
-        $game->submit($player2->id(), CardId::fromString('card-5'));
-        $game->completeRound($player2->id());
+        self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($game->hand($player1)->contents()));
+        self::assertSame(['card-5', 'card-6', 'card-7', 'card-8'], array_keys($game->hand($player2)->contents()));
+        self::assertTrue($game->rounds()->current()->cardCzar()->isEqualTo($player1));
+        $game->submit($player2, CardId::fromString('card-5'));
+        $game->completeRound($player2);
 
         $game->startRound(RoundId::fromString('round-2'));
-        self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($player1->hand()->contents()));
-        self::assertSame(['card-6', 'card-7', 'card-8', 'card-9'], array_keys($player2->hand()->contents()));
-        self::assertSame($player2, $game->rounds()->current()->cardCzar());
-        $game->submit($player1->id(), CardId::fromString('card-1'));
-        $game->completeRound($player1->id());
+        self::assertSame(['card-1', 'card-2', 'card-3', 'card-4'], array_keys($game->hand($player1)->contents()));
+        self::assertSame(['card-6', 'card-7', 'card-8', 'card-9'], array_keys($game->hand($player2)->contents()));
+        self::assertTrue($game->rounds()->current()->cardCzar()->isEqualTo($player2));
+        $game->submit($player1, CardId::fromString('card-1'));
+        $game->completeRound($player1);
 
-        self::assertSame(['card-2', 'card-3', 'card-4', 'card-10'], array_keys($player1->hand()->contents()));
-        self::assertSame(['card-6', 'card-7', 'card-8', 'card-9'], array_keys($player2->hand()->contents()));
+        self::assertSame(['card-2', 'card-3', 'card-4', 'card-10'], array_keys($game->hand($player1)->contents()));
+        self::assertSame(['card-6', 'card-7', 'card-8', 'card-9'], array_keys($game->hand($player2)->contents()));
 
-        $reconstitutedGame = EventBasedGame::reconstituteFromEvents($game->id(), $this->createEventGenerator($game));
+        $generator = $this->createEventGenerator($game->releaseEvents());
+        $game = clone $game;
+        $reconstitutedGame = EventBasedGame::reconstituteFromEvents($game->id(), $generator);
 
         self::assertEquals($game, $reconstitutedGame);
     }
@@ -83,9 +82,8 @@ final class EventBasedGameTest extends TestCase
     /**
      * @return Generator<object>
      */
-    private function createEventGenerator(AggregateRoot $root): Generator
+    private function createEventGenerator(array $events): Generator
     {
-        $events = $root->releaseEvents();
         foreach ($events as $item) {
             yield $item;
         }

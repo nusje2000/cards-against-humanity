@@ -66,7 +66,7 @@ final class Hand implements JsonSerializable
         return $this->hand;
     }
 
-    public function cardById(CardId $id): WhiteCard
+    public function card(CardId $id): WhiteCard
     {
         if (!isset($this->hand[$id->toString()])) {
             throw NoCardFound::byId($id);

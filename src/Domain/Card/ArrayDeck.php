@@ -6,6 +6,7 @@ namespace Nusje2000\CAH\Domain\Card;
 
 use JsonSerializable;
 use Nusje2000\CAH\Domain\Exception\Card\EmptyDeck;
+use Nusje2000\CAH\Domain\Exception\Card\NoCardFound;
 
 /**
  * @template T of Card
@@ -15,12 +16,12 @@ use Nusje2000\CAH\Domain\Exception\Card\EmptyDeck;
 final class ArrayDeck implements Deck, JsonSerializable
 {
     /**
-     * @var array<array-key, T> $cards
+     * @var array<string, T> $cards
      */
     private array $cards;
 
     /**
-     * @param array<array-key, T> $cards
+     * @param array<string, T> $cards
      */
     private function __construct(array $cards)
     {
@@ -30,28 +31,52 @@ final class ArrayDeck implements Deck, JsonSerializable
     /**
      * @template CardType of Card
      *
-     * @param array<array-key, CardType> $cards
+     * @psalm-param array<CardType> $cards
+     *
+     * @param array<Card>           $cards
      *
      * @return self<CardType>
      */
     public static function fromArray(array $cards): self
     {
-        return new self($cards);
+        $mapped = [];
+        foreach ($cards as $card) {
+            $mapped[$card->id()->toString()] = $card;
+        }
+
+        return new self($mapped);
     }
 
     /**
      * @return T
      */
-    public function draw(): Card
+    public function get(Id $card): Card
     {
-        /** @var T|null $card */
-        $card = array_shift($this->cards);
+        if (isset($this->cards[$card->toString()])) {
+            return $this->cards[$card->toString()];
+        }
+
+        throw NoCardFound::byId($card);
+    }
+
+    /**
+     * @return T
+     */
+    public function random(): Card
+    {
+        /** @var string|null $card */
+        $card = array_rand($this->cards);
 
         if (null !== $card) {
-            return $card;
+            return $this->get(Id::fromString($card));
         }
 
         throw EmptyDeck::create();
+    }
+
+    public function remove(Id $card): void
+    {
+        unset($this->cards[$card->toString()]);
     }
 
     public function cards(): array

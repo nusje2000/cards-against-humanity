@@ -5,30 +5,22 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Player;
 
 use Nusje2000\CAH\Domain\Exception\Game\NoPlayersFound;
-use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
 
 final class PlayerRegistry
 {
     /**
-     * @var array<string, Player>
+     * @var array<string, Id>
      */
     private array $players = [];
 
-    private bool $hasRotated = false;
-
-    public function findById(Id $id): Player
+    public function join(Id $player): void
     {
-        $player = $this->players[$id->toString()] ?? null;
-        if (null === $player) {
-            throw PlayerDoesNotExist::withId($id);
-        }
-
-        return $player;
+        $this->players[$player->toString()] = $player;
     }
 
-    public function join(Player $player): void
+    public function isJoined(Id $player): bool
     {
-        $this->players[$player->id()->toString()] = $player;
+        return isset($this->players[$player->toString()]);
     }
 
     public function leave(Id $player): void
@@ -36,24 +28,37 @@ final class PlayerRegistry
         unset($this->players[$player->toString()]);
     }
 
-    public function rotate(): Player
+    public function first(): Id
     {
-        $player = current($this->players);
-        if (false === $player) {
-            $player = reset($this->players);
-        }
-
+        $player = reset($this->players);
         if (false === $player) {
             throw NoPlayersFound::create();
         }
 
-        next($this->players);
-
         return $player;
     }
 
+    public function next(Id $current): Id
+    {
+        reset($this->players);
+
+        while (false !== ($player = current($this->players))) {
+            if (!$player->isEqualTo($current)) {
+                next($this->players);
+
+                continue;
+            }
+
+            $next = next($this->players);
+
+            return $next ?: $this->first();
+        }
+
+        throw NoPlayersFound::create();
+    }
+
     /**
-     * @return array<string, Player>
+     * @return array<string, Id>
      */
     public function toArray(): array
     {

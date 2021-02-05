@@ -33,7 +33,11 @@
                 $('[data-api-trigger]').on('click', (event) => {
                     const href = $(event.target).data('api-trigger');
 
-                    fetch(href).then(() => {
+                    fetch(href).then((response) => {
+                        if (response.status !== 200) {
+                            throw `Unexpected statuscode ${response.status}`;
+                        }
+
                         window.location.reload();
                     }).catch(error => alert(error));
                 })

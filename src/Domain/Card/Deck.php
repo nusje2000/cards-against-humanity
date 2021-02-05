@@ -12,7 +12,17 @@ interface Deck
     /**
      * @return T
      */
-    public function draw(): Card;
+    public function get(Id $card): Card;
+
+    /**
+     * @return T
+     */
+    public function random(): Card;
+
+    /**
+     * @param Id $card
+     */
+    public function remove(Id $card): void;
 
     /**
      * @return array<T>

@@ -6,27 +6,21 @@ namespace Nusje2000\CAH\Domain;
 
 use JsonSerializable;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
-use Nusje2000\CAH\Domain\Player\Player;
+use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
 final class Submission implements JsonSerializable
 {
-    /**
-     * @var Player
-     */
-    private Player $player;
+    private PlayerId $player;
 
-    /**
-     * @var WhiteCard
-     */
     private WhiteCard $card;
 
-    public function __construct(Player $player, WhiteCard $card)
+    public function __construct(PlayerId $player, WhiteCard $card)
     {
         $this->player = $player;
         $this->card = $card;
     }
 
-    public function player(): Player
+    public function player(): PlayerId
     {
         return $this->player;
     }
