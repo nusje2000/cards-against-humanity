@@ -64,10 +64,9 @@ final class ArrayDeck implements Deck, JsonSerializable
      */
     public function first(): Card
     {
-        /** @var string|null $card */
         $card = reset($this->cards);
 
-        if (null !== $card) {
+        if (false !== $card) {
             return $card;
         }
 
