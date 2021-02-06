@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Infrastructure\Command\Game;
 
 use EventSauce\EventSourcing\AggregateRootRepository;
+use Nusje2000\CAH\Domain\Command\Game\Create;
 use Nusje2000\CAH\Domain\Game\EventBasedGame;
 
 final class CreateHandler

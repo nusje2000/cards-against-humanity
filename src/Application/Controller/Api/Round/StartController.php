@@ -7,7 +7,7 @@ namespace Nusje2000\CAH\Application\Controller\Api\Round;
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
-use Nusje2000\CAH\Infrastructure\Command\Round\Start;
+use Nusje2000\CAH\Domain\Command\Round\Start;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Infrastructure\Command\Game;
+namespace Nusje2000\CAH\Domain\Command\Game;
 
 use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Card\Deck;

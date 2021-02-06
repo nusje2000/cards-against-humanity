@@ -9,6 +9,7 @@
         <service id="cah.repository.game" class="EventSauce\EventSourcing\ConstructingAggregateRootRepository">
             <argument type="string">Nusje2000\CAH\Domain\Game\EventBasedGame</argument>
             <argument type="service" id="cah.message_repository.game"/>
+            <argument type="service" id="cah.message_dispatcher.game"/>
         </service>
 
         <service id="cah.message_repository.game" class="Nusje2000\CAH\Infrastructure\Repository\FileSystemRepository">

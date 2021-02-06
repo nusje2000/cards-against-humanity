@@ -20,6 +20,14 @@
             <argument type="service" id="cah.repository.game"/>
         </service>
 
+        <service id="cah.command.handler.player.restock" class="Nusje2000\CAH\Infrastructure\Command\Player\RestockHandler">
+            <argument type="service" id="cah.repository.game"/>
+        </service>
+
+        <service id="cah.command.handler.player.restock_all" class="Nusje2000\CAH\Infrastructure\Command\Player\RestockAllHandler">
+            <argument type="service" id="cah.repository.game"/>
+        </service>
+
         <service id="cah.command.handler.round.start" class="Nusje2000\CAH\Infrastructure\Command\Round\StartHandler">
             <argument type="service" id="cah.repository.game"/>
         </service>

@@ -7,7 +7,7 @@ namespace Nusje2000\CAH\Application\Controller\Api\Player;
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Infrastructure\Command\Player\JoinGame;
+use Nusje2000\CAH\Domain\Command\Player\JoinGame;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

@@ -120,8 +120,6 @@ final class EventBasedGame implements Game, AggregateRoot
     public function join(PlayerId $player): void
     {
         $this->recordThat(new PlayerJoined($player));
-        // TODO: move this to a consumer
-        $this->restockPlayer($player);
     }
 
     public function leave(PlayerId $player): void
@@ -253,13 +251,6 @@ final class EventBasedGame implements Game, AggregateRoot
 
         foreach ($current->submissions() as $submission) {
             $this->recordThat(new WhiteCardWasDiscarded($submission->card()));
-        }
-    }
-
-    private function restockPlayer(PlayerId $player): void
-    {
-        while ($this->rules()->handSize() > $this->hand($player)->size()) {
-            $this->draw($player);
         }
     }
 

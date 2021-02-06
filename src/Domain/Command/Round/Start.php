@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Infrastructure\Command\Round;
+namespace Nusje2000\CAH\Domain\Command\Round;
 
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;

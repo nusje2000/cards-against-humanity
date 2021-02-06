@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="cah.message_dispatcher.game" class="EventSauce\EventSourcing\SynchronousMessageDispatcher">
+            <argument type="service" id="cah.consumer.game.restock"/>
+        </service>
+
+        <service id="cah.consumer.game.restock" class="Nusje2000\CAH\Infrastructure\Consumer\Game\RestockConsumer">
+            <argument type="service" id="tactician.commandbus"/>
+        </service>
+    </services>
+</container>

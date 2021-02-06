@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Infrastructure\Command\Round;
+namespace Nusje2000\CAH\Domain\Command\Player;
 
-use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
-final class Submit
+final class Restock
 {
     /**
      * @var GameId
@@ -20,16 +19,10 @@ final class Submit
      */
     private PlayerId $player;
 
-    /**
-     * @var CardId
-     */
-    private CardId $card;
-
-    public function __construct(GameId $game, PlayerId $player, CardId $card)
+    public function __construct(GameId $game, PlayerId $player)
     {
         $this->game = $game;
         $this->player = $player;
-        $this->card = $card;
     }
 
     public function game(): GameId
@@ -40,10 +33,5 @@ final class Submit
     public function player(): PlayerId
     {
         return $this->player;
-    }
-
-    public function card(): CardId
-    {
-        return $this->card;
     }
 }

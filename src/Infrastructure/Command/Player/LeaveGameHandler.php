@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Infrastructure\Command\Player;
 
 use EventSauce\EventSourcing\AggregateRootRepository;
+use Nusje2000\CAH\Domain\Command\Player\LeaveGame;
 use Nusje2000\CAH\Domain\Game\EventBasedGame;
 
 final class LeaveGameHandler

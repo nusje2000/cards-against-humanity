@@ -8,7 +8,7 @@ use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Infrastructure\Command\Round\Submit;
+use Nusje2000\CAH\Domain\Command\Round\Submit;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
