@@ -8,7 +8,7 @@ use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Player\Hand;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
-use Nusje2000\CAH\Domain\Round\RoundRegistry;
+use Nusje2000\CAH\Domain\Round\Registry;
 use Nusje2000\CAH\Domain\Table;
 
 interface Game
@@ -30,7 +30,7 @@ interface Game
 
     public function hand(PlayerId $player): Hand;
 
-    public function rounds(): RoundRegistry;
+    public function rounds(): Registry;
 
     public function startRound(RoundId $roundId): void;
 

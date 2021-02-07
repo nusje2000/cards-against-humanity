@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Round;
 
-use LogicException;
 use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Exception\Round\NoSubmissionFound;
+use Nusje2000\CAH\Domain\Exception\Round\NoWinnerFound;
+use Nusje2000\CAH\Domain\Exception\Round\SubmissionAlreadyPresent;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Submission;
 
@@ -18,7 +19,7 @@ final class Round
 
     private BlackCard $blackCard;
 
-    private ?Submission $winner = null;
+    private ?PlayerId $winner = null;
 
     /**
      * @var array<string, Submission>
@@ -50,10 +51,10 @@ final class Round
     public function winner(): Submission
     {
         if (null === $this->winner) {
-            throw new LogicException('Round is not completed yet, so no winner is present.');
+            throw NoWinnerFound::create();
         }
 
-        return $this->winner;
+        return $this->submissionByPlayer($this->winner);
     }
 
     /**
@@ -81,11 +82,20 @@ final class Round
 
     public function submit(Submission $submission): void
     {
-        $this->submissions[$submission->player()->toString()] = $submission;
+        $player = $submission->player();
+        if ($this->playerHasSubmitted($player)) {
+            throw SubmissionAlreadyPresent::forPlayer($player);
+        }
+
+        $this->submissions[$player->toString()] = $submission;
     }
 
-    public function end(Submission $winner): void
+    public function end(PlayerId $winner): void
     {
+        if (!$this->playerHasSubmitted($winner)) {
+            throw NoSubmissionFound::byPlayer($winner);
+        }
+
         $this->winner = $winner;
     }
 }

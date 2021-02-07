@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Domain\Player;
 
 use Nusje2000\CAH\Domain\Exception\Game\NoPlayersFound;
+use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
 
-final class PlayerRegistry
+final class Registry
 {
     /**
      * @var array<string, Id>
@@ -54,7 +55,7 @@ final class PlayerRegistry
             return $next ?: $this->first();
         }
 
-        throw NoPlayersFound::create();
+        throw PlayerDoesNotExist::withId($current);
     }
 
     /**

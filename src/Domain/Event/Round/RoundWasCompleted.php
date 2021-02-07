@@ -27,7 +27,7 @@ final class RoundWasCompleted implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'player_id' => $this->winningPlayer()->toString(),
+            'winning_player_id' => $this->winningPlayer()->toString(),
         ];
     }
 
@@ -40,7 +40,7 @@ final class RoundWasCompleted implements SerializablePayload
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new self(
-            PlayerId::fromString($payload['player_id']),
+            PlayerId::fromString($payload['winning_player_id']),
         );
     }
 }

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Player;
 
-use JsonSerializable;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
 use Nusje2000\CAH\Domain\Exception\Card\NoCardFound;
 
-final class Hand implements JsonSerializable
+final class Hand
 {
     /**
      * @var array<string, WhiteCard>
@@ -78,15 +77,5 @@ final class Hand implements JsonSerializable
     public function size(): int
     {
         return count($this->hand);
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'contents' => $this->contents(),
-        ];
     }
 }

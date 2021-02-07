@@ -16,8 +16,8 @@ use Nusje2000\CAH\Domain\Event\Game\GameWasInitialized;
 use Nusje2000\CAH\Domain\Event\Game\RulesWereSet;
 use Nusje2000\CAH\Domain\Event\Game\TableWasCreated;
 use Nusje2000\CAH\Domain\Event\Player\PlayerHasDrawnCard;
-use Nusje2000\CAH\Domain\Event\Player\PlayerJoined;
-use Nusje2000\CAH\Domain\Event\Player\PlayerLeft;
+use Nusje2000\CAH\Domain\Event\Player\PlayerHasJoined;
+use Nusje2000\CAH\Domain\Event\Player\PlayerHasLeft;
 use Nusje2000\CAH\Domain\Event\Round\CardWasSubmitted;
 use Nusje2000\CAH\Domain\Event\Round\RoundWasCompleted;
 use Nusje2000\CAH\Domain\Event\Round\RoundWasStarted;
@@ -25,13 +25,12 @@ use Nusje2000\CAH\Domain\Exception\Game\NoRulesFound;
 use Nusje2000\CAH\Domain\Exception\Game\NoTableFound;
 use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
 use Nusje2000\CAH\Domain\Exception\Game\RoundLimitReached;
-use Nusje2000\CAH\Domain\Exception\Round\SubmissionAlreadyPresent;
 use Nusje2000\CAH\Domain\Player\Hand;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Domain\Player\PlayerRegistry;
+use Nusje2000\CAH\Domain\Player\Registry as PlayerRegistry;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
+use Nusje2000\CAH\Domain\Round\Registry as RoundRegistry;
 use Nusje2000\CAH\Domain\Round\Round;
-use Nusje2000\CAH\Domain\Round\RoundRegistry;
 use Nusje2000\CAH\Domain\Submission;
 use Nusje2000\CAH\Domain\Table;
 
@@ -43,9 +42,9 @@ final class EventBasedGame implements Game, AggregateRoot
 
     private ?Rules $rules = null;
 
-    private RoundRegistry $rounds;
-
     private PlayerRegistry $players;
+
+    private RoundRegistry $rounds;
 
     /**
      * @var array<string, Hand>
@@ -119,12 +118,12 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function join(PlayerId $player): void
     {
-        $this->recordThat(new PlayerJoined($player));
+        $this->recordThat(new PlayerHasJoined($player));
     }
 
     public function leave(PlayerId $player): void
     {
-        $this->recordThat(new PlayerLeft($player));
+        $this->recordThat(new PlayerHasLeft($player));
     }
 
     public function draw(PlayerId $id): void
@@ -179,13 +178,13 @@ final class EventBasedGame implements Game, AggregateRoot
         $this->rules = $event->rules();
     }
 
-    public function applyPlayerJoined(PlayerJoined $event): void
+    public function applyPlayerHasJoined(PlayerHasJoined $event): void
     {
         $this->hands[$event->player()->toString()] = Hand::empty();
         $this->players->join($event->player());
     }
 
-    public function applyPlayerLeft(PlayerLeft $event): void
+    public function applyPlayerHasLeft(PlayerHasLeft $event): void
     {
         $this->players->leave($event->player());
         unset($this->hands[$event->player()->toString()]);
@@ -221,10 +220,6 @@ final class EventBasedGame implements Game, AggregateRoot
             throw PlayerDoesNotExist::withId($player);
         }
 
-        if ($this->rounds->current()->playerHasSubmitted($player)) {
-            throw SubmissionAlreadyPresent::forPlayer($player);
-        }
-
         $hand = $this->hand($player);
         $card = $hand->card($event->card());
 
@@ -237,8 +232,7 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function applyRoundWasCompleted(RoundWasCompleted $event): void
     {
-        $winner = $this->rounds->current()->submissions()[$event->winningPlayer()->toString()];
-        $this->rounds->current()->end($winner);
+        $this->rounds->current()->end($event->winningPlayer());
 
         $this->rounds->finishCurrentRound();
     }

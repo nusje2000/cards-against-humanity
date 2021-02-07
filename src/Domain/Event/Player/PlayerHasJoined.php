@@ -7,7 +7,7 @@ namespace Nusje2000\CAH\Domain\Event\Player;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
-final class PlayerLeft implements SerializablePayload
+final class PlayerHasJoined implements SerializablePayload
 {
     private PlayerId $player;
 
@@ -32,15 +32,13 @@ final class PlayerLeft implements SerializablePayload
     }
 
     /**
-     *
      * @psalm-suppress MixedArgument
+     * @psalm-suppress MixedArrayAccess
      *
      * @param array<mixed> $payload
      */
     public static function fromPayload(array $payload): SerializablePayload
     {
-        return new self(
-            PlayerId::fromString($payload['player_id'])
-        );
+        return new self(PlayerId::fromString($payload['player_id']));
     }
 }

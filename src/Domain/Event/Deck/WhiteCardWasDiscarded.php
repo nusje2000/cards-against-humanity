@@ -32,8 +32,8 @@ final class WhiteCardWasDiscarded implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'id' => $this->card()->id()->toString(),
-            'contents' => $this->card()->contents()->toString(),
+            'card_id' => $this->card()->id()->toString(),
+            'card_contents' => $this->card()->contents()->toString(),
         ];
     }
 
@@ -46,8 +46,8 @@ final class WhiteCardWasDiscarded implements SerializablePayload
     {
         return new self(
             new WhiteCard(
-                Id::fromString($payload['id']),
-                Text::fromString($payload['contents'])
+                Id::fromString($payload['card_id']),
+                Text::fromString($payload['card_contents'])
             )
         );
     }

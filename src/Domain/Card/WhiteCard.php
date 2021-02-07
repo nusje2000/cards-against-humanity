@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Card;
 
-use JsonSerializable;
-
-final class WhiteCard implements Card, JsonSerializable
+final class WhiteCard implements Card
 {
     /**
      * @var Id
@@ -32,16 +30,5 @@ final class WhiteCard implements Card, JsonSerializable
     public function contents(): Text
     {
         return $this->text;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->id()->toString(),
-            'contents' => $this->contents()->toString(),
-        ];
     }
 }

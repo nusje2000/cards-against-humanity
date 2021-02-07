@@ -7,7 +7,7 @@ namespace Nusje2000\CAH\Domain\Round;
 use Nusje2000\CAH\Domain\Exception\Game\NoActiveRound;
 use Nusje2000\CAH\Domain\Exception\Round\UnfinishedRoundPresent;
 
-final class RoundRegistry
+final class Registry
 {
     /**
      * @var array<int, Round>

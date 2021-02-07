@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Card;
 
-use JsonSerializable;
 use Nusje2000\CAH\Domain\Exception\Card\EmptyDeck;
 use Nusje2000\CAH\Domain\Exception\Card\NoCardFound;
 
@@ -13,7 +12,7 @@ use Nusje2000\CAH\Domain\Exception\Card\NoCardFound;
  *
  * @implements Deck<T>
  */
-final class ArrayDeck implements Deck, JsonSerializable
+final class ArrayDeck implements Deck
 {
     /**
      * @var array<string, T> $cards
@@ -86,13 +85,5 @@ final class ArrayDeck implements Deck, JsonSerializable
     public function size(): int
     {
         return count($this->cards);
-    }
-
-    /**
-     * @return array<T>
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->cards;
     }
 }

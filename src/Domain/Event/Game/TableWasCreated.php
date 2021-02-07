@@ -56,20 +56,18 @@ final class TableWasCreated implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'table' => [
-                'white_deck' => array_map(static function (WhiteCard $card): array {
-                    return [
-                        'id' => $card->id()->toString(),
-                        'contents' => $card->contents()->toString(),
-                    ];
-                }, $this->whiteDeck()->cards()),
-                'black_deck' => array_map(static function (BlackCard $card): array {
-                    return [
-                        'id' => $card->id()->toString(),
-                        'contents' => $card->contents()->toString(),
-                    ];
-                }, $this->blackDeck()->cards()),
-            ],
+            'white_deck' => array_map(static function (WhiteCard $card): array {
+                return [
+                    'card_id' => $card->id()->toString(),
+                    'card_contents' => $card->contents()->toString(),
+                ];
+            }, $this->whiteDeck()->cards()),
+            'black_deck' => array_map(static function (BlackCard $card): array {
+                return [
+                    'card_id' => $card->id()->toString(),
+                    'card_contents' => $card->contents()->toString(),
+                ];
+            }, $this->blackDeck()->cards()),
         ];
     }
 
@@ -84,13 +82,13 @@ final class TableWasCreated implements SerializablePayload
         return new self(
             ArrayDeck::fromArray(
                 array_map(static function (array $card): WhiteCard {
-                    return new WhiteCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                }, $payload['table']['white_deck'])
+                    return new WhiteCard(CardId::fromString($card['card_id']), Text::fromString($card['card_contents']));
+                }, $payload['white_deck'])
             ),
             ArrayDeck::fromArray(
                 array_map(static function (array $card): BlackCard {
-                    return new BlackCard(CardId::fromString($card['id']), Text::fromString($card['contents']));
-                }, $payload['table']['black_deck'])
+                    return new BlackCard(CardId::fromString($card['card_id']), Text::fromString($card['card_contents']));
+                }, $payload['black_deck'])
             ),
         );
     }

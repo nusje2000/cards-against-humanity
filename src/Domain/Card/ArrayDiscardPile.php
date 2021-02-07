@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Card;
 
-use JsonSerializable;
-
 /**
  * @template T of Card
  *
  * @implements DiscardPile<T>
  */
-final class ArrayDiscardPile implements DiscardPile, JsonSerializable
+final class ArrayDiscardPile implements DiscardPile
 {
     /**
      * @var array<T>
@@ -68,13 +66,5 @@ final class ArrayDiscardPile implements DiscardPile, JsonSerializable
     public function size(): int
     {
         return count($this->pile);
-    }
-
-    /**
-     * @return array<T>
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->cards();
     }
 }

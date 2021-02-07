@@ -9,7 +9,7 @@ use EventSauce\EventSourcing\Message;
 use League\Tactician\CommandBus;
 use Nusje2000\CAH\Domain\Command\Player\Restock;
 use Nusje2000\CAH\Domain\Command\Player\RestockAll;
-use Nusje2000\CAH\Domain\Event\Player\PlayerJoined;
+use Nusje2000\CAH\Domain\Event\Player\PlayerHasJoined;
 use Nusje2000\CAH\Domain\Event\Round\RoundWasCompleted;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 
@@ -27,7 +27,7 @@ final class RestockConsumer implements Consumer
         $game = $message->aggregateRootId();
         $event = $message->event();
 
-        if ($game instanceof GameId && $event instanceof PlayerJoined) {
+        if ($game instanceof GameId && $event instanceof PlayerHasJoined) {
             $this->commandBus->handle(new Restock($game, $event->player()));
         }
 

@@ -27,7 +27,7 @@ final class GameWasInitialized implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'id' => $this->id()->toString(),
+            'game_id' => $this->id()->toString(),
         ];
     }
 
@@ -39,7 +39,7 @@ final class GameWasInitialized implements SerializablePayload
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new self(
-            Id::fromString($payload['id'])
+            Id::fromString($payload['game_id'])
         );
     }
 }

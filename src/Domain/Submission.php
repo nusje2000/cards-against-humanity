@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain;
 
-use JsonSerializable;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
-final class Submission implements JsonSerializable
+final class Submission
 {
     private PlayerId $player;
 
@@ -28,16 +27,5 @@ final class Submission implements JsonSerializable
     public function card(): WhiteCard
     {
         return $this->card;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'player' => $this->player(),
-            'card' => $this->card(),
-        ];
     }
 }

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain;
 
-use JsonSerializable;
 use Nusje2000\CAH\Domain\Card\ArrayDiscardPile;
 use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Card\Deck;
 use Nusje2000\CAH\Domain\Card\DiscardPile;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
 
-final class Table implements JsonSerializable
+final class Table
 {
     /**
      * @var Deck<WhiteCard>
@@ -102,18 +101,5 @@ final class Table implements JsonSerializable
     public function blackDiscardPile(): DiscardPile
     {
         return $this->blackDiscardPile;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'white_deck' => $this->whiteDeck(),
-            'black_deck' => $this->blackDeck(),
-            'white_discard_pile' => $this->whiteDiscardPile(),
-            'black_discard_pile' => $this->blackDiscardPile(),
-        ];
     }
 }

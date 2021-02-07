@@ -40,7 +40,7 @@ final class PlayerHasDrawnCard implements SerializablePayload
         return [
             'player_id' => $this->player()->toString(),
             'card_id' => $this->card()->id()->toString(),
-            'card_content' => $this->card()->contents()->toString(),
+            'card_contents' => $this->card()->contents()->toString(),
         ];
     }
 
@@ -54,7 +54,7 @@ final class PlayerHasDrawnCard implements SerializablePayload
     {
         return new self(
             PlayerId::fromString($payload['player_id']),
-            new WhiteCard(CardId::fromString($payload['card_id']), Text::fromString($payload['card_content']))
+            new WhiteCard(CardId::fromString($payload['card_id']), Text::fromString($payload['card_contents']))
         );
     }
 }
