@@ -1,0 +1,28 @@
+security:
+    encoders:
+        Nusje2000\CAH\Infrastructure\Entity\User:
+            algorithm: auto
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        users:
+            entity:
+                class: 'Nusje2000\CAH\Infrastructure\Entity\User'
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            lazy: true
+            form_login:
+                csrf_token_generator: security.csrf.token_manager
+            guard:
+                authenticators:
+                    - cah.authentication.main_authenticator
+            logout:
+                path: cah_logout
+                target: cah_index
+
+    access_control: ~

@@ -17,9 +17,6 @@ final class ViewController
      */
     private AggregateRootRepository $gameRepository;
 
-    /**
-     * @var Environment
-     */
     private Environment $twig;
 
     /**

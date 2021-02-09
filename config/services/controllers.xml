@@ -17,6 +17,18 @@
             <argument type="service" id="twig"/>
         </service>
 
+        <service id="cah.controller.client.user.register" class="Nusje2000\CAH\Application\Controller\Client\User\RegisterController">
+            <argument type="service" id="form.factory"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="tactician.commandbus"/>
+            <argument type="service" id="twig"/>
+        </service>
+
+        <service id="cah.controller.client.user.login" class="Nusje2000\CAH\Application\Controller\Client\User\LoginController">
+            <argument type="service" id="security.authentication_utils"/>
+            <argument type="service" id="twig"/>
+        </service>
+
         <service id="cah.controller.api.game.create" class="Nusje2000\CAH\Application\Controller\Api\Game\CreateController">
             <argument type="service" id="tactician.commandbus"/>
         </service>

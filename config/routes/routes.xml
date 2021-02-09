@@ -11,6 +11,16 @@
         <default key="_controller">cah.controller.client.game.view</default>
     </route>
 
+    <route id="cah_register" path="/register" methods="GET,POST">
+        <default key="_controller">cah.controller.client.user.register</default>
+    </route>
+
+    <route id="cah_login" path="/login" methods="GET,POST">
+        <default key="_controller">cah.controller.client.user.login</default>
+    </route>
+
+    <route id="cah_logout" path="/logout"/>
+
     <route id="cah_index" path="/" methods="GET">
         <default key="_controller">cah.controller.client.index</default>
     </route>

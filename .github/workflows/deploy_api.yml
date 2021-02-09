@@ -82,7 +82,9 @@ jobs:
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
-                        php bin/console cache:warmup
+                        php bin/console cache:warmup || exit 1
+                        php bin/console doctrine:database:create || exit 1
+                        php bin/console doctrine:schema:update || exit 1
                         cd ${SOURCE_DIR}
-                        rm ${SOURCE_DIR}/current
-                        ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current
+                        rm ${SOURCE_DIR}/current || exit 1
+                        ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current || exit 1

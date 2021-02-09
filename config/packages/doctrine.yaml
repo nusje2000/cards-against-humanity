@@ -1,0 +1,14 @@
+doctrine:
+    dbal:
+        url: 'sqlite:///%kernel.storage_dir%/database.sqlite'
+
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            Nusje2000\CAH\Infrastructure\Entity\User:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Nusje2000\CAH\Infrastructure\Entity'

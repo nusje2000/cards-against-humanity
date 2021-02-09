@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="cah.authentication.main_authenticator" class="Nusje2000\CAH\Infrastructure\Security\MainAuthenticator">
+            <argument type="service" id="cah.repository.user"/>
+            <argument type="service" id="router.default"/>
+            <argument type="service" id="security.csrf.token_manager"/>
+            <argument type="service" id="security.user_password_encoder.generic"/>
+        </service>
+    </services>
+</container>

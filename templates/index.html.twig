@@ -10,8 +10,14 @@
                 An online version of Cards Against Humanity (Work in Progress)
             </div>
             <div class="flex w-1/3 self-center mx-auto">
-                <a class="font-bold p-3 bg-white text-black rounded flex-1 mx-5 start-game cursor-pointer"
-                   data-api="{{ url('cah_api_game_create') }}">Start</a>
+                {% if is_granted(constant('Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter::IS_AUTHENTICATED_FULLY')) %}
+                    <a class="font-bold p-3 bg-white text-black rounded flex-1 mx-5 start-game cursor-pointer"
+                       data-api="{{ url('cah_api_game_create') }}">Start Game</a>
+                    <a href="{{ path('cah_logout') }}" class="font-bold p-3 bg-black text-white rounded flex-1 mx-5">Logout</a>
+                {% else %}
+                    <a href="{{ path('cah_login') }}" class="font-bold p-3 bg-white text-black rounded flex-1 mx-5">Login</a>
+                    <a href="{{ path('cah_register') }}" class="font-bold p-3 bg-white text-black rounded flex-1 mx-5">Register</a>
+                {% endif %}
                 <a href="https://github.com/nusje2000/cards-against-humanity" class="font-bold p-3 bg-black text-white rounded flex-1 mx-5">GitHub</a>
             </div>
         </div>

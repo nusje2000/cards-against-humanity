@@ -1,3 +1,8 @@
 framework:
     router:
         utf8: true
+
+    session:
+        handler_id: null
+        cookie_secure: auto
+        cookie_samesite: lax

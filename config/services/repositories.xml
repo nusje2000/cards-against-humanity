@@ -17,5 +17,9 @@
             <argument type="string">game</argument>
             <argument type="string">%kernel.project_dir%/var/storage</argument>
         </service>
+
+        <service id="cah.repository.user" class="Nusje2000\CAH\Infrastructure\Repository\DoctrineUserRepository">
+            <argument type="service" id="Doctrine\ORM\EntityManagerInterface"/>
+        </service>
     </services>
 </container>
