@@ -35,7 +35,7 @@ final class Kernel extends BaseKernel
             new TacticianBundle(),
         ];
 
-        if ('dev' === $this->getEnvironment()) {
+        if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {
             $bundles[] = new WebProfilerBundle();
         }
 
