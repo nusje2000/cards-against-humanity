@@ -38,7 +38,7 @@
 
     <div class="flex w-full mb-5">
         <div class="w-3/4 mx-2">
-            {% for player in game.players %}
+            {% for player in game.players if player.id.equalTo(app.user.id)%}
                 {% if round != null and round.cardCzar.equalTo(player) %}
                     <div class="mb-10">
                         <h1 class="text-4xl text-white">{{ player.toString }} ⭐</h1>
