@@ -39,24 +39,22 @@
     <div class="flex w-full mb-5">
         <div class="w-3/4 mx-2">
             {% for player in game.players %}
-                {% if player.id.equalTo(app.user.id) %}
-                    {% if round != null and round.cardCzar.equalTo(player) %}
-                        <div class="mb-10">
-                            <h1 class="text-4xl text-white">{{ player.toString }} ⭐</h1>
-                            <h2 class="text-2xl text-white">You are the card czar.</h2>
-                        </div>
-                    {% else %}
-                        <div class="mb-10">
-                            <h1 class="text-4xl text-white">{{ player.toString }}</h1>
-                            {% for card in game.hand(player).contents %}
-                                {{ view.white_card_trigger(
-                                    card,
-                                    path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': player.toString}),
-                                    round != null and round.playerHasSubmitted(player) and round.submissionByPlayer(player).card.id.equalTo(card.id)
-                                ) }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                {% if round != null and round.cardCzar.equalTo(player) %}
+                    <div class="mb-10">
+                        <h1 class="text-4xl text-white">{{ player.toString }} ⭐</h1>
+                        <h2 class="text-2xl text-white">You are the card czar.</h2>
+                    </div>
+                {% else %}
+                    <div class="mb-10">
+                        <h1 class="text-4xl text-white">{{ player.toString }}</h1>
+                        {% for card in game.hand(player).contents %}
+                            {{ view.white_card_trigger(
+                                card,
+                                path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': player.toString}),
+                                round != null and round.playerHasSubmitted(player) and round.submissionByPlayer(player).card.id.equalTo(card.id)
+                            ) }}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
