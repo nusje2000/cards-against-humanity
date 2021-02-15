@@ -16,6 +16,9 @@ final class Registry
 
     public function join(Id $player): void
     {
+        if (isset($this->players[$player->toString()])) {
+
+        }
         $this->players[$player->toString()] = $player;
     }
 
@@ -59,10 +62,10 @@ final class Registry
     }
 
     /**
-     * @return array<string, Id>
+     * @return list<Id>
      */
     public function toArray(): array
     {
-        return $this->players;
+        return array_values($this->players);
     }
 }

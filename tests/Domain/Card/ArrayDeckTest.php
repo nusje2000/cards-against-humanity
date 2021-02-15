@@ -68,18 +68,17 @@ final class ArrayDeckTest extends TestCase
         $cards = $subject->cards();
 
         self::assertCount(5, $cards);
-        self::assertSame(['card-1', 'card-2', 'card-3', 'card-4', 'card-5'], array_keys($cards));
 
-        self::assertSame($cards['card-1']->id()->toString(), 'card-1');
-        self::assertSame($cards['card-1']->contents()->toString(), 'This is the content of card-1');
-        self::assertSame($cards['card-2']->id()->toString(), 'card-2');
-        self::assertSame($cards['card-2']->contents()->toString(), 'This is the content of card-2');
-        self::assertSame($cards['card-3']->id()->toString(), 'card-3');
-        self::assertSame($cards['card-3']->contents()->toString(), 'This is the content of card-3');
-        self::assertSame($cards['card-4']->id()->toString(), 'card-4');
-        self::assertSame($cards['card-4']->contents()->toString(), 'This is the content of card-4');
-        self::assertSame($cards['card-5']->id()->toString(), 'card-5');
-        self::assertSame($cards['card-5']->contents()->toString(), 'This is the content of card-5');
+        self::assertSame($cards[0]->id()->toString(), 'card-1');
+        self::assertSame($cards[0]->contents()->toString(), 'This is the content of card-1');
+        self::assertSame($cards[1]->id()->toString(), 'card-2');
+        self::assertSame($cards[1]->contents()->toString(), 'This is the content of card-2');
+        self::assertSame($cards[2]->id()->toString(), 'card-3');
+        self::assertSame($cards[2]->contents()->toString(), 'This is the content of card-3');
+        self::assertSame($cards[3]->id()->toString(), 'card-4');
+        self::assertSame($cards[3]->contents()->toString(), 'This is the content of card-4');
+        self::assertSame($cards[4]->id()->toString(), 'card-5');
+        self::assertSame($cards[4]->contents()->toString(), 'This is the content of card-5');
     }
 
     public function testSize(): void

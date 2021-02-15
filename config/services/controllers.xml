@@ -15,6 +15,7 @@
         <service id="cah.controller.client.game.view" class="Nusje2000\CAH\Application\Controller\Client\Game\ViewController">
             <argument type="service" id="cah.repository.game"/>
             <argument type="service" id="twig"/>
+            <argument type="service" id="cah.player.storage"/>
         </service>
 
         <service id="cah.controller.client.user.register" class="Nusje2000\CAH\Application\Controller\Client\User\RegisterController">
@@ -31,14 +32,37 @@
 
         <service id="cah.controller.api.game.create" class="Nusje2000\CAH\Application\Controller\Api\Game\CreateController">
             <argument type="service" id="tactician.commandbus"/>
+            <argument type="service" id="cah.player.storage"/>
         </service>
 
-        <service id="cah.controller.api.player.join_game" class="Nusje2000\CAH\Application\Controller\Api\Player\JoinGameController">
+        <service id="cah.controller.api.game.join" class="Nusje2000\CAH\Application\Controller\Api\Game\JoinController">
+            <argument type="service" id="tactician.commandbus"/>
+            <argument type="service" id="cah.player.storage"/>
+        </service>
+
+        <service id="cah.controller.api.game.leave" class="Nusje2000\CAH\Application\Controller\Api\Game\LeaveController">
             <argument type="service" id="tactician.commandbus"/>
         </service>
 
-        <service id="cah.controller.api.player.leave_game" class="Nusje2000\CAH\Application\Controller\Api\Player\LeaveGameController">
-            <argument type="service" id="tactician.commandbus"/>
+        <service id="cah.controller.api.game.fetch" class="Nusje2000\CAH\Application\Controller\Api\Game\FetchController">
+            <argument type="service" id="cah.repository.game"/>
+            <argument type="service" id="serializer"/>
+        </service>
+
+        <service id="cah.controller.api.game.hand" class="Nusje2000\CAH\Application\Controller\Api\Game\HandController">
+            <argument type="service" id="cah.player.storage"/>
+            <argument type="service" id="cah.repository.game"/>
+            <argument type="service" id="serializer"/>
+        </service>
+
+        <service id="cah.controller.api.game.players" class="Nusje2000\CAH\Application\Controller\Api\Game\PlayersController">
+            <argument type="service" id="cah.repository.game"/>
+            <argument type="service" id="cah.repository.player"/>
+            <argument type="service" id="serializer"/>
+        </service>
+
+        <service id="cah.controller.api.player.fetch" class="Nusje2000\CAH\Application\Controller\Api\Player\FetchController">
+            <argument type="service" id="cah.repository.player"/>
         </service>
 
         <service id="cah.controller.api.round.complete" class="Nusje2000\CAH\Application\Controller\Api\Round\CompleteController">

@@ -25,17 +25,17 @@ final class TableWasCreatedTest extends TestCase
         $payload = $event->toPayload();
         self::assertSame($payload, [
             'white_deck' => [
-                'card-1' => ['card_id' => 'card-1', 'card_contents' => 'Card 1'],
-                'card-2' => ['card_id' => 'card-2', 'card_contents' => 'Card 2'],
-                'card-3' => ['card_id' => 'card-3', 'card_contents' => 'Card 3'],
-                'card-4' => ['card_id' => 'card-4', 'card_contents' => 'Card 4'],
-                'card-5' => ['card_id' => 'card-5', 'card_contents' => 'Card 5'],
-                'card-6' => ['card_id' => 'card-6', 'card_contents' => 'Card 6'],
+                ['card_id' => 'card-1', 'card_contents' => 'Card 1'],
+                ['card_id' => 'card-2', 'card_contents' => 'Card 2'],
+                ['card_id' => 'card-3', 'card_contents' => 'Card 3'],
+                ['card_id' => 'card-4', 'card_contents' => 'Card 4'],
+                ['card_id' => 'card-5', 'card_contents' => 'Card 5'],
+                ['card_id' => 'card-6', 'card_contents' => 'Card 6'],
             ],
             'black_deck' => [
-                'card-1' => ['card_id' => 'card-1', 'card_contents' => 'Card 1'],
-                'card-2' => ['card_id' => 'card-2', 'card_contents' => 'Card 2'],
-                'card-3' => ['card_id' => 'card-3', 'card_contents' => 'Card 3'],
+                ['card_id' => 'card-1', 'card_contents' => 'Card 1'],
+                ['card_id' => 'card-2', 'card_contents' => 'Card 2'],
+                ['card_id' => 'card-3', 'card_contents' => 'Card 3'],
             ],
         ]);
 

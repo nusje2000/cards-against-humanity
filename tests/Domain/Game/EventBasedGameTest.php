@@ -52,7 +52,7 @@ final class EventBasedGameTest extends TestCase
         $game->draw($player2);
         $game->draw($player2);
 
-        self::assertEquals(['player-1' => $player1, 'player-2' => $player2], $game->players());
+        self::assertEquals([0 => $player1, 1 => $player2], $game->players());
 
         $game->startRound(RoundId::fromString('round-1'));
         self::assertSame(['card-1', 'card-2', 'card-3'], array_keys($game->hand($player1)->contents()));

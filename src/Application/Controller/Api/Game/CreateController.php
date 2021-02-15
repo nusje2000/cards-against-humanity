@@ -22,9 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CreateController
 {
-    /**
-     * @var CommandBus
-     */
     private CommandBus $commandBus;
 
     private Generator $faker;

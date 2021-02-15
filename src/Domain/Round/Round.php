@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Round;
 
+use JsonSerializable;
 use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Exception\Round\NoSubmissionFound;
 use Nusje2000\CAH\Domain\Exception\Round\NoWinnerFound;
@@ -11,7 +12,7 @@ use Nusje2000\CAH\Domain\Exception\Round\SubmissionAlreadyPresent;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Nusje2000\CAH\Domain\Submission;
 
-final class Round
+final class Round implements JsonSerializable
 {
     private Id $id;
 
@@ -58,11 +59,11 @@ final class Round
     }
 
     /**
-     * @return array<string, Submission>
+     * @return list<Submission>
      */
     public function submissions(): array
     {
-        return $this->submissions;
+        return array_values($this->submissions);
     }
 
     public function playerHasSubmitted(PlayerId $id): bool
@@ -97,5 +98,18 @@ final class Round
         }
 
         $this->winner = $winner;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id(),
+            'card_czar' => $this->cardCzar(),
+            'submissions' => $this->submissions(),
+            'winner' => $this->winner ?? null,
+        ];
     }
 }

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Nusje2000\CAH\Application\Controller\Api\Player;
+namespace Nusje2000\CAH\Application\Controller\Api\Game;
 
 use League\Tactician\CommandBus;
+use Nusje2000\CAH\Domain\Command\Player\LeaveGame;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
-use Nusje2000\CAH\Domain\Command\Player\LeaveGame;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-final class LeaveGameController
+final class LeaveController
 {
     private CommandBus $commandBus;
 

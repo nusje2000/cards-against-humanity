@@ -10,5 +10,10 @@
             <argument type="service" id="security.csrf.token_manager"/>
             <argument type="service" id="security.user_password_encoder.generic"/>
         </service>
+
+        <service id="cah.player.storage" class="Nusje2000\CAH\Infrastructure\Security\TokenBasedPlayerStorage">
+            <argument type="service" id="security.untracked_token_storage"/>
+            <argument type="service" id="cah.repository.player"/>
+        </service>
     </services>
 </container>

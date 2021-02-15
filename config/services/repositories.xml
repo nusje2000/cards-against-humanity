@@ -21,5 +21,9 @@
         <service id="cah.repository.user" class="Nusje2000\CAH\Infrastructure\Repository\DoctrineUserRepository">
             <argument type="service" id="Doctrine\ORM\EntityManagerInterface"/>
         </service>
+
+        <service id="cah.repository.player" class="Nusje2000\CAH\Infrastructure\Repository\UserPlayerRepository">
+            <argument type="service" id="cah.repository.user"/>
+        </service>
     </services>
 </container>

@@ -28,4 +28,9 @@ final class Username extends AbstractString
             ]),
         ];
     }
+
+    public function toString(): string
+    {
+        return $this->get();
+    }
 }

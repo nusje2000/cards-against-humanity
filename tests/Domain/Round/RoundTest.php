@@ -47,7 +47,7 @@ final class RoundTest extends TestCase
         self::assertEquals([], $subject->submissions());
         $submission = new Submission(PlayerId::fromString('player'), new WhiteCard(CardId::fromString('card'), Text::fromString('text')));
         $subject->submit($submission);
-        self::assertEquals(['player' => $submission], $subject->submissions());
+        self::assertEquals([$submission], $subject->submissions());
     }
 
     public function testWinner(): void

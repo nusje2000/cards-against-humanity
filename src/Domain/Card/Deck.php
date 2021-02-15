@@ -25,7 +25,7 @@ interface Deck
     public function remove(Id $card): void;
 
     /**
-     * @return array<T>
+     * @return list<T>
      */
     public function cards(): array;
 

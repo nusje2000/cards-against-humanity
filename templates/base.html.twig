@@ -18,30 +18,7 @@
         {% block body %}{% endblock %}
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-            <script>
-                $('.start-game').on('click', (event) => {
-                    const href = $(event.target).data('api');
-
-                    fetch(href).then((response) => {
-                        return response.json();
-                    }).then((json) => {
-                        window.location.href = `/game/${json.id}`;
-                    }).catch(error => alert(error));
-                });
-
-                $('[data-api-trigger]').on('click', (event) => {
-                    const href = $(event.target).data('api-trigger');
-
-                    fetch(href).then((response) => {
-                        if (response.status !== 200) {
-                            throw `Unexpected statuscode ${response.status}`;
-                        }
-
-                        window.location.reload();
-                    }).catch(error => alert(error));
-                })
-            </script>
+            <script src="/game.js"></script>
         {% endblock %}
     </body>
 </html>

@@ -20,7 +20,7 @@ interface Game
     public function rules(): Rules;
 
     /**
-     * @return array<PlayerId>
+     * @return list<PlayerId>
      */
     public function players(): array;
 

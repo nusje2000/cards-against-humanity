@@ -64,9 +64,9 @@ final class RegistryTest extends TestCase
     {
         $subject = $this->createSubject();
         self::assertEquals([
-            'player-1' => Id::fromString('player-1'),
-            'player-2' => Id::fromString('player-2'),
-            'player-3' => Id::fromString('player-3'),
+            0 => Id::fromString('player-1'),
+            1 => Id::fromString('player-2'),
+            2 => Id::fromString('player-3'),
         ], $subject->toArray());
     }
 

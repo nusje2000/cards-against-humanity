@@ -10,9 +10,9 @@ use Nusje2000\CAH\Infrastructure\Entity\User;
 
 interface UserRepository
 {
-    public function byUsername(Username $username): User;
-
     public function retrieve(Id $id): User;
+
+    public function byUsername(Username $username): User;
 
     public function persist(User $user): void;
 }

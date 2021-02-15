@@ -25,12 +25,29 @@
         <default key="_controller">cah.controller.client.index</default>
     </route>
 
-    <route id="cah_api_game_player_join" path="/api/game/{game}/join" methods="GET">
-        <default key="_controller">cah.controller.api.player.join_game</default>
+    <route id="cah_api_game_game_fetch" path="/api/game/{game}" methods="GET">
+        <default key="_controller">cah.controller.api.game.fetch</default>
     </route>
 
-    <route id="cah_api_player_leave_game" path="/api/game/{game}/leave/{player}" methods="GET">
-        <default key="_controller">cah.controller.api.player.leave_game</default>
+    <route id="cah_api_game_game_fetch_hand" path="/api/game/{game}/hand" methods="GET">
+        <default key="_controller">cah.controller.api.game.hand</default>
+    </route>
+
+
+    <route id="cah_api_game_game_fetch_players" path="/api/game/{game}/players" methods="GET">
+        <default key="_controller">cah.controller.api.game.players</default>
+    </route>
+
+    <route id="cah_api_game_player_fetch" path="/api/player/{player}" methods="GET">
+        <default key="_controller">cah.controller.api.player.fetch</default>
+    </route>
+
+    <route id="cah_api_game_join" path="/api/game/{game}/join" methods="GET">
+        <default key="_controller">cah.controller.api.game.join</default>
+    </route>
+
+    <route id="cah_api_game_leave" path="/api/game/{game}/leave/{player}" methods="GET">
+        <default key="_controller">cah.controller.api.game.leave</default>
     </route>
 
     <route id="cah_api_round_start" path="/api/game/{game}/round/start" methods="GET">

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Domain\Round;
 
+use JsonSerializable;
 use Nusje2000\CAH\Domain\Exception\Game\NoActiveRound;
 use Nusje2000\CAH\Domain\Exception\Round\UnfinishedRoundPresent;
 
-final class Registry
+final class Registry implements JsonSerializable
 {
     /**
      * @var array<int, Round>
@@ -56,5 +57,17 @@ final class Registry
     public function previous(): ?Round
     {
         return end($this->completed) ?: null;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'current' => $this->current,
+            'completed' => $this->completed(),
+            'previous' => $this->previous(),
+        ];
     }
 }

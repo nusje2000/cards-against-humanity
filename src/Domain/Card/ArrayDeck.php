@@ -79,7 +79,7 @@ final class ArrayDeck implements Deck
 
     public function cards(): array
     {
-        return $this->cards;
+        return array_values($this->cards);
     }
 
     public function size(): int
