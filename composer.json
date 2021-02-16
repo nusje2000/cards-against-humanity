@@ -13,7 +13,6 @@
         "symfony/framework-bundle": "^5.1",
         "symfony/dotenv": "^5.1",
         "symfony/twig-bundle": "^5.1",
-        "fzaninotto/faker": "^1.9",
         "symfony-bundles/json-request-bundle": "^3.1",
         "aeviiq/value-object": "^0.2.1",
         "ramsey/uuid": "^4.1",
