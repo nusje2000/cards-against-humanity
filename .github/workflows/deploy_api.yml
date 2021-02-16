@@ -71,14 +71,16 @@ jobs:
                     script: |
                         export SOURCE_DIR=/www/cah-test-api
                         export LOCAL_ENV=/www/cah-test-api/config/.env.local
+                        export LOCAL_STORAGE=/www/cah-test-api/storage
                         cd ${SOURCE_DIR}
                         export DATE=`date '+%F_%H%M%S'`
                         unzip ./release.zip -d release-${DATE}
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
+                        rm -rf ${SOURCE_DIR}/release-${DATE}/var/storage
+                        ln -s ${LOCAL_STORAGE} ${SOURCE_DIR}/release-${DATE}/var/storage
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
                         php bin/console cache:warmup || exit 1
-                        php bin/console doctrine:database:create || exit 1
                         php bin/console doctrine:schema:update --force || exit 1
                         cd ${SOURCE_DIR}
                         rm ${SOURCE_DIR}/current || exit 1
