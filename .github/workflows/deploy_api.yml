@@ -72,7 +72,7 @@ jobs:
                         export LOCAL_ENV=/www/cah-test-api/config/.env.local
                         cd ${SOURCE_DIR}
                         export DATE=`date '+%F_%H%M%S'`
-                        unzip ./release.zip -d release-${DATE}
+                        unzip -qq ./release.zip -d release-${DATE}
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
