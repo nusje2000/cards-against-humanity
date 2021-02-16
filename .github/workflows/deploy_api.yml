@@ -70,13 +70,10 @@ jobs:
                     script: |
                         export SOURCE_DIR=/www/cah-test-api
                         export LOCAL_ENV=/www/cah-test-api/config/.env.local
-                        export LOCAL_STORAGE=/www/cah-test-api/storage
                         cd ${SOURCE_DIR}
                         export DATE=`date '+%F_%H%M%S'`
                         unzip ./release.zip -d release-${DATE}
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
-                        rm -rf ${SOURCE_DIR}/release-${DATE}/var/storage
-                        cp ${SOURCE_DIR}/current/var/storage ${SOURCE_DIR}/release-${DATE}/var/storage
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
                         php bin/console cache:warmup || exit 1
