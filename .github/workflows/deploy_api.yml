@@ -77,7 +77,7 @@ jobs:
                         unzip ./release.zip -d release-${DATE}
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
                         rm -rf ${SOURCE_DIR}/release-${DATE}/var/storage
-                        ln -s ${LOCAL_STORAGE} ${SOURCE_DIR}/release-${DATE}/var/storage
+                        cp ${SOURCE_DIR}/current/var/storage ${SOURCE_DIR}/release-${DATE}/var/storage
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
                         php bin/console cache:warmup || exit 1
