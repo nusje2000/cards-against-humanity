@@ -12,28 +12,16 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Setup PHP, with composer and extensions
-                uses: shivammathur/setup-php@v1
+                uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    extension-csv: mbstring, xml, ctype, iconv, mysql, curl, intl
+                    extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
                     coverage: pcov
-
             -   uses: actions/checkout@v1
-
-            -   name: Install dependencies
-                run: |
-                    composer clear-cache
-                    composer validate
-                    composer install --prefer-dist --no-progress --no-suggest
-
+            -   uses: ramsey/composer-install@v1
             -   name: PHP Stan
-                run: |
-                    vendor/bin/phpstan analyze
-
+                run: vendor/bin/phpstan analyze
             -   name: Psalm
-                run: |
-                    vendor/bin/psalm
-
+                run: vendor/bin/psalm
             -   name: PHPUnit
-                run: |
-                    vendor/bin/phpunit
+                run: vendor/bin/phpunit

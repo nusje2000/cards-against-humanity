@@ -12,31 +12,26 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Setup PHP, with composer and extensions
-                uses: shivammathur/setup-php@v1
+                uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    extension-csv: mbstring, xml, ctype, iconv, mysql, curl, intl
+                    extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
                     coverage: pcov
-
             -   uses: actions/checkout@v1
-
-            -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress --no-suggest
-
+            -   uses: ramsey/composer-install@v1
             -   name: PHPUnit
-                run: |
-                    vendor/bin/phpunit
+                run: vendor/bin/phpunit
 
     deploy:
-        name: 'Deploy'
+        name: 'Deploy to api-test.society.cards'
         runs-on: ubuntu-latest
         needs: [ 'tests' ]
         steps:
             -   name: Setup PHP, with composer and extensions
-                uses: shivammathur/setup-php@v1
+                uses: shivammathur/setup-php@v2
                 with:
                     php-version: 7.4
-                    extension-csv: mbstring, xml, ctype, iconv, mysql, curl, intl
+                    extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
                     coverage: pcov
 
             -   uses: actions/checkout@v1
