@@ -32,7 +32,6 @@ jobs:
                 with:
                     php-version: 7.4
                     extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
-                    coverage: pcov
 
             -   uses: actions/checkout@v1
 
@@ -81,6 +80,7 @@ jobs:
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
                         php bin/console cache:warmup || exit 1
+                        php bin/console doctrine:database:create || exit 1
                         php bin/console doctrine:schema:update --force || exit 1
                         cd ${SOURCE_DIR}
                         rm ${SOURCE_DIR}/current || exit 1
