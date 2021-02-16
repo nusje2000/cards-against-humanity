@@ -8,6 +8,9 @@ use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Submit
 {
     /**

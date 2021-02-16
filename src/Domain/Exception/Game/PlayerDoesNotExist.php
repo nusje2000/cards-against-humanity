@@ -9,6 +9,9 @@ use Nusje2000\CAH\Domain\Player\Username;
 use Throwable;
 use UnexpectedValueException;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class PlayerDoesNotExist extends UnexpectedValueException
 {
     private function __construct(string $message, ?Throwable $previous = null)

@@ -2,81 +2,99 @@
 
 {% import _self as view %}
 
-{% macro white_card(card, bottom_text, highlight = false) %}
-    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex {{ highlight ? 'bg-gradient-to-t from-green-400 to-blue-500' }}">
-        {{ card.contents.toString }}
+{% macro white_card(card, bottom_text) %}
+    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex">
+        {{ card.contents.toString ?? '' }}
         <div class="absolute bottom-0 left-0 font-bold m-2">
-            {{ bottom_text }} {{ highlight ? '❤️' }}
+            {{ bottom_text }}
         </div>
     </div>
 {% endmacro %}
 
-{% macro white_card_trigger(card, api_route, highlight = false) %}
-    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex {{ highlight ? 'bg-gradient-to-t from-green-400 to-transparent' }}"
+{% macro submission(submission, bottom_text, winner = false) %}
+    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex {{ winner ? 'bg-gradient-to-t from-green-400 to-blue-500' }}">
+        {{ card.contents.toString ?? '' }}
+        <div class="absolute bottom-0 left-0 font-bold m-2">
+            <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: submission.player.toString}) }}"
+                  data-api-property="username"></span>
+            {{ winner ? '❤️' }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro white_card_trigger(card, api_route) %}
+    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex"
          data-api-trigger="{{ api_route }}">
         {{ card.contents.toString }}
         <div class="absolute bottom-0 left-0 font-bold m-2">
-            {{ highlight ? '✅' }} {{ highlight ? 'Selected' : 'Click to pick' }}
+            Click to pick
         </div>
     </div>
 {% endmacro %}
 
 {% macro black_card(card) %}
     <div class="relative w-48 h-64 bg-black text-white font-bold p-2 mb-2 mr-1 rounded inline-flex">
-        {{ card.contents.toString }}
+        {{ card.contents.toString|replace({'_': '__________'}) }}
     </div>
 {% endmacro %}
 
 {% macro black_card_trigger(text, api_route) %}
     <div class="relative w-48 h-64 bg-black text-white font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex" data-api-trigger="{{ api_route }}">
-        {{ text }}
+        {{ text|replace({'_': '__________'}) }}
     </div>
 {% endmacro %}
+
+{% block meta %}
+    {{ parent() }}
+    <meta name="game-version-trigger"
+          data-version-api="{{ path('cah_api_game_game_version', {game: game.id.toString}) }}"
+          data-current="{{ game.aggregateRootVersion }}"/>
+{% endblock %}
 
 {% block body %}
     {% set round = game.rounds.hasActiveRound ? game.rounds.current : null %}
 
     <div class="flex w-full mb-5">
         <div class="w-3/4 mx-2">
-            {% for player in game.players %}
-                {% if player.equalTo(current_player.id) %}
-                    {% if round != null and round.cardCzar.equalTo(player) %}
-                        <div class="mb-10">
-                            <h1 class="text-4xl text-white">
-                                <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: player.toString}) }}" data-api-property="username"></span>
-                                ⭐
-                            </h1>
-                            <h2 class="text-2xl text-white">You are the card czar.</h2>
-                        </div>
-                    {% else %}
-                        <div class="mb-10">
-                            <h1 class="text-4xl text-white">
-                                <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: player.toString}) }}" data-api-property="username"></span>
-                            </h1>
-                            {% for card in game.hand(player).contents %}
+            {% if game.players.isJoined(current_player.id) %}
+                {% if round != null and round.cardCzar.equalTo(current_player.id) %}
+                    <div class="mb-10">
+                        <h1 class="text-4xl text-white">
+                            <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: current_player.id.toString}) }}"
+                                  data-api-property="username"></span>
+                            ⭐
+                        </h1>
+                        <h2 class="text-2xl text-white">You are the card czar.</h2>
+                    </div>
+                {% else %}
+                    <div class="mb-10">
+                        <h1 class="text-4xl text-white">
+                            <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: current_player.id.toString}) }}"
+                                  data-api-property="username"></span>
+                        </h1>
+                        {% for card in game.hand(current_player.id).contents %}
+                            {% if round == null or round.playerHasSubmitted(current_player.id) %}
+                                {{ view.white_card(card) }}
+                            {% else %}
                                 {{ view.white_card_trigger(
                                     card,
-                                    path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': player.toString}),
-                                    round != null and round.playerHasSubmitted(player) and round.submissionByPlayer(player).card.id.equalTo(card.id)
+                                    path('cah_api_round_submission', {'card': card.id.toString, 'game': game.id.toString, 'player': current_player.id.toString})
                                 ) }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
-            {% endfor %}
+            {% endif %}
 
 
             <h2 class="text-2xl text-white">
                 Players:
             </h2>
-            {% for player in game.players %}
-                <h3 class="text-1xl text-white">
-                    <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: player.toString}) }}" data-api-property="username"></span>
-                    {% if round != null and round.cardCzar.equalTo(player) %}
-                        <span title="This player is the card czar">⭐</span>
-                    {% endif %}
-                </h3>
-            {% endfor %}
+            <div data-api-playerlist="{{ path('cah_api_game_game_fetch_players', {game: game.id.toString}) }}">
+                <template>
+                    <h3 class="text-xl2 text-white">__username__</h3>
+                </template>
+            </div>
         </div>
 
         <div class="w-1/4 mx-2">
@@ -88,14 +106,22 @@
                 {{ view.black_card_trigger('Click to start next round', path('cah_api_round_start', {'game': game.id.toString})) }}
             {% endif %}
 
-            {% if game.players[current_player.id.toString] is not defined %}
+            {% if not game.players.joined(current_player.id) %}
                 {{ view.black_card_trigger('Join game', path('cah_api_game_join', {'game' : game.id.toString})) }}
             {% endif %}
 
             {% if round != null %}
                 <div class="max-w-full">
                     {% for submission in round.submissions %}
-                        {{ view.white_card_trigger(submission.card, path('cah_api_round_complete', {'game': game.id.toString, 'winner': submission.player.toString})) }}
+                        {% set everyone_submitted = round.submissions|length == (game.players.toArray|length - 1) %}
+
+                        {% if round.cardCzar.isEqualTo(current_player.id) and everyone_submitted %}
+                            {{ view.white_card_trigger(submission.card, path('cah_api_round_complete', {'game': game.id.toString, 'winner': submission.player.toString})) }}
+                        {% elseif  everyone_submitted or submission.player.isEqualTo(current_player.id) %}
+                            {{ view.white_card(submission.card) }}
+                        {% else %}
+                            {{ view.white_card('') }}
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}
@@ -106,7 +132,7 @@
         <div class="flex w-full">
             {{ view.black_card(round.blackCard) }}
             {% for submission in round.submissions %}
-                {{ view.white_card(submission.card, submission.player.toString, submission.player.equalTo(round.winner.player)) }}
+                {{ view.submission(submission, submission.player.equalTo(round.winner.player)) }}
             {% endfor %}
         </div>
     {% endfor %}

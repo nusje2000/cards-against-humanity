@@ -32,7 +32,8 @@
 
         <service id="cah.controller.api.game.create" class="Nusje2000\CAH\Application\Controller\Api\Game\CreateController">
             <argument type="service" id="tactician.commandbus"/>
-            <argument type="service" id="cah.player.storage"/>
+            <argument type="service" id="cah.repository.white_deck"/>
+            <argument type="service" id="cah.repository.black_deck"/>
         </service>
 
         <service id="cah.controller.api.game.join" class="Nusje2000\CAH\Application\Controller\Api\Game\JoinController">
@@ -47,6 +48,10 @@
         <service id="cah.controller.api.game.fetch" class="Nusje2000\CAH\Application\Controller\Api\Game\FetchController">
             <argument type="service" id="cah.repository.game"/>
             <argument type="service" id="serializer"/>
+        </service>
+
+        <service id="cah.controller.api.game.version" class="Nusje2000\CAH\Application\Controller\Api\Game\VersionController">
+            <argument type="service" id="cah.repository.game"/>
         </service>
 
         <service id="cah.controller.api.game.hand" class="Nusje2000\CAH\Application\Controller\Api\Game\HandController">

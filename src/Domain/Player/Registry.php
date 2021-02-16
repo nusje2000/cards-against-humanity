@@ -6,6 +6,7 @@ namespace Nusje2000\CAH\Domain\Player;
 
 use Nusje2000\CAH\Domain\Exception\Game\NoPlayersFound;
 use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
+use Nusje2000\CAH\Domain\Exception\Game\PlayerHasJoinedAlready;
 
 final class Registry
 {
@@ -17,8 +18,9 @@ final class Registry
     public function join(Id $player): void
     {
         if (isset($this->players[$player->toString()])) {
-
+            throw PlayerHasJoinedAlready::create($player);
         }
+
         $this->players[$player->toString()] = $player;
     }
 

@@ -43,7 +43,7 @@ final class PlayersController
 
         $players = array_map(function (PlayerId $id): Player {
             return $this->playerRepository->retreive($id);
-        }, $retrieved->players());
+        }, $retrieved->players()->toArray());
 
         $data = $this->serializer->serialize($players, 'json', [
             'groups' => 'default',

@@ -8,6 +8,9 @@ use DomainException;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class SubmissionAlreadyPresent extends DomainException
 {
     private function __construct(string $message, ?Throwable $previous = null)

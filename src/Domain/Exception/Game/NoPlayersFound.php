@@ -7,6 +7,9 @@ namespace Nusje2000\CAH\Domain\Exception\Game;
 use LogicException;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class NoPlayersFound extends LogicException
 {
     private function __construct(string $message, ?Throwable $previous = null)

@@ -25,5 +25,8 @@
         <service id="cah.repository.player" class="Nusje2000\CAH\Infrastructure\Repository\UserPlayerRepository">
             <argument type="service" id="cah.repository.user"/>
         </service>
+
+        <service id="cah.repository.white_deck" class="Nusje2000\CAH\Infrastructure\Repository\StaticWhiteDeckRepository"/>
+        <service id="cah.repository.black_deck" class="Nusje2000\CAH\Infrastructure\Repository\StaticBlackDeckRepository"/>
     </services>
 </container>

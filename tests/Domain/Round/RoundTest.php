@@ -100,6 +100,19 @@ final class RoundTest extends TestCase
         $round->submissionByPlayer(PlayerId::fromString('other-player'));
     }
 
+    public function testJsonSerialize(): void
+    {
+        $subject = $this->createSubject();
+
+        self::assertEquals([
+            'id' => Id::fromString('round-1'),
+            'black_card' => new BlackCard(CardId::fromString('card'), Text::fromString('text')),
+            'card_czar' => PlayerId::fromString('player'),
+            'submissions' => [],
+            'winner' => null,
+        ], $subject->jsonSerialize());
+    }
+
     private function createSubject(): Round
     {
         return new Round(

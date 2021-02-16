@@ -6,6 +6,9 @@ namespace Nusje2000\CAH\Domain\Exception\Round;
 
 use LogicException;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class NoWinnerFound extends LogicException
 {
     public static function create(): self

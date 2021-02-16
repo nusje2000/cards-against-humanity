@@ -30,7 +30,7 @@ final class RestockAllHandler
         /** @var EventBasedGame $game */
         $game = $this->gameRepository->retrieve($restock->game());
 
-        foreach ($game->players() as $player) {
+        foreach ($game->players()->toArray() as $player) {
             $this->restockPlayer($game, $player);
         }
 

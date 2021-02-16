@@ -107,6 +107,7 @@ final class Round implements JsonSerializable
     {
         return [
             'id' => $this->id(),
+            'black_card' => $this->blackCard(),
             'card_czar' => $this->cardCzar(),
             'submissions' => $this->submissions(),
             'winner' => $this->winner ?? null,

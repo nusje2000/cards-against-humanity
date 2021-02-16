@@ -101,9 +101,9 @@ final class EventBasedGame implements Game, AggregateRoot
     /**
      * @inheritDoc
      */
-    public function players(): array
+    public function players(): PlayerRegistry
     {
-        return $this->players->toArray();
+        return $this->players;
     }
 
     public function hand(PlayerId $player): Hand
@@ -210,6 +210,7 @@ final class EventBasedGame implements Game, AggregateRoot
 
     public function applyRoundWasStarted(RoundWasStarted $event): void
     {
+        $this->table()->blackDeck()->remove($event->card()->id());
         $this->rounds->start(new Round($event->id(), $event->cardCzar(), $event->card()));
     }
 

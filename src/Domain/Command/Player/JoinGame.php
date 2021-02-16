@@ -7,6 +7,9 @@ namespace Nusje2000\CAH\Domain\Command\Player;
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class JoinGame
 {
     /**

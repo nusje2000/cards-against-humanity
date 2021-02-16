@@ -10,6 +10,9 @@ use Nusje2000\CAH\Domain\Card\WhiteCard;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Game\Rules;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Create
 {
     private Id $id;

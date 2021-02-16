@@ -7,6 +7,9 @@ namespace Nusje2000\CAH\Domain\Command\Round;
 use Nusje2000\CAH\Domain\Game\Id;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Start
 {
     /**

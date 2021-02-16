@@ -8,6 +8,9 @@ use LogicException;
 use Nusje2000\CAH\Domain\Round\Id;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class UnfinishedRoundPresent extends LogicException
 {
     private function __construct(string $message, ?Throwable $previous = null)

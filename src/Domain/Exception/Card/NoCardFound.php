@@ -8,6 +8,9 @@ use LogicException;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class NoCardFound extends LogicException
 {
     private function __construct(string $message, ?Throwable $previous = null)

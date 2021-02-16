@@ -6,6 +6,7 @@ namespace Nusje2000\CAH\Tests\Domain\Player;
 
 use Nusje2000\CAH\Domain\Exception\Game\NoPlayersFound;
 use Nusje2000\CAH\Domain\Exception\Game\PlayerDoesNotExist;
+use Nusje2000\CAH\Domain\Exception\Game\PlayerHasJoinedAlready;
 use Nusje2000\CAH\Domain\Player\Id;
 use Nusje2000\CAH\Domain\Player\Registry;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,9 @@ final class RegistryTest extends TestCase
         self::assertFalse($subject->isJoined(Id::fromString('player-4')));
         $subject->join(Id::fromString('player-4'));
         self::assertTrue($subject->isJoined(Id::fromString('player-4')));
+
+        $this->expectExceptionObject(PlayerHasJoinedAlready::create(Id::fromString('player-4')));
+        $subject->join(Id::fromString('player-4'));
     }
 
     public function testIsJoined(): void

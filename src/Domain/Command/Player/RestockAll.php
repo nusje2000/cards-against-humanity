@@ -6,6 +6,9 @@ namespace Nusje2000\CAH\Domain\Command\Player;
 
 use Nusje2000\CAH\Domain\Game\Id as GameId;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class RestockAll
 {
     /**

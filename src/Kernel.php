@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nusje2000\CAH;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use League\Tactician\Bundle\TacticianBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -36,6 +37,7 @@ final class Kernel extends BaseKernel
         ];
 
         if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {
+            $bundles[] = new DoctrineFixturesBundle();
             $bundles[] = new WebProfilerBundle();
         }
 
@@ -55,6 +57,10 @@ final class Kernel extends BaseKernel
 
         $configurator->import($confDir . '/{packages}/*.yaml');
         $configurator->import($confDir . '/{packages}/' . $this->environment . '/*.yaml');
+
+        if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {
+            $configurator->import($confDir . '/services/dev/fixtures.xml');
+        }
 
         $configurator->import($confDir . '/services/commands.xml');
         $configurator->import($confDir . '/services/consumers.xml');

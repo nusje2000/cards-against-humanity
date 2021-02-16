@@ -7,6 +7,7 @@ namespace Nusje2000\CAH\Domain\Game;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Player\Hand;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
+use Nusje2000\CAH\Domain\Player\Registry as PlayerRegistry;
 use Nusje2000\CAH\Domain\Round\Id as RoundId;
 use Nusje2000\CAH\Domain\Round\Registry;
 use Nusje2000\CAH\Domain\Table;
@@ -19,10 +20,7 @@ interface Game
 
     public function rules(): Rules;
 
-    /**
-     * @return list<PlayerId>
-     */
-    public function players(): array;
+    public function players(): PlayerRegistry;
 
     public function join(PlayerId $player): void;
 

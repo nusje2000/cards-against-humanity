@@ -43,3 +43,39 @@ $('[data-api-fetch]').each((index, element) => {
         return $element.text(property)
     }).catch(e => $element.text(e));
 });
+
+$('meta[name="game-version-trigger"]').each((index, element) => {
+    const $element = $(element);
+    const path = $element.data('version-api');
+    const current = $element.data('current');
+
+    function checkForUpdate() {
+        fetch(path).then(response => response.json()).then(response => {
+            if (response.version !== current) {
+                window.location.reload();
+            }
+        }).finally(() => setTimeout(checkForUpdate, 2000));
+    }
+
+    checkForUpdate();
+});
+
+$('[data-api-playerlist]').each((index, element) => {
+    const $element = $(element);
+    const path = $element.data('api-playerlist');
+    const container = $element.find('template').html();
+
+    $element.text('Loading...');
+
+    fetch(path).then(response => {
+        return response.json()
+    }).then(players => {
+        $element.empty();
+
+        for (const player of players) {
+            const playerContainer = container;
+            playerContainer.replace('__username__', player.username);
+            $element.append(playerContainer.replace('__username__', player.username));
+        }
+    }).catch(e => $element.text(e));
+});

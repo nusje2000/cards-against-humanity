@@ -99,6 +99,39 @@ final class RegistryTest extends TestCase
         self::assertSame($round, $subject->previous());
     }
 
+    public function testJsonSerialize(): void
+    {
+        $subject = $this->createSubject();
+
+        self::assertEquals([
+            'current' => null,
+            'completed' => [],
+            'previous' => null,
+        ], $subject->jsonSerialize());
+
+        $round = new Round(
+            Id::fromString('round-1'),
+            PlayerId::fromString('player'),
+            new BlackCard(CardId::fromString('card'), Text::fromString('text'))
+        );
+
+        $subject->start($round);
+
+        self::assertEquals([
+            'current' => $round,
+            'completed' => [],
+            'previous' => null,
+        ], $subject->jsonSerialize());
+
+        $subject->finishCurrentRound();
+
+        self::assertEquals([
+            'current' => null,
+            'completed' => [$round],
+            'previous' => $round,
+        ], $subject->jsonSerialize());
+    }
+
     private function createSubject(): Registry
     {
         return new Registry();
