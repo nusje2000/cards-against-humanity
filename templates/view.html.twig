@@ -11,9 +11,9 @@
     </div>
 {% endmacro %}
 
-{% macro submission(submission, bottom_text, winner = false) %}
+{% macro submission(submission, winner = false) %}
     <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex {{ winner ? 'bg-gradient-to-t from-green-400 to-blue-500' }}">
-        {{ card.contents.toString ?? '' }}
+        {{ submission.card.contents.toString ?? '' }}
         <div class="absolute bottom-0 left-0 font-bold m-2">
             <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: submission.player.toString}) }}"
                   data-api-property="username"></span>
@@ -102,7 +102,7 @@
 
             {% if round != null %}
                 {{ view.black_card(round.blackCard) }}
-            {% else %}
+            {% elseif game.players.toArray|length > 1 %}
                 {{ view.black_card_trigger('Click to start next round', path('cah_api_round_start', {'game': game.id.toString})) }}
             {% endif %}
 
