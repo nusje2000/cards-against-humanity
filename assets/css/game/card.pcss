@@ -1,0 +1,19 @@
+.card {
+    @apply relative w-48 h-64 font-bold p-2 mb-2 mr-1 rounded inline-flex;
+
+    &.card__black {
+        @apply bg-black text-white;
+    }
+
+    &.card__white {
+        @apply bg-white text-black;
+    }
+
+    &.card__highlight {
+        @apply text-white bg-gradient-to-t from-green-400 to-blue-500;
+    }
+
+    .card--bottom-text {
+        @apply absolute bottom-0 left-0 font-bold m-2;
+    }
+}

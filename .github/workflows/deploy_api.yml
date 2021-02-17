@@ -8,7 +8,7 @@ on:
 
 jobs:
     tests:
-        name: 'Tests (PHP: 7.4, MySQL: 5.7)'
+        name: 'Tests (PHP: 7.4)'
         runs-on: ubuntu-latest
         steps:
             -   name: Setup PHP, with composer and extensions
@@ -39,6 +39,11 @@ jobs:
                 run: composer install --no-dev --prefer-dist --no-progress --no-suggest
                 env:
                     APP_ENV: prod
+
+            -   name: Build assets
+                run: |
+                    npm install
+                    npm run build
 
             -   name: Create package
                 uses: thedoctor0/zip-release@master
@@ -76,9 +81,7 @@ jobs:
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
-                        php bin/console cache:warmup || exit 1
-                        php bin/console doctrine:database:create || exit 1
-                        php bin/console doctrine:schema:update --force || exit 1
+                        bin/load_data || exit 1
                         cd ${SOURCE_DIR}
                         rm ${SOURCE_DIR}/current || exit 1
                         ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current || exit 1

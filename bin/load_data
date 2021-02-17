@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Nusje2000\ProcessRunner\Executor\SequentialExecutor;
+use Nusje2000\ProcessRunner\Factory\TaskListFactory;
+use Nusje2000\ProcessRunner\Listener\StaticConsoleListener;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+set_time_limit(0);
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+$executor = new SequentialExecutor();
+$executor->addListener(new StaticConsoleListener(new ConsoleOutput()));
+
+$tasks = TaskListFactory::createFromArray([
+    'Create database' => 'php bin/console doctrine:database:create',
+    'Update database schema' => 'php bin/console doctrine:schema:update --force',
+    'Insert fixtures' => 'php bin/console doctrine:fixtures:load --no-interaction',
+]);
+
+$executor->execute($tasks);
+
+$tasks->getFailedTasks()->count() > 0 ? exit(1) : exit(0);

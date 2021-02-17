@@ -1,0 +1,17 @@
+{
+    "devDependencies": {
+        "autoprefixer": "^10.2.4",
+        "cssnano": "^4.1.10",
+        "postcss": "^8.2.6",
+        "postcss-cli": "^8.3.1",
+        "postcss-nested": "^5.0.3",
+        "tailwindcss": "^2.0.3"
+    },
+    "scripts": {
+        "build": "postcss assets/css/common.pcss -o public/common.css",
+        "watch": "postcss assets/css/common.pcss -o public/common.css --watch"
+    },
+    "dependencies": {
+        "postcss-import": "^14.0.0"
+    }
+}

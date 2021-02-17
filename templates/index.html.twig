@@ -11,14 +11,13 @@
             </div>
             <div class="flex w-1/3 self-center mx-auto">
                 {% if is_granted(constant('Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter::IS_AUTHENTICATED_FULLY')) %}
-                    <a class="font-bold p-3 bg-white text-black rounded flex-1 mx-5 start-game cursor-pointer"
-                       data-api="{{ url('cah_api_game_create') }}">Start Game</a>
-                    <a href="{{ path('cah_logout') }}" class="font-bold p-3 bg-black text-white rounded flex-1 mx-5">Logout</a>
+                    <a class="btn btn--primary flex-1 start-game" data-api="{{ url('cah_api_game_create') }}">Start Game</a>
+                    <a href="{{ path('cah_logout') }}" class="btn btn--secondary flex-1">Logout</a>
                 {% else %}
-                    <a href="{{ path('cah_login') }}" class="font-bold p-3 bg-white text-black rounded flex-1 mx-5">Login</a>
-                    <a href="{{ path('cah_register') }}" class="font-bold p-3 bg-white text-black rounded flex-1 mx-5">Register</a>
+                    <a href="{{ path('cah_login') }}" class="btn btn--primary flex-1">Login</a>
+                    <a href="{{ path('cah_register') }}" class="btn btn--primary flex-1">Register</a>
                 {% endif %}
-                <a href="https://github.com/nusje2000/cards-against-humanity" class="font-bold p-3 bg-black text-white rounded flex-1 mx-5">GitHub</a>
+                <a href="https://github.com/nusje2000/cards-against-humanity" class="btn btn--secondary flex-1">GitHub</a>
             </div>
         </div>
     </div>

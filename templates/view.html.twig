@@ -3,43 +3,45 @@
 {% import _self as view %}
 
 {% macro white_card(card, bottom_text) %}
-    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex">
+    <div class="card card__white">
         {{ card.contents.toString ?? '' }}
-        <div class="absolute bottom-0 left-0 font-bold m-2">
+
+        <div class="card--bottom-text">
             {{ bottom_text }}
         </div>
     </div>
 {% endmacro %}
 
 {% macro submission(submission, winner = false) %}
-    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded inline-flex {{ winner ? 'bg-gradient-to-t from-green-400 to-blue-500' }}">
-        {{ submission.card.contents.toString ?? '' }}
-        <div class="absolute bottom-0 left-0 font-bold m-2">
-            <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: submission.player.toString}) }}"
-                  data-api-property="username"></span>
+    <div class="card {{ winner ? 'card__highlight' : 'card__white' }}">
+        {% if submission is defined %}
+            {{ submission.card.contents.toString }}
+        {% endif %}
+
+        <div class="card--bottom-text">
+            <span data-api-fetch="{{ url('cah_api_game_player_fetch', {player: submission.player.toString}) }}" data-api-property="username"></span>
             {{ winner ? '❤️' }}
         </div>
     </div>
 {% endmacro %}
 
 {% macro white_card_trigger(card, api_route) %}
-    <div class="relative w-48 h-64 bg-white text-black font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex"
-         data-api-trigger="{{ api_route }}">
+    <div class="card card__white cursor-pointer" data-api-trigger="{{ api_route }}">
         {{ card.contents.toString }}
-        <div class="absolute bottom-0 left-0 font-bold m-2">
+        <div class="card--bottom-text">
             Click to pick
         </div>
     </div>
 {% endmacro %}
 
 {% macro black_card(card) %}
-    <div class="relative w-48 h-64 bg-black text-white font-bold p-2 mb-2 mr-1 rounded inline-flex">
+    <div class="card card__black">
         {{ card.contents.toString|replace({'_': '__________'}) }}
     </div>
 {% endmacro %}
 
 {% macro black_card_trigger(text, api_route) %}
-    <div class="relative w-48 h-64 bg-black text-white font-bold p-2 mb-2 mr-1 rounded cursor-pointer inline-flex" data-api-trigger="{{ api_route }}">
+    <div class="card card__black cursor-pointer" data-api-trigger="{{ api_route }}">
         {{ text|replace({'_': '__________'}) }}
     </div>
 {% endmacro %}
