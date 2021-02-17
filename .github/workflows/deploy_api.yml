@@ -81,7 +81,8 @@ jobs:
                         ln -s ${LOCAL_ENV} ${SOURCE_DIR}/release-${DATE}/.env.local
                         rm ${SOURCE_DIR}/release.zip
                         cd ${SOURCE_DIR}/release-${DATE}
-                        bin/load_data || exit 1
+                        php bin/console ca:wa || exit 1
+                        php bin/load_data || exit 1
                         cd ${SOURCE_DIR}
                         rm ${SOURCE_DIR}/current || exit 1
                         ln -s ${SOURCE_DIR}/release-${DATE} ${SOURCE_DIR}/current || exit 1
