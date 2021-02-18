@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 use SymfonyBundles\JsonRequestBundle\SymfonyBundlesJsonRequestBundle;
 
 final class Kernel extends BaseKernel
@@ -34,6 +35,7 @@ final class Kernel extends BaseKernel
             new DoctrineBundle(),
             new TwigBundle(),
             new TacticianBundle(),
+            new WebpackEncoreBundle(),
         ];
 
         if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {

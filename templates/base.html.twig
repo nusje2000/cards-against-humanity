@@ -13,14 +13,17 @@
             }
         </style>
         {% block stylesheets %}
-            <link href="/common.css" rel="stylesheet">
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
+        {% block additional_stylesheets %}{% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
             <script src="/game.js"></script>
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        {% block additional_javascripts %}{% endblock %}
     </body>
 </html>

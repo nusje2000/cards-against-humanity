@@ -44,22 +44,6 @@ $('[data-api-fetch]').each((index, element) => {
     }).catch(e => $element.text(e));
 });
 
-$('meta[name="game-version-trigger"]').each((index, element) => {
-    const $element = $(element);
-    const path = $element.data('version-api');
-    const current = $element.data('current');
-
-    function checkForUpdate() {
-        fetch(path).then(response => response.json()).then(response => {
-            if (response.version !== current) {
-                window.location.reload();
-            }
-        }).finally(() => setTimeout(checkForUpdate, 2000));
-    }
-
-    checkForUpdate();
-});
-
 $('[data-api-playerlist]').each((index, element) => {
     const $element = $(element);
     const path = $element.data('api-playerlist');

@@ -2,6 +2,14 @@
 
 {% import _self as view %}
 
+{% block additional_stylesheets %}
+    {{ encore_entry_link_tags('game') }}
+{% endblock %}
+
+{% block additional_javascripts %}
+    {{ encore_entry_script_tags('game') }}
+{% endblock %}
+
 {% macro white_card(card, bottom_text) %}
     <div class="card card__white">
         {{ card.contents.toString ?? '' }}
@@ -56,6 +64,8 @@
 {% block body %}
     {% set round = game.rounds.hasActiveRound ? game.rounds.current : null %}
 
+    <div class="game-container" data-id="{{ game.id }}"></div>
+
     <div class="flex w-full mb-5">
         <div class="w-3/4 mx-2">
             {% if game.players.isJoined(current_player.id) %}
@@ -108,7 +118,7 @@
                 {{ view.black_card_trigger('Click to start next round', path('cah_api_round_start', {'game': game.id.toString})) }}
             {% endif %}
 
-            {% if not game.players.joined(current_player.id) %}
+            {% if not game.players.isJoined(current_player.id) %}
                 {{ view.black_card_trigger('Join game', path('cah_api_game_join', {'game' : game.id.toString})) }}
             {% endif %}
 

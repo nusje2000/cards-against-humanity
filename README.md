@@ -6,7 +6,7 @@ An online version of the party game Cards Against Humanity.
 
 ```shell
 npm install # install dependencies
-npm run build # build css assets
+npm run build # build frontend assets
 
 composer install # install dependencies
 bin/console doctrine:database:create # create database

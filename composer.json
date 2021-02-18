@@ -23,7 +23,8 @@
         "symfony/form": "^5.2",
         "symfony/security-bundle": "^5.2",
         "symfony/serializer": "^5.2",
-        "nusje2000/process-runner": "^0.2.1"
+        "nusje2000/process-runner": "^0.2.1",
+        "symfony/webpack-encore-bundle": "^1.11"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.42",

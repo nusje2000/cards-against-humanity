@@ -15,6 +15,14 @@ final class Registry
      */
     private array $players = [];
 
+    /**
+     * @return array<Id>
+     */
+    public function joined(): array
+    {
+        return $this->players;
+    }
+
     public function join(Id $player): void
     {
         if (isset($this->players[$player->toString()])) {
