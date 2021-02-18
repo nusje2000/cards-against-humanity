@@ -33,21 +33,22 @@ jobs:
                     php-version: 7.4
                     extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
 
-            -   uses: bahmutov/npm-install@v1
-                with:
-                    install-command: yarn --frozen-lockfile
-
             -   uses: actions/checkout@v1
 
-            -   name: Install dependencies
+            -   name: Install dependencies (composer)
                 run: composer install --no-dev --prefer-dist --no-progress --no-suggest
                 env:
                     APP_ENV: prod
 
+            -   name: Install dependencies (yarn)
+                uses: borales/actions-yarn@v2.0.0
+                with:
+                    cmd: install
+
             -   name: Build assets
-                run: |
-                    yarn install
-                    yarn run build
+                uses: borales/actions-yarn@v2.0.0
+                with:
+                    cmd: build
 
             -   name: Create package
                 uses: thedoctor0/zip-release@master
