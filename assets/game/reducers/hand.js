@@ -18,7 +18,7 @@ function hand(state = defaultState, action) {
             return {
                 ...state,
                 cards: action.cards,
-                fetching: true,
+                fetching: false,
                 error: null,
             };
         case Hand.error:

@@ -13,6 +13,7 @@ function game(state = defaultState, action) {
         case Game.fetching:
             return {
                 ...state,
+                id: action.id,
                 fetching: true,
                 gameFetchError: null,
             };

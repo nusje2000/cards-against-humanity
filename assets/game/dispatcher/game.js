@@ -2,7 +2,7 @@ import {Game} from "../action/game";
 
 export function load(id) {
     return (dispatcher) => {
-        dispatcher({type: Game.fetching});
+        dispatcher({type: Game.fetching, id});
 
         fetch(`/api/game/${id}`).then(response => {
             return response.json();
@@ -19,5 +19,11 @@ export function load(id) {
 
             dispatcher({type: Game.error, error})
         });
+    }
+}
+
+export function submit(game, card) {
+    return (dispatcher) => {
+        fetch(`/api/game/${game}/round/submit/${card}`).then(() => load(game)(dispatcher))
     }
 }

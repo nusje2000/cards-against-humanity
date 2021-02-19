@@ -80,6 +80,7 @@
 
         <service id="cah.controller.api.round.submit" class="Nusje2000\CAH\Application\Controller\Api\Round\SubmissionController">
             <argument type="service" id="tactician.commandbus"/>
+            <argument type="service" id="cah.player.storage"/>
         </service>
     </services>
 </container>

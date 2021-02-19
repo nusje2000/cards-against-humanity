@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import White from './components/card/White';
 import Black from "./components/card/Black";
 import {load as loadGame} from "./dispatcher/game";
-import {load as loadHand} from "./dispatcher/hand";
+import StartRound from "./components/controls/StartRound";
+import Hand from "./components/player/Hand";
+import PlayerList from "./components/player/PlayerList";
 
 class App extends Component {
     static propTypes = {
@@ -16,10 +18,35 @@ class App extends Component {
     }
 
     render() {
+        if (this.props.error) {
+            return (<div>
+                <White>There was a problem loading the game.</White>
+                <White>{this.props.error}</White>
+            </div>);
+        }
+
+        if (this.props.fetching) {
+            return (<div>
+                Loading the game...
+            </div>);
+        }
+
         return (
-            <div>
-                {this.props.hand && this.props.hand.map(card => <White key={card.id} text={card.contents}/>)}
-                {this.props.currentRound && <Black text={this.props.currentRound.black_card.contents}/>}
+            <div className="flex w-full mb-5">
+                <div className="w-3/4 mx-2">
+                    <Hand gameId={this.props.gameId}/>
+                </div>
+                <div className="w-1/4 mx-2">
+                    {this.props.currentRound !== null ? <Black>
+                        {this.props.currentRound.black_card.contents.replace('_', '__________')}
+                    </Black> : <StartRound/>}
+                    <White>
+                        <div className="block">
+                            <div>Players:</div>
+                            <PlayerList/>
+                        </div>
+                    </White>
+                </div>
             </div>
         )
     }
@@ -27,15 +54,13 @@ class App extends Component {
 
 export default connect(state => {
     return {
-        hand: state.hand.cards,
+        fetching: state.game.fetching,
+        error: state.game.error,
         players: state.game.players,
         currentRound: state.game.currentRound,
     }
 }, dispatch => {
     return {
-        load: id => {
-            dispatch(loadGame(id));
-            dispatch(loadHand(id));
-        }
+        load: id => dispatch(loadGame(id)),
     }
 })(App);

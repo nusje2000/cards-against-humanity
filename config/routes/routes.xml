@@ -58,7 +58,7 @@
         <default key="_controller">cah.controller.api.round.start</default>
     </route>
 
-    <route id="cah_api_round_submission" path="/api/game/{game}/round/submit/{player}/{card}" methods="GET">
+    <route id="cah_api_round_submission" path="/api/game/{game}/round/submit/{card}" methods="GET">
         <default key="_controller">cah.controller.api.round.submit</default>
     </route>
 
