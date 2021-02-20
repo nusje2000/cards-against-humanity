@@ -99,7 +99,7 @@ final class MainAuthenticator extends AbstractFormLoginAuthenticator
 
     protected function getLoginUrl(): string
     {
-        return $this->urlGenerator->generate('cah_index');
+        return $this->urlGenerator->generate('cah_login');
     }
 
     private function validateCsrfToken(LoginCredentials $credentials): void

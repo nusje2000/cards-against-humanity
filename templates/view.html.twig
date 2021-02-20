@@ -92,11 +92,6 @@
             <h2 class="text-2xl text-white">
                 Players:
             </h2>
-            <div data-api-playerlist="{{ path('cah_api_game_game_fetch_players', {game: game.id.toString}) }}">
-                <template>
-                    <h3 class="text-xl2 text-white">__username__</h3>
-                </template>
-            </div>
         </div>
 
         <div class="w-1/4 mx-2">
@@ -106,6 +101,10 @@
                 {{ view.black_card(round.blackCard) }}
             {% elseif game.players.toArray|length > 1 %}
                 {{ view.black_card_trigger('Click to start next round', path('cah_api_round_start', {'game': game.id.toString})) }}
+            {% else %}
+                <div class="card card__black">
+                    Waiting for players (1/2)
+                </div>
             {% endif %}
 
             {% if not game.players.joined(current_player.id) %}

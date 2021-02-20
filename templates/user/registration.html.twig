@@ -1,8 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_row(form) }}
-    <button class="font-bold p-3 bg-white text-black rounded flex-1 mx-5" type="submit">Register</button>
-    {{ form_end(form) }}
+    <div class="w-screen h-screen flex">
+        <div class="text-white self-center xl:w-1/2 w-full m-auto p-10">
+            {{ form_start(form) }}
+
+            <div class="form-row">
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password) }}
+            </div>
+
+            <button type="submit" class="w-full btn btn--primary btn--large m-0">Register</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

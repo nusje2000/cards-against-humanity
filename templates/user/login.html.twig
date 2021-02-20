@@ -1,19 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if error %}
-        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    <form action="{{ path('cah_login') }}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{ last_username }}"/>
+    <div class="w-screen h-screen flex">
+        <div class="text-white self-center xl:w-1/2 w-full m-auto p-10">
+            <form action="{{ path('cah_login') }}" method="post">
+                {% if error %}
+                    <div class="font-bold text-red-600">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"/>
+                <div class="form-row">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="{{ last_username }}"/>
+                </div>
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password"/>
+                </div>
 
-        <button type="submit">login</button>
-    </form>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button type="submit" class="w-full btn btn--primary btn--large m-0">login</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}
