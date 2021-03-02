@@ -17,5 +17,8 @@
         <attribute name="rounds">
             <group>default</group>
         </attribute>
+        <attribute name="version">
+            <group>default</group>
+        </attribute>
     </class>
 </serializer>

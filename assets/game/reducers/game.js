@@ -6,6 +6,8 @@ const defaultState = {
     previousRound: null,
     completedRounds: null,
     gameFetchError: null,
+    joining: false,
+    currentPlayer: null,
 };
 
 function game(state = defaultState, action) {
@@ -24,6 +26,7 @@ function game(state = defaultState, action) {
                 currentRound: action.currentRound,
                 previousRound: action.currentRound,
                 completedRounds: action.completedRounds,
+                version: action.version,
                 fetching: false,
                 gameFetchError: null,
             };
@@ -36,6 +39,24 @@ function game(state = defaultState, action) {
                 completedRounds: null,
                 fetching: false,
                 gameFetchError: action.error,
+            };
+        case Game.joining:
+            return {
+                ...state,
+                joining: true,
+                currentPlayer: null
+            };
+        case Game.joined:
+            return {
+                ...state,
+                joining: false,
+                currentPlayer: action.player
+            };
+        case Game.join_failed:
+            return {
+                ...state,
+                joining: false,
+                currentPlayer: null
             };
         default:
             return state;

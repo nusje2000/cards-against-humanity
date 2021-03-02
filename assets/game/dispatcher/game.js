@@ -1,4 +1,18 @@
 import {Game} from "../action/game";
+import {load as loadHand} from "./hand";
+
+export function update(id) {
+    return (dispatcher, getState) => {
+        fetch(`/api/game/${id}/version`).then(response => {
+            return response.json();
+        }).then(response => {
+            if (getState().game.version !== response.version) {
+                dispatcher(load(id))
+                dispatcher(loadHand(id))
+            }
+        });
+    }
+}
 
 export function load(id) {
     return (dispatcher) => {
@@ -13,6 +27,7 @@ export function load(id) {
                 currentRound: game.rounds.current,
                 previousRound: game.rounds.previous,
                 completedRounds: game.rounds.completed,
+                version: game.version
             })
         }).catch(error => {
             console.error(error);
@@ -20,6 +35,22 @@ export function load(id) {
             dispatcher({type: Game.error, error})
         });
     }
+}
+
+export function join(id) {
+    return (dispatcher) => {
+        dispatcher({type: Game.joining, game: id});
+
+        fetch(`/api/game/${id}/join`).then(response => {
+            return response.json();
+        }).then(player => {
+            dispatcher({type: Game.joined, game: id, player: player.id});
+        }).catch(error => {
+            alert(`Could not join the game due to: ${error}`);
+
+            dispatcher({type: Game.error, error})
+        });
+    };
 }
 
 export function submit(game, card) {

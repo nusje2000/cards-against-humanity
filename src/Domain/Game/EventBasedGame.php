@@ -80,6 +80,11 @@ final class EventBasedGame implements Game, AggregateRoot
         return $id;
     }
 
+    public function version(): int
+    {
+        return $this->aggregateRootVersion();
+    }
+
     public function table(): Table
     {
         if (null === $this->table) {

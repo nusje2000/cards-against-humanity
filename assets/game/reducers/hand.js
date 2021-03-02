@@ -21,6 +21,13 @@ function hand(state = defaultState, action) {
                 fetching: false,
                 error: null,
             };
+        case Hand.clear:
+            return {
+                ...state,
+                cards: null,
+                fetching: false,
+                error: null,
+            };
         case Hand.error:
             return {
                 ...state,

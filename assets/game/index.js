@@ -8,6 +8,7 @@ import game from './reducers/game';
 import hand from './reducers/hand';
 import player from './reducers/player';
 import App from './App';
+import {Game} from "./action/game";
 
 
 for (const element of document.getElementsByClassName('game-container')) {
@@ -15,6 +16,11 @@ for (const element of document.getElementsByClassName('game-container')) {
 
     const store = createStore(combineReducers({game, hand, players: player}), composeEnhancers(applyMiddleware(ReduxThunk)));
     const gameId = element.getAttribute('data-id');
+    const playerId = element.getAttribute('data-player-id');
+
+    if (playerId) {
+        store.dispatch({type: Game.joined, game: gameId, player: playerId});
+    }
 
     ReactDOM.render(<Provider store={store}><App gameId={gameId}/></Provider>, element);
 }

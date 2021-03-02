@@ -20,7 +20,7 @@ class StartRound extends Component {
         }
 
         return (
-            <Black onClick={() => start(this.props.gameId)} bottomText={'Click to start'}>
+            <Black onClick={() => this.props.start(this.props.gameId)} bottomText={'Click to start'}>
                 Start round
             </Black>
         );
@@ -34,6 +34,6 @@ export default connect(state => {
     }
 }, dispatch => {
     return {
-        startRound: (game) => dispatch(start(game)),
+        start: (game) => dispatch(start(game)),
     }
 })(StartRound);

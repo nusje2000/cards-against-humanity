@@ -1,5 +1,5 @@
 .btn {
-    @apply font-bold p-3 rounded mx-5 cursor-pointer;
+    @apply font-bold p-3 rounded mx-5 cursor-pointer uppercase;
 
     &.btn--primary {
         @apply bg-white text-black;
@@ -7,5 +7,9 @@
 
     &.btn--secondary {
         @apply bg-black text-white;
+    }
+
+    &.btn--large {
+        @apply text-xl;
     }
 }

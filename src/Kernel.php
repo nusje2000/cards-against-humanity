@@ -70,6 +70,7 @@ final class Kernel extends BaseKernel
         $configurator->import($confDir . '/services/repositories.xml');
         $configurator->import($confDir . '/services/security.xml');
         $configurator->import($confDir . '/services/serializer.xml');
+        $configurator->import($confDir . '/services/subscribers.xml');
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void
