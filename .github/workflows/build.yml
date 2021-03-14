@@ -25,5 +25,7 @@ jobs:
                 run: vendor/bin/psalm
             -   name: Prepare database
                 run: php bin/load_data
+            -   name: Install drivers
+                run: vendor/bin/bdi detect drivers
             -   name: PHPUnit
                 run: vendor/bin/phpunit
