@@ -19,6 +19,8 @@ jobs:
                     coverage: pcov
             -   uses: actions/checkout@v1
             -   uses: ramsey/composer-install@v1
+            -   name: Prepare database
+                run: php bin/load_data
             -   name: PHPUnit
                 run: vendor/bin/phpunit
 

@@ -23,5 +23,7 @@ jobs:
                 run: vendor/bin/phpstan analyze
             -   name: Psalm
                 run: vendor/bin/psalm
+            -   name: Prepare database
+                run: php bin/load_data
             -   name: PHPUnit
                 run: vendor/bin/phpunit
