@@ -26,7 +26,12 @@
             <argument type="service" id="cah.repository.user"/>
         </service>
 
-        <service id="cah.repository.white_deck" class="Nusje2000\CAH\Infrastructure\Repository\StaticWhiteDeckRepository"/>
-        <service id="cah.repository.black_deck" class="Nusje2000\CAH\Infrastructure\Repository\StaticBlackDeckRepository"/>
+        <service id="cah.repository.white_deck" class="Nusje2000\CAH\Infrastructure\Repository\StaticWhiteDeckRepository">
+            <argument type="service" id="cah.deck.randomizer"/>
+        </service>
+
+        <service id="cah.repository.black_deck" class="Nusje2000\CAH\Infrastructure\Repository\StaticBlackDeckRepository">
+            <argument type="service" id="cah.deck.randomizer"/>
+        </service>
     </services>
 </container>

@@ -5,6 +5,7 @@
 /public/build
 
 ###> phpunit/phpunit ###
+/drivers
 /bin/phpunit
 /phpunit.xml
 .phpunit.result.cache

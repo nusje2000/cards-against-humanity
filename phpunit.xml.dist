@@ -10,6 +10,7 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
+        <server name="KERNEL_CLASS" value="Nusje2000\CAH\Kernel"/>
     </php>
     <testsuites>
         <testsuite name="Project Test Suite">
