@@ -60,17 +60,19 @@ final class Kernel extends BaseKernel
         $configurator->import($confDir . '/{packages}/*.yaml');
         $configurator->import($confDir . '/{packages}/' . $this->environment . '/*.yaml');
 
-        if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {
-            $configurator->import($confDir . '/services/dev/fixtures.xml');
-        }
-
         $configurator->import($confDir . '/services/commands.xml');
         $configurator->import($confDir . '/services/consumers.xml');
         $configurator->import($confDir . '/services/controllers.xml');
+        $configurator->import($confDir . '/services/randomizer.xml');
         $configurator->import($confDir . '/services/repositories.xml');
         $configurator->import($confDir . '/services/security.xml');
         $configurator->import($confDir . '/services/serializer.xml');
         $configurator->import($confDir . '/services/subscribers.xml');
+
+        if ('dev' === $this->getEnvironment() || 'test' === $this->getEnvironment()) {
+            $configurator->import($confDir . '/services/dev/fixtures.xml');
+            $configurator->import($confDir . '/services/dev/randomizer.xml');
+        }
     }
 
     public function configureRoutes(RoutingConfigurator $routes): void

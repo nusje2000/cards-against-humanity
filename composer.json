@@ -28,11 +28,15 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.42",
-        "vimeo/psalm": "^3.15",
+        "vimeo/psalm": "^4.0",
         "phpunit/phpunit": "^9.3",
         "symfony/web-profiler-bundle": "^5.1",
         "phpstan/phpstan-symfony": "^0.12.16",
-        "doctrine/doctrine-fixtures-bundle": "^3.4"
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "symfony/panther": "^1.0",
+        "dbrekelmans/bdi": "^0.3.0",
+        "phpstan/phpstan-phpunit": "^0.12.18",
+        "psalm/plugin-phpunit": "^0.15.1"
     },
     "autoload": {
         "psr-4": {

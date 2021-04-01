@@ -9,6 +9,10 @@ use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 
 final class ValueObjectNormalizer implements ContextAwareNormalizerInterface
 {
+    /**
+     * @param mixed        $data
+     * @param array<mixed> $context
+     */
     public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         return $data instanceof AbstractValue;

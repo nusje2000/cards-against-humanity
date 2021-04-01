@@ -9,6 +9,7 @@ use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Card\Deck;
 use Nusje2000\CAH\Domain\Card\Id;
 use Nusje2000\CAH\Domain\Card\Text;
+use Nusje2000\CAH\Infrastructure\Deck\DeckRandomizer;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -17,6 +18,16 @@ use Ramsey\Uuid\Uuid;
 final class StaticBlackDeckRepository implements DeckRepository
 {
     /**
+     * @var DeckRandomizer
+     */
+    private DeckRandomizer $randomizer;
+
+    public function __construct(DeckRandomizer $randomizer)
+    {
+        $this->randomizer = $randomizer;
+    }
+
+    /**
      * @return Deck<BlackCard>
      */
     public function retrieve(): Deck
@@ -24,12 +35,11 @@ final class StaticBlackDeckRepository implements DeckRepository
         $cards = [];
 
         $decoded = $this->getJson();
-        shuffle($decoded['black']);
         foreach ($decoded['black'] as $text) {
             $cards[] = new BlackCard(Id::fromUuid(Uuid::uuid4()), Text::fromString($text));
         }
 
-        return ArrayDeck::fromArray($cards);
+        return $this->randomizer->randomize(ArrayDeck::fromArray($cards));
     }
 
     /**

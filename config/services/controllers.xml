@@ -18,6 +18,13 @@
             <argument type="service" id="cah.player.storage"/>
         </service>
 
+        <service id="cah.controller.client.game.create" class="Nusje2000\CAH\Application\Controller\Client\Game\CreateController">
+            <argument type="service" id="tactician.commandbus"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="cah.repository.white_deck"/>
+            <argument type="service" id="cah.repository.black_deck"/>
+        </service>
+
         <service id="cah.controller.client.user.register" class="Nusje2000\CAH\Application\Controller\Client\User\RegisterController">
             <argument type="service" id="form.factory"/>
             <argument type="service" id="router"/>

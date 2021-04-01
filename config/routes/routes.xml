@@ -7,6 +7,10 @@
         <default key="_controller">cah.controller.api.game.create</default>
     </route>
 
+    <route id="cah_game_create" path="/game/create" methods="GET">
+        <default key="_controller">cah.controller.client.game.create</default>
+    </route>
+
     <route id="cah_game_view" path="/game/{game}" methods="GET">
         <default key="_controller">cah.controller.client.game.view</default>
     </route>
