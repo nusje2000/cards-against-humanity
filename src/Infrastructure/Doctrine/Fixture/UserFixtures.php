@@ -9,26 +9,26 @@ use Doctrine\Persistence\ObjectManager;
 use Nusje2000\CAH\Domain\Player\Id;
 use Nusje2000\CAH\Domain\Player\Username;
 use Nusje2000\CAH\Infrastructure\Entity\User;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 final class UserFixtures implements FixtureInterface
 {
-    private EncoderFactoryInterface $encoderFactory;
+    private PasswordHasherFactoryInterface $passwordHasherFactory;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory)
+    public function __construct(PasswordHasherFactoryInterface $passwordHasherFactory)
     {
-        $this->encoderFactory = $encoderFactory;
+        $this->passwordHasherFactory = $passwordHasherFactory;
     }
 
     public function load(ObjectManager $manager): void
     {
-        $encoder = $this->encoderFactory->getEncoder(User::class);
+        $passwordHasher = $this->passwordHasherFactory->getPasswordHasher(User::class);
 
         foreach ($this->users() as $user) {
             $user = new User(
                 Id::fromString('id_' . $user['username']->toString()),
                 $user['username'],
-                $encoder->encodePassword($user['password'], $user['salt']),
+                $passwordHasher->hash($user['password']),
                 $user['salt']
             );
 

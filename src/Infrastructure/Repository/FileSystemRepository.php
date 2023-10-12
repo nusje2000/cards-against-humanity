@@ -20,7 +20,7 @@ use function Safe\json_encode;
 use function Safe\mkdir;
 use function Safe\sprintf;
 
-final class FileSystemRepository implements MessageRepository
+final class FileSystemRepository
 {
     private MessageSerializer $messageSerializer;
 

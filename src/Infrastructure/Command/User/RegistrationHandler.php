@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Infrastructure\Command\User;
 
-use Nusje2000\CAH\Domain\Player\Id;
-use Nusje2000\CAH\Domain\Player\Username;
+use Exception;
 use Nusje2000\CAH\Infrastructure\Entity\User;
 use Nusje2000\CAH\Infrastructure\Repository\UserRepository;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 final class RegistrationHandler
 {
@@ -20,37 +19,39 @@ final class RegistrationHandler
     private UserRepository $userRepository;
 
     /**
-     * @var EncoderFactoryInterface
+     * @var PasswordHasherFactoryInterface
      */
-    private EncoderFactoryInterface $encoderFactory;
+    private PasswordHasherFactoryInterface $passwordHasherFactory;
 
-    public function __construct(UserRepository $userRepository, EncoderFactoryInterface $encoderFactory)
+    public function __construct(UserRepository $userRepository, PasswordHasherFactoryInterface $passwordHasherFactory)
     {
         $this->userRepository = $userRepository;
-        $this->encoderFactory = $encoderFactory;
+        $this->passwordHasherFactory = $passwordHasherFactory;
     }
 
+    /**
+     * @throws Exception
+     */
     public function handle(Registration $register): void
     {
-        $user = $this->createUser($register->id(), $register->username(), $register->password());
+        $salt = $this->createSalt();
+        $saltedPassword = $register->password() . $salt;
+        $password = $this->hashPassword($saltedPassword);
+
+        $user = new User($register->id(), $register->username(), $password, $salt);
         $this->userRepository->persist($user);
     }
 
-    private function createUser(Id $id, Username $username, string $plainPassword): User
+    private function hashPassword(string $plainPassword): string
     {
-        $salt = $this->createSalt();
-        $password = $this->encodePassword($plainPassword, $salt);
+        $passwordHasher = $this->passwordHasherFactory->getPasswordHasher(User::class);
 
-        return new User($id, $username, $password, $salt);
+        return $passwordHasher->hash($plainPassword);
     }
 
-    private function encodePassword(string $plainPassword, string $salt): string
-    {
-        $encoder = $this->encoderFactory->getEncoder(User::class);
-
-        return $encoder->encodePassword($plainPassword, $salt);
-    }
-
+    /**
+     * @throws Exception
+     */
     private function createSalt(): string
     {
         return random_bytes(self::SALT_SIZE);
