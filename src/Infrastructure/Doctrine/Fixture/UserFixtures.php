@@ -29,8 +29,7 @@ final class UserFixtures implements FixtureInterface
                 Id::fromString('id_' . $user['username']->toString()),
                 $user['username'],
                 $passwordHasher->hash($user['password']),
-                $user['salt']
-            );
+                );
 
             $manager->persist($user);
         }
@@ -39,16 +38,16 @@ final class UserFixtures implements FixtureInterface
     }
 
     /**
-     * @return array<array{username: Username, password: string, salt: string}>
+     * @return array<array{username: Username, password: string}>
      */
     private function users(): array
     {
         return [
-            ['username' => Username::fromString('player_1'), 'password' => 'player_1', 'salt' => 'salt_1'],
-            ['username' => Username::fromString('player_2'), 'password' => 'player_2', 'salt' => 'salt_2'],
-            ['username' => Username::fromString('player_3'), 'password' => 'player_3', 'salt' => 'salt_3'],
-            ['username' => Username::fromString('player_4'), 'password' => 'player_4', 'salt' => 'salt_4'],
-            ['username' => Username::fromString('player_5'), 'password' => 'player_5', 'salt' => 'salt_5'],
+            ['username' => Username::fromString('player_1'), 'password' => 'player_1'],
+            ['username' => Username::fromString('player_2'), 'password' => 'player_2'],
+            ['username' => Username::fromString('player_3'), 'password' => 'player_3'],
+            ['username' => Username::fromString('player_4'), 'password' => 'player_4'],
+            ['username' => Username::fromString('player_5'), 'password' => 'player_5'],
         ];
     }
 }

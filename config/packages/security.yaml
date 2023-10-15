@@ -1,4 +1,5 @@
 security:
+    enable_authenticator_manager: true
     password_hashers:
         Nusje2000\CAH\Infrastructure\Entity\User:
             algorithm: auto
@@ -14,12 +15,11 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
             lazy: true
+            entry_point: form_login
             form_login:
-                csrf_token_generator: security.csrf.token_manager
-            guard:
-                authenticators:
+                enable_csrf: true
+            custom_authenticators:
                     - cah.authentication.main_authenticator
             logout:
                 path: cah_logout
@@ -28,3 +28,7 @@ security:
     access_control:
         - { path: '^/game', roles: IS_AUTHENTICATED_FULLY }
         - { path: '^/api', roles: IS_AUTHENTICATED_FULLY }
+        # allow unauthenticated users to access the login form
+        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        # but require authentication for all other admin routes
+        - { path: ^/admin, roles: ROLE_ADMIN }

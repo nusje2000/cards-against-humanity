@@ -9,7 +9,7 @@
         </defaults>
 
         <service id="cah.fixture.user" class="Nusje2000\CAH\Infrastructure\Doctrine\Fixture\UserFixtures">
-            <argument type="service" id="security.encoder_factory"/>
+            <argument type="service" id="security.password_hasher_factory"/>
         </service>
     </services>
 </container>

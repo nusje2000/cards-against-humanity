@@ -6,9 +6,10 @@ namespace Nusje2000\CAH\Infrastructure\Entity;
 
 use Nusje2000\CAH\Domain\Player\Id;
 use Nusje2000\CAH\Domain\Player\Username;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class User implements UserInterface
+final class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     private string $id;
 
@@ -16,17 +17,14 @@ final class User implements UserInterface
 
     private string $password;
 
-    private string $salt;
-
-    public function __construct(Id $id, Username $username, string $password, string $salt)
+    public function __construct(Id $id, Username $username, string $password)
     {
         $this->id = $id->toString();
         $this->username = $username->get();
         $this->password = $password;
-        $this->salt = $salt;
     }
 
-    public function getId(): Id
+    public function getUserIdentifier(): Id
     {
         return Id::fromString($this->id);
     }
@@ -41,11 +39,6 @@ final class User implements UserInterface
         return $this->password;
     }
 
-    public function getSalt(): string
-    {
-        return $this->salt;
-    }
-
     /**
      * @return array<string>
      */
@@ -56,5 +49,14 @@ final class User implements UserInterface
 
     public function eraseCredentials(): void
     {
+    }
+
+
+    /**
+     * @deprecated for upgrading Symfony 5 to 6
+     */
+    public function getSalt(): string
+    {
+        return '';
     }
 }

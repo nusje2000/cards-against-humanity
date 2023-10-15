@@ -11,8 +11,6 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 final class RegistrationHandler
 {
-    private const SALT_SIZE = 16;
-
     /**
      * @var UserRepository
      */
@@ -34,11 +32,7 @@ final class RegistrationHandler
      */
     public function handle(Registration $register): void
     {
-        $salt = $this->createSalt();
-        $saltedPassword = $register->password() . $salt;
-        $password = $this->hashPassword($saltedPassword);
-
-        $user = new User($register->id(), $register->username(), $password, $salt);
+        $user = new User($register->id(), $register->username(), $this->hashPassword($register->password()));
         $this->userRepository->persist($user);
     }
 
@@ -47,13 +41,5 @@ final class RegistrationHandler
         $passwordHasher = $this->passwordHasherFactory->getPasswordHasher(User::class);
 
         return $passwordHasher->hash($plainPassword);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createSalt(): string
-    {
-        return random_bytes(self::SALT_SIZE);
     }
 }

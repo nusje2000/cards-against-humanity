@@ -10,7 +10,7 @@
 
         <service id="cah.command.handler.user.register" class="Nusje2000\CAH\Infrastructure\Command\User\RegistrationHandler">
             <argument type="service" id="cah.repository.user"/>
-            <argument type="service" id="security.encoder_factory.generic"/>
+            <argument type="service" id="security.password_hasher_factory"/>
         </service>
 
         <service id="cah.command.handler.game.create" class="Nusje2000\CAH\Infrastructure\Command\Game\CreateHandler">
