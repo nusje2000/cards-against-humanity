@@ -17,10 +17,10 @@ final class UserPlayerRepository implements PlayerRepository
         $this->userRepository = $userRepository;
     }
 
-    public function retreive(Id $id): Player
+    public function retrieve(Id $id): Player
     {
         $user = $this->userRepository->retrieve($id);
 
-        return new Player($user->getId(), Username::fromString($user->getUsername()));
+        return new Player($user->getUserIdentifier(), Username::fromString($user->getUsername()));
     }
 }

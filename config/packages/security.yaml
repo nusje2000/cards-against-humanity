@@ -9,6 +9,7 @@ security:
         users:
             entity:
                 class: 'Nusje2000\CAH\Infrastructure\Entity\User'
+                property: username
 
     firewalls:
         dev:
@@ -28,7 +29,3 @@ security:
     access_control:
         - { path: '^/game', roles: IS_AUTHENTICATED_FULLY }
         - { path: '^/api', roles: IS_AUTHENTICATED_FULLY }
-        # allow unauthenticated users to access the login form
-        - { path: ^/admin/login, roles: PUBLIC_ACCESS }
-        # but require authentication for all other admin routes
-        - { path: ^/admin, roles: ROLE_ADMIN }

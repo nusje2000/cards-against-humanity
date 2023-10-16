@@ -9,5 +9,5 @@ use Nusje2000\CAH\Domain\Player\Player;
 
 interface PlayerRepository
 {
-    public function retreive(Id $id): Player;
+    public function retrieve(Id $id): Player;
 }

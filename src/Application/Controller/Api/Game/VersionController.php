@@ -27,7 +27,6 @@ final class VersionController
 
     public function __invoke(string $game): Response
     {
-        /** @var EventBasedGame $retrieved */
         $retrieved = $this->gameRepository->retrieve(Id::fromString($game));
 
         return new JsonResponse([
