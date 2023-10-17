@@ -7,6 +7,7 @@
         <service id="cah.authentication.main_authenticator" class="Nusje2000\CAH\Infrastructure\Security\MainAuthenticator">
             <argument type="service" id="cah.repository.user"/>
             <argument type="service" id="router.default"/>
+            <argument type="service" id="security.password_hasher" />
             <argument type="service" id="router"/>
         </service>
 

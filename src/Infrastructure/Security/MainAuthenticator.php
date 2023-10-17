@@ -11,6 +11,7 @@ use Nusje2000\CAH\Infrastructure\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -18,10 +19,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
@@ -32,12 +31,18 @@ final class MainAuthenticator extends AbstractLoginFormAuthenticator
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly RouterInterface $router,
 
 ) {}
-    
+
+    public function supports(Request $request): bool
+    {
+        return 'cah_login' === $request->attributes->get('_route') && $request->isMethod('POST');
+    }
     public function getCredentials(Request $request): LoginCredentials
     {
+
         $credentials = LoginCredentials::fromRequest($request);
         $request->getSession()->set(Security::LAST_USERNAME, $credentials->username()->get());
 
@@ -46,18 +51,14 @@ final class MainAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $credentials = $this->getCredentials($request);
+        $password = strval($request->request->get('password'));
+        $credentials = LoginCredentials::fromRequest($request);
 
         return new Passport(
             new UserBadge($credentials->username()->toString()),
-            new PasswordCredentials($credentials->password()),
-            [
-                new CsrfTokenBadge(
-                    'authenticate',
-                    $credentials->csrfToken()
-                ),
-                (new RememberMeBadge())->enable(),
-            ]
+            new CustomCredentials(function(string $password, User $user) {
+                return $this->passwordHasher->isPasswordValid($user, $password);
+            }, $password)
         );
     }
 
