@@ -15,7 +15,7 @@ final class Id extends AbstractString implements AggregateRootId
         parent::__construct($string);
     }
 
-    public static function fromString(string $aggregateRootId): self
+    public static function fromString(string $aggregateRootId): static
     {
         return new self($aggregateRootId);
     }

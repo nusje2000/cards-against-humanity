@@ -21,6 +21,6 @@ final class UserPlayerRepository implements PlayerRepository
     {
         $user = $this->userRepository->retrieve($id);
 
-        return new Player($user->getUserIdentifier(), Username::fromString($user->getUsername()));
+        return new Player($user->getId(), Username::fromString($user->getUsername()));
     }
 }
