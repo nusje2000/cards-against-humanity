@@ -42,7 +42,6 @@ final class MainAuthenticator extends AbstractLoginFormAuthenticator
     }
     public function getCredentials(Request $request): LoginCredentials
     {
-
         $credentials = LoginCredentials::fromRequest($request);
         $request->getSession()->set(Security::LAST_USERNAME, $credentials->username()->get());
 
@@ -79,7 +78,6 @@ final class MainAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath) {
             return new RedirectResponse($targetPath);
         }
-
         return new RedirectResponse($this->urlGenerator->generate('cah_index'));
     }
 
