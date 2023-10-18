@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  php:
+    build: ./docker/php-fpm
+    volumes:
+      - ./:/application
+  node:
+    image: node
+    volumes:
+      - ./:/application
+    command: tail -f /dev/null
+    working_dir: /application
+  nginx:
+    image: nginx
+    ports:
+      - "${HTTP_PORT}:80"
+    links:
+      - php
+    volumes:
+      - ./:/application
+      - ./docker/nginx/symfony.conf:/etc/nginx/conf.d/default.conf
