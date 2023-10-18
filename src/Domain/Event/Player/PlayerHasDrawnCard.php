@@ -9,6 +9,7 @@ use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Card\Text;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
+use UnexpectedValueException;
 
 final class PlayerHasDrawnCard implements SerializablePayload
 {
@@ -50,8 +51,14 @@ final class PlayerHasDrawnCard implements SerializablePayload
      *
      * @param array<mixed> $payload
      */
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
+        if (!is_string($payload['player_id'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported player_id to be a string, %s received.', gettype($payload['player_id']))
+            );
+        }
+
         return new self(
             PlayerId::fromString($payload['player_id']),
             new WhiteCard(CardId::fromString($payload['card_id']), Text::fromString($payload['card_contents']))

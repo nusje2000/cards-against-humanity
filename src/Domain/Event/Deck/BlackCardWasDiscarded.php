@@ -8,6 +8,7 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Nusje2000\CAH\Domain\Card\BlackCard;
 use Nusje2000\CAH\Domain\Card\Id;
 use Nusje2000\CAH\Domain\Card\Text;
+use UnexpectedValueException;
 
 final class BlackCardWasDiscarded implements SerializablePayload
 {
@@ -42,8 +43,20 @@ final class BlackCardWasDiscarded implements SerializablePayload
      *
      * @param array<mixed> $payload
      */
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
+        if (!is_string($payload['card_id'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported card_id to be a string, %s received.', gettype($payload['card_id']))
+            );
+        }
+
+        if (!is_string($payload['card_contents'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported card_contents to be a string, %s received.', gettype($payload['card_contents']))
+            );
+        }
+
         return new self(
             new BlackCard(
                 Id::fromString($payload['card_id']),

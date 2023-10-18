@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Nusje2000\CAH\Tests\Unit\Domain\Player;
 
 use Nusje2000\CAH\Domain\Player\Id;
-use PHPStan\Testing\TestCase;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**

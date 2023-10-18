@@ -6,6 +6,7 @@ namespace Nusje2000\CAH\Domain\Event\Game;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Nusje2000\CAH\Domain\Game\Rules;
+use UnexpectedValueException;
 
 final class RulesWereSet implements SerializablePayload
 {
@@ -37,8 +38,20 @@ final class RulesWereSet implements SerializablePayload
      *
      * @param array<mixed> $payload
      */
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
+        if (!is_int($payload['hand_size'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported hand_size to be a string, %s received.', gettype($payload['hand_size']))
+            );
+        }
+
+        if (!is_int($payload['max_rounds']) && $payload['max_rounds'] !== null) {
+            throw new UnexpectedValueException(
+                sprintf('Exported max_rounds to be a string, %s received.', gettype($payload['max_rounds']))
+            );
+        }
+
         return new self(
             Rules::custom(
                 $payload['hand_size'],
