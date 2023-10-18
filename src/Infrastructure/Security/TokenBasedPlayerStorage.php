@@ -34,7 +34,7 @@ final class TokenBasedPlayerStorage implements PlayerStorage
             throw NoPlayerFound::invalidUser(User::class, $user);
         }
 
-        return $this->repository->retreive($user->getId());
+        return $this->repository->retrieve($user->getId());
     }
 
     public function currentOrNull(): ?Player

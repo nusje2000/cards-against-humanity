@@ -24,9 +24,14 @@ final class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->password = $password;
     }
 
-    public function getUserIdentifier(): Id
+    public function getId(): Id
     {
         return Id::fromString($this->id);
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
     }
 
     public function getUsername(): string

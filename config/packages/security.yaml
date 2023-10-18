@@ -25,6 +25,8 @@ security:
                 username_parameter: username
                 password_parameter: password
                 enable_csrf: true
+            custom_authenticators:
+                - cah.authentication.main_authenticator
             logout:
                 path: cah_logout
                 target: cah_index
