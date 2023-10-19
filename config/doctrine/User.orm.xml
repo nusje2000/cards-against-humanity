@@ -6,7 +6,6 @@
         <id name="id" type="string"/>
         <field name="username"/>
         <field name="password"/>
-        <field name="salt"/>
 
         <unique-constraints>
             <unique-constraint columns="username"/>

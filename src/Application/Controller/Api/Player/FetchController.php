@@ -20,7 +20,7 @@ final class FetchController
 
     public function __invoke(string $player): Response
     {
-        $object = $this->playerRepository->retreive(Id::fromString($player));
+        $object = $this->playerRepository->retrieve(Id::fromString($player));
 
         return new JsonResponse([
             'id' => $object->id()->toString(),

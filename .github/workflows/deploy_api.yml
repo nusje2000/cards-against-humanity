@@ -8,13 +8,13 @@ on:
 
 jobs:
     tests:
-        name: 'Tests (PHP: 7.4)'
+        name: 'Tests (PHP: 8.2)'
         runs-on: ubuntu-latest
         steps:
             -   name: Setup PHP, with composer and extensions
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
+                    php-version: 8.2
                     extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
                     coverage: pcov
             -   uses: actions/checkout@v1
@@ -30,7 +30,7 @@ jobs:
             -   name: Setup PHP, with composer and extensions
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 7.4
+                    php-version: 8.2
                     extensions: mbstring, xml, ctype, iconv, mysql, curl, intl
 
             -   name: Setup Node

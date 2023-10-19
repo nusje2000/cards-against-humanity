@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
-use SymfonyBundles\JsonRequestBundle\SymfonyBundlesJsonRequestBundle;
+use SymfonyBundles\JsonRequestBundle\JsonRequestBundle;
 
 final class Kernel extends BaseKernel
 {
@@ -30,7 +30,7 @@ final class Kernel extends BaseKernel
     {
         $bundles = [
             new FrameworkBundle(),
-            new SymfonyBundlesJsonRequestBundle(),
+            new JsonRequestBundle(),
             new SecurityBundle(),
             new DoctrineBundle(),
             new TwigBundle(),

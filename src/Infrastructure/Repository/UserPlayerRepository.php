@@ -17,7 +17,7 @@ final class UserPlayerRepository implements PlayerRepository
         $this->userRepository = $userRepository;
     }
 
-    public function retreive(Id $id): Player
+    public function retrieve(Id $id): Player
     {
         $user = $this->userRepository->retrieve($id);
 

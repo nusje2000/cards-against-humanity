@@ -1,5 +1,5 @@
 security:
-    encoders:
+    password_hashers:
         Nusje2000\CAH\Infrastructure\Entity\User:
             algorithm: auto
 
@@ -8,19 +8,24 @@ security:
         users:
             entity:
                 class: 'Nusje2000\CAH\Infrastructure\Entity\User'
+                property: username
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
             lazy: true
+            entry_point: form_login
+            provider: users
             form_login:
-                csrf_token_generator: security.csrf.token_manager
-            guard:
-                authenticators:
-                    - cah.authentication.main_authenticator
+                login_path: cah_login
+                check_path: cah_login
+                username_parameter: username
+                password_parameter: password
+                enable_csrf: true
+            custom_authenticators:
+                - cah.authentication.main_authenticator
             logout:
                 path: cah_logout
                 target: cah_index
@@ -28,3 +33,4 @@ security:
     access_control:
         - { path: '^/game', roles: IS_AUTHENTICATED_FULLY }
         - { path: '^/api', roles: IS_AUTHENTICATED_FULLY }
+

@@ -176,7 +176,7 @@ final class EventBasedGameTest extends TestCase
     /**
      * @param array<array-key, object> $events
      *
-     * @return Generator<object>
+     * @return Generator<int, object, void, int>
      */
     private function createEventGenerator(array $events): Generator
     {

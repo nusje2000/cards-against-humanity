@@ -5,10 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="cah.authentication.main_authenticator" class="Nusje2000\CAH\Infrastructure\Security\MainAuthenticator">
-            <argument type="service" id="cah.repository.user"/>
             <argument type="service" id="router.default"/>
-            <argument type="service" id="security.csrf.token_manager"/>
-            <argument type="service" id="security.user_password_encoder.generic"/>
+            <argument type="service" id="security.password_hasher" />
         </service>
 
         <service id="cah.player.storage" class="Nusje2000\CAH\Infrastructure\Security\TokenBasedPlayerStorage">

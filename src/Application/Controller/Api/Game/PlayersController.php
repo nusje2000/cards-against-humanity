@@ -42,7 +42,7 @@ final class PlayersController
         $retrieved = $this->gameRepository->retrieve(Id::fromString($game));
 
         $players = array_map(function (PlayerId $id): Player {
-            return $this->playerRepository->retreive($id);
+            return $this->playerRepository->retrieve($id);
         }, $retrieved->players()->toArray());
 
         $data = $this->serializer->serialize($players, 'json', [

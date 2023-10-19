@@ -34,8 +34,12 @@ use Nusje2000\CAH\Domain\Round\Round;
 use Nusje2000\CAH\Domain\Submission;
 use Nusje2000\CAH\Domain\Table;
 
+/**
+ * @implements AggregateRoot<Id>
+ */
 final class EventBasedGame implements Game, AggregateRoot
 {
+    /** @use AggregateRootBehaviour<Id> */
     use AggregateRootBehaviour;
 
     private ?Table $table = null;

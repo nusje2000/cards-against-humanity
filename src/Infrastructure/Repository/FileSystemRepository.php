@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Nusje2000\CAH\Infrastructure\Repository;
 
+use BadMethodCallException;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Header;
 use EventSauce\EventSourcing\Message;
 use EventSauce\EventSourcing\MessageRepository;
+use EventSauce\EventSourcing\PaginationCursor;
 use EventSauce\EventSourcing\Serialization\MessageSerializer;
 use Generator;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use UnexpectedValueException;
-
-use function Safe\json_decode;
-use function Safe\json_encode;
-use function Safe\mkdir;
-use function Safe\sprintf;
 
 final class FileSystemRepository implements MessageRepository
 {
@@ -39,7 +36,7 @@ final class FileSystemRepository implements MessageRepository
             $this->verifyAggregateRootDirectoryExists($id);
             $path = $this->messageFile($message);
 
-            file_put_contents($path, json_encode($this->messageSerializer->serializeMessage($message), JSON_PRETTY_PRINT));
+            file_put_contents($path, json_encode($this->messageSerializer->serializeMessage($message), JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
         }
     }
 
@@ -52,14 +49,11 @@ final class FileSystemRepository implements MessageRepository
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
             /** @var array<mixed> $decoded */
-            $decoded = json_decode($file->getContents(), true);
+            $decoded = json_decode($file->getContents(), true, flags: JSON_THROW_ON_ERROR);
+            $message = $this->messageSerializer->unserializePayload($decoded);
+            $version = $message->aggregateVersion();
 
-            /** @var Message $message */
-            foreach ($this->messageSerializer->unserializePayload($decoded) as $message) {
-                $version = $message->aggregateVersion();
-
-                yield $message;
-            }
+            yield $message;
         }
 
         return $version;
@@ -75,27 +69,32 @@ final class FileSystemRepository implements MessageRepository
         foreach ($files as $file) {
             /** @var array<mixed> $decoded */
             $decoded = json_decode($file->getContents(), true);
+            $message = $this->messageSerializer->unserializePayload($decoded);
 
-            /** @var Message $message */
-            foreach ($this->messageSerializer->unserializePayload($decoded) as $message) {
-                if ($message->aggregateVersion() <= $aggregateRootVersion) {
-                    continue;
-                }
-
-                $version = $message->aggregateVersion();
-
-                yield $message;
+            if ($message->aggregateVersion() <= $aggregateRootVersion) {
+                continue;
             }
+
+            $version = $message->aggregateVersion();
+
+            yield $message;
         }
 
         return $version;
+    }
+
+    public function paginate(PaginationCursor $cursor): Generator
+    {
+        throw new BadMethodCallException('Method has not been implemented.');
     }
 
     private function verifyAggregateRootDirectoryExists(?AggregateRootId $id): void
     {
         $path = $this->aggregateRootDirectory($id);
         if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+            if (!mkdir($path, 0777, true)) {
+                throw new \RuntimeException(sprintf('Cannot create directory "%s".', $path));
+            };
         }
     }
 

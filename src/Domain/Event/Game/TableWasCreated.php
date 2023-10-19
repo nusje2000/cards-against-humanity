@@ -11,6 +11,7 @@ use Nusje2000\CAH\Domain\Card\Deck;
 use Nusje2000\CAH\Domain\Card\Id as CardId;
 use Nusje2000\CAH\Domain\Card\Text;
 use Nusje2000\CAH\Domain\Card\WhiteCard;
+use UnexpectedValueException;
 
 final class TableWasCreated implements SerializablePayload
 {
@@ -77,8 +78,19 @@ final class TableWasCreated implements SerializablePayload
      *
      * @param array<mixed> $payload
      */
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
+        if (!is_array($payload['white_deck'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported white_deck to be an array, %s received.', gettype($payload['white_deck']))
+            );
+        }
+        if (!is_array($payload['black_deck'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported black_deck to be an array, %s received.', gettype($payload['black_deck']))
+            );
+        }
+
         return new self(
             ArrayDeck::fromArray(
                 array_map(static function (array $card): WhiteCard {

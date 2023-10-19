@@ -15,6 +15,20 @@ bin/console doctrine:fixtures:load # load test fixtures (optional)
 symfony serve # run webserver
 ```
 
+## Using docker
+
+```shell
+docker-compose up -d # start docker services
+
+docker-compose exec node npm install # install dependencies
+docker-compose exec node npm run build # build frontend assets
+
+docker-compose exec composer install # install dependencies
+docker-compose exec bin/console doctrine:database:create # create database
+docker-compose exec bin/console doctrine:schema:update -f # prepare database schema
+docker-compose exec bin/console doctrine:fixtures:load # load test fixtures (optional)
+```
+
 ## Motivation
 
 I love the original card game but due to COVID-19, it's not possible to gather some friends and play this game. I'm always looking for new things to learn in my

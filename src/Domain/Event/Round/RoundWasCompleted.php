@@ -6,6 +6,7 @@ namespace Nusje2000\CAH\Domain\Event\Round;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Nusje2000\CAH\Domain\Player\Id as PlayerId;
+use UnexpectedValueException;
 
 final class RoundWasCompleted implements SerializablePayload
 {
@@ -37,8 +38,14 @@ final class RoundWasCompleted implements SerializablePayload
      *
      * @param array<mixed> $payload
      */
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
+        if (!is_string($payload['winning_player_id'])) {
+            throw new UnexpectedValueException(
+                sprintf('Exported winning_player_id to be a string, %s received.', gettype($payload['winning_player_id']))
+            );
+        }
+
         return new self(
             PlayerId::fromString($payload['winning_player_id']),
         );
