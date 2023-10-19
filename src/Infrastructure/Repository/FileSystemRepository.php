@@ -36,7 +36,7 @@ final class FileSystemRepository implements MessageRepository
             $this->verifyAggregateRootDirectoryExists($id);
             $path = $this->messageFile($message);
 
-            file_put_contents($path, json_encode($this->messageSerializer->serializeMessage($message), JSON_PRETTY_PRINT));
+            file_put_contents($path, json_encode($this->messageSerializer->serializeMessage($message), JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
         }
     }
 
@@ -49,7 +49,7 @@ final class FileSystemRepository implements MessageRepository
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
             /** @var array<mixed> $decoded */
-            $decoded = json_decode($file->getContents(), true);
+            $decoded = json_decode($file->getContents(), true, flags: JSON_THROW_ON_ERROR);
             $message = $this->messageSerializer->unserializePayload($decoded);
             $version = $message->aggregateVersion();
 
@@ -92,7 +92,9 @@ final class FileSystemRepository implements MessageRepository
     {
         $path = $this->aggregateRootDirectory($id);
         if (!is_dir($path)) {
-            mkdir($path, 0777, true);
+            if (!mkdir($path, 0777, true)) {
+                throw new \RuntimeException(sprintf('Cannot create directory "%s".', $path));
+            };
         }
     }
 
