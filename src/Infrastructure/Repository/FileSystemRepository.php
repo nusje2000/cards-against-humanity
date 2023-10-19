@@ -17,11 +17,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use UnexpectedValueException;
 
-use function Safe\json_decode;
-use function Safe\json_encode;
-use function Safe\mkdir;
-use function Safe\sprintf;
-
 final class FileSystemRepository implements MessageRepository
 {
     private MessageSerializer $messageSerializer;
